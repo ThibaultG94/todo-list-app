@@ -1,9 +1,12 @@
-import React from 'react';
+import AddTaskForm from './components/AddTaskForm';
+import TaskList from './components/TaskList';
 
 const App = () => {
 	return (
 		<div className="app" data-testid="app">
-			<h1>Hello React</h1>
+			<h1>To-Do List</h1>
+			<AddTaskForm />
+			<TaskList />
 		</div>
 	);
 };
