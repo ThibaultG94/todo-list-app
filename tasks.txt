@@ -26,3 +26,9 @@ et supprimer des tâches sur la liste partagée.
 
 6. Vue calendrier : Intègre une vue calendrier pour aider les utilisateurs à visualiser leurs tâches 
 et leurs échéances à venir.
+
+7. Archive des tâches : Les tâches supprimées vont dans une archive. Possibilité de vider l'archive (tout supprimer)
+
+8. Créer une vrai base de données
+
+9. Créer un compte, authentification

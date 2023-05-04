@@ -15,11 +15,17 @@ const Task = ({ task, taskData, setTaskData }: Props) => {
 		});
 	};
 
+	const handleDelete = () => {
+		setTaskData(taskData.filter((el) => el.id !== task.id));
+	};
+
 	return (
 		<div className="task-container">
 			<p>{task.name}</p>
 			<h5>{dateFormater(task.date)}</h5>
-			<span id="delete">&#10008;</span>
+			<span id="delete" onClick={() => handleDelete()}>
+				&#10008;
+			</span>
 		</div>
 	);
 };
