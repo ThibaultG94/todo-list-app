@@ -1,20 +1,24 @@
-import { useRef, useState } from 'react';
-import { MessagesInt } from './model';
+import { Dispatch, SetStateAction, useRef } from 'react';
+import { TasksInt } from './model';
 
-const AddTaskForm = () => {
+type Props = {
+	taskData: TasksInt[];
+	setTaskData: Dispatch<SetStateAction<TasksInt[]>>;
+};
+
+const AddTaskForm = ({ taskData, setTaskData }: Props) => {
 	const inputMessage = useRef<HTMLInputElement | null>(null);
-	const [messData, setMessData] = useState<MessagesInt[]>([]);
 
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
 
 		if (inputMessage) {
-			const mess: MessagesInt = {
+			const mess: TasksInt = {
 				id: Math.round(Math.random() * Date.now()),
-				message: inputMessage?.current?.value,
+				name: inputMessage?.current?.value,
 				date: Date.now(),
 			};
-			setMessData((prevData) => [...prevData, mess]);
+			setTaskData((prevData: any) => [...prevData, mess]);
 		}
 
 		(document.getElementById('newTask') as HTMLInputElement).value = '';

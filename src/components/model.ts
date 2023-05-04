@@ -1,5 +1,5 @@
-export interface MessagesInt {
+export interface TasksInt {
 	id: number;
-	message: string | undefined;
+	name: string | undefined;
 	date: number;
 }
