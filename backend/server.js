@@ -1,0 +1,28 @@
+const express = require('express');
+const connecDB = require('./config/db');
+const dotenv = require('dotenv').config();
+const cors = require('cors');
+const port = 5000;
+
+// connexion à la DB
+connecDB();
+
+const app = express();
+
+// Authorisation CORS
+app.use(
+	cors({
+		origin: 'http://localhost:3000',
+		credentials: true,
+		optionsSuccessStatus: 200,
+	})
+);
+
+// Middleware qui permet de traiter les données de la Request
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+app.use('/task', require('./routes/task.routes'));
+
+// Lancer le serveur
+app.listen(port, () => console.log('Le serveur a démarré au port ' + port));
