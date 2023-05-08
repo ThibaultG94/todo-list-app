@@ -24,15 +24,21 @@ module.exports.editTask = async (req, res) => {
 	if (!task) {
 		res.status(400).json({ message: "Cette tâche n'existe pas" });
 	}
+
+	const updateTask = await TaskModel.findByIdAndUpdate(task, req.body, {
+		new: true,
+	});
+
+	res.status(200).json(updateTask);
 };
 
 module.exports.deleteTask = async (req, res) => {
-	const task = await TaskModel.findById(req.params.id);
+	const task = await TaskModel.findByIdAndDelete(req.params.id);
 
 	if (!task) {
 		res.status(400).json({ message: "Cette tâche n'existe pas" });
 	}
 
-	await task.remove();
+	// await task.delete();
 	res.status(200).json('Tâche supprimée ' + req.params.id);
 };
