@@ -12,4 +12,4 @@ router.post('/', setTasks);
 router.put('/:id', editTask);
 router.delete('/:id', deleteTask);
 
-module.export = router;
+module.exports = router;
