@@ -39,6 +39,6 @@ module.exports.deleteTask = async (req, res) => {
 		res.status(400).json({ message: "Cette tâche n'existe pas" });
 	}
 
-	// await task.delete();
+	await task.deleteOne();
 	res.status(200).json('Tâche supprimée ' + req.params.id);
 };
