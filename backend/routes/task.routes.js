@@ -7,8 +7,8 @@ const {
 } = require('../controllers/task.controller');
 const router = express.Router();
 
-router.get('/', getTasks);
 router.post('/', setTasks);
+router.get('/', getTasks);
 router.put('/:id', editTask);
 router.delete('/:id', deleteTask);
 

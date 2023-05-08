@@ -2,7 +2,7 @@ const TaskModel = require('../models/task.model');
 
 module.exports.getTasks = async (req, res) => {
 	const task = await TaskModel.find();
-	res.status(200).json(post);
+	res.status(200).json(task);
 };
 
 module.exports.setTasks = async (req, res) => {
@@ -11,11 +11,11 @@ module.exports.setTasks = async (req, res) => {
 	}
 
 	const task = await TaskModel.create({
-		name: req.body.task,
+		name: req.body.name,
 		author: req.body.author,
 		date: req.body.date,
 	});
-	res.status(200).json(post);
+	res.status(200).json(task);
 };
 
 module.exports.editTask = async (req, res) => {
