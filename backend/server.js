@@ -23,6 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/task', require('./routes/task.routes'));
+app.use('/user', require('./routes/user.routes'));
 
 // Lancer le serveur
 app.listen(port, () => console.log('Le serveur a démarré au port ' + port));
