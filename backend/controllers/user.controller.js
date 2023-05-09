@@ -48,8 +48,15 @@ module.exports.loginUser = async (req, res) => {
 			return res.status(401).json({ message: 'Mot de passe invalide' });
 		}
 
-		// Générez un token d'authentification (par exemple, un JWT) ici si vous en avez besoin.
-		// const token = generateAuthToken(user);
+		if (user && isPasswordValid) {
+			const token = user.generateAuthToken();
+			res.status(200).json({
+				message: 'Authentification réussie',
+				token,
+			});
+		} else {
+			res.status(400).json({ message: 'Identifiants incorrects' });
+		}
 
 		res.status(200).json({
 			message: 'Connexion réussie',
