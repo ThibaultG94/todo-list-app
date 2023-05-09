@@ -2,11 +2,7 @@ const UserModel = require('../models/user.model');
 const bcrypt = require('bcryptjs');
 
 module.exports.registerUser = async (req, res) => {
-	const user = await UserModel.create({
-		username: req.body.username,
-		email: req.body.email,
-		password: req.body.password,
-	});
+	const { username, email, password } = req.body;
 
 	try {
 		const existingUser = await UserModel.findOne({ email });
@@ -21,25 +17,22 @@ module.exports.registerUser = async (req, res) => {
 		const newUser = new UserModel({ username, email, password });
 		await newUser.save();
 
-		res.status(201).json({ message: 'Compte créé', user });
+		res.status(201).json({ message: 'Compte créé', user: newUser });
 	} catch (err) {
 		res.status(500).json({
-			message: "Erreur dans l'enregistremet du compte",
+			message: "Erreur dans l'enregistrement du compte",
 			err,
 		});
 	}
 };
 
 module.exports.loginUser = async (req, res) => {
-	const { email, password } = req.body;
-
 	try {
+		const { email, password } = req.body;
 		const user = await UserModel.findOne({ email });
 
 		if (!user) {
-			return res
-				.status(404)
-				.json({ message: "L'utilisateur n'existe pas" });
+			return res.status(404).json({ message: 'Identifiants incorrects' });
 		}
 
 		const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -53,21 +46,55 @@ module.exports.loginUser = async (req, res) => {
 			res.status(200).json({
 				message: 'Authentification réussie',
 				token,
+				user: {
+					id: user._id,
+					username: user.username,
+					email: user.email,
+				},
 			});
 		} else {
 			res.status(400).json({ message: 'Identifiants incorrects' });
 		}
+	} catch (err) {
+		res.status(500).json({ message: 'Erreur interne du serveur', err });
+	}
+};
+
+module.exports.updateUser = async (req, res) => {
+	try {
+		const userId = req.user._id;
+		const updates = req.body;
+		const updatedUser = await User.findByIdAndUpdate(userId, updates, {
+			new: true,
+		});
+
+		if (!updatedUser) {
+			return res.status(404).json({ message: 'Utilisateur introuvable' });
+		}
 
 		res.status(200).json({
-			message: 'Connexion réussie',
-			// token, // Retournez le token si nécessaire
-			user: {
-				id: user._id,
-				username: user.username,
-				email: user.email,
-			},
+			message: 'Utilisateur mis à jour',
+			user: updatedUser,
 		});
 	} catch (err) {
-		res.status(500).json({ message: 'Connexion échouée', err });
+		res.status(500).json({ message: 'Erreur interne du serveur', err });
+	}
+};
+
+module.exports.deleteUser = async (req, res) => {
+	try {
+		const userId = req.user._id;
+		const deletedUser = await User.findByIdAndRemove(userId);
+
+		if (!deletedUser) {
+			return res.status(404).json({ message: 'Utilisateur introuvable' });
+		}
+
+		res.status(200).json({
+			message: 'Utilisateur supprimé',
+			user: deletedUser,
+		});
+	} catch (err) {
+		res.status(500).json({ message: 'Erreur interne du serveur', err });
 	}
 };
