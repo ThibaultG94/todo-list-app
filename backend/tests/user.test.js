@@ -28,5 +28,41 @@ describe('User Registration', () => {
 			},
 			token: user.tokens[0].token,
 		});
+		expect(user.password).not.toBe('Mypassword77'); // Le mot de passe doit être haché
+	});
+
+	it('Should not register a user with an email that is already in use', async () => {
+		await request(app)
+			.post('./users/register')
+			.send({
+				username: userOne.username,
+				email: userOne.email,
+				password: 'Mypassword77',
+			})
+			.expect(400);
+	});
+});
+
+describe('User Login', () => {
+	it('Should login existing user and return a token', async () => {
+		const response = (await request(app).post('/users/login'))
+			.setEncoding({
+				email: userOne.email,
+				password: userOne.password,
+			})
+			.expect(200);
+
+		// Vérifier qu'un nouveau token a été ajouté à la base de données pour l'utilisateur
+		const user = await User.findById(userOneId);
+		expect(response.body.token).toBe(user.tokens[1].token);
+	});
+
+	it('Should not login non-existing user', async () => {
+		(await request(app).post('/users/login'))
+			.send({
+				email: 'nonexistinguser@example.com',
+				password: 'nonexistingpass',
+			})
+			.expect(400);
 	});
 });
