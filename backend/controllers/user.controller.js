@@ -65,11 +65,22 @@ module.exports.updateUser = async (req, res) => {
 		const userIdFromToken = req.user._id;
 		const userRoleFromToken = req.user.role;
 		const userIdFromParams = req.params.id;
+		const userToUpdate = await UserModel.findById(userIdFromParams);
+
+		// Previent qu'un non-superadmin modifie un admin
+
+		if (userToUpdate.role !== 'user' && roleFromToken !== 'superadmin') {
+			return res.status(403).json({
+				message:
+					"Vous n'avez pas les droits suffisants pour effectuer cette action",
+			});
+		}
 
 		// Autorise l'utilisateur à mettre à jour ses propres données ou, si l'utilisateur est un admin, à mettre à jour n'importe quelle donnée
 		if (
 			userIdFromToken !== userIdFromParams &&
-			userRoleFromToken !== 'admin'
+			userRoleFromToken !== 'admin' &&
+			userRoleFromToken !== 'superadmin'
 		) {
 			return res.status(403).json({
 				message:
@@ -109,8 +120,22 @@ module.exports.deleteUser = async (req, res) => {
 		const userIdFromToken = req.user._id;
 		const roleFromToken = req.user.role;
 		const userIdFromParams = req.params.id;
+		const userToDelete = await UserModel.findById(userIdFromParams);
 
-		if (userIdFromToken !== userIdFromParams && roleFromToken !== 'admin') {
+		// Previens qu'un non-superadmin puisse supprimer un admin
+
+		if (userToDelete.role !== 'user' && roleFromToken !== 'superadmin') {
+			return res.status(403).json({
+				message:
+					"Vous n'avez pas les droits suffisants pour effectuer cette action",
+			});
+		}
+
+		if (
+			userIdFromToken !== userIdFromParams &&
+			roleFromToken !== 'admin' &&
+			roleFromToken !== 'superadmin'
+		) {
 			return res.status(403).json({
 				message:
 					"Vous n'avez pas les droits suffisants pour effectuer cette action.",
@@ -135,10 +160,37 @@ module.exports.deleteUser = async (req, res) => {
 
 module.exports.getUser = async (req, res) => {
 	try {
-		const user = await UserModel.findById(req.user._id).select('-password');
+		const userIdFromToken = req.user._id;
+		const userRoleFromToken = req.user.role;
+		const userIdFromParams = req.params.id;
+
+		// Si l'utilisateur ne demande pas ses propres données ou s'il n'est pas admin ou superadmin, nié la requête
+		if (
+			userIdFromToken !== userIdFromParams &&
+			userRoleFromToken !== 'admin' &&
+			userRoleFromToken !== 'superadmin'
+		) {
+			return res.status(403).json({
+				message:
+					"Vous n'avez pas les droits suffisants pour effectuer cette action",
+			});
+		}
+
+		const user = await UserModel.findById(userIdFromParams).select(
+			'-password'
+		);
 		if (!user) {
 			res.status(400).json({ message: 'Utilisateur non trouvé' });
 		}
+
+		// Si l'utilisateur est admin mais qu'il ne demande pas ses propres données ou que l'utilisateur est superadmin, nié la requête
+		if (user.role !== 'user' && userRoleFromToken !== 'superadmin') {
+			return res.status(403).json({
+				message:
+					"Vous n'avez pas les droits suffisants pour effectuer cette action",
+			});
+		}
+
 		res.status(200).json({ user });
 	} catch (err) {
 		res.status(500).json({ message: 'Erreur serveur' });
