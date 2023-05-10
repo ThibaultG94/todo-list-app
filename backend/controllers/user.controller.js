@@ -1,4 +1,3 @@
-const userModel = require('../models/user.model');
 const UserModel = require('../models/user.model');
 const bcrypt = require('bcryptjs');
 
@@ -63,15 +62,38 @@ module.exports.loginUser = async (req, res) => {
 
 module.exports.updateUser = async (req, res) => {
 	try {
-		const userId = req.user._id;
-		const updates = req.body;
-		const updatedUser = await User.findByIdAndUpdate(userId, updates, {
-			new: true,
-		});
+		const userIdFromToken = req.user._id;
+		const userRoleFromToken = req.user.role;
+		const userIdFromParams = req.params.id;
 
-		if (!updatedUser) {
+		// Autorise l'utilisateur à mettre à jour ses propres données ou, si l'utilisateur est un admin, à mettre à jour n'importe quelle donnée
+		if (
+			userIdFromToken !== userIdFromParams &&
+			userRoleFromToken !== 'admin'
+		) {
+			return res.status(403).json({
+				message:
+					"Vous n'avez pas les droits suffisants pour effectuer cette action",
+			});
+		}
+
+		// Les données à mettre à jour
+		const updates = req.body;
+
+		// Trouver l'utilisateur d'abord
+
+		const user = await UserModel.findById(userIdFromParams);
+		if (!user) {
 			return res.status(404).json({ message: 'Utilisateur introuvable' });
 		}
+
+		// Mettre à jour les champs de l'utilisateur
+		Object.keys(updates).forEach((update) => {
+			user[update] = updates[update];
+		});
+
+		// Sauvegarder l'utilisateur
+		const updatedUser = await user.save();
 
 		res.status(200).json({
 			message: 'Utilisateur mis à jour',
@@ -84,8 +106,18 @@ module.exports.updateUser = async (req, res) => {
 
 module.exports.deleteUser = async (req, res) => {
 	try {
-		const userId = req.user._id;
-		const deletedUser = await User.findByIdAndRemove(userId);
+		const userIdFromToken = req.user._id;
+		const roleFromToken = req.user.role;
+		const userIdFromParams = req.params.id;
+
+		if (userIdFromToken !== userIdFromParams && roleFromToken !== 'admin') {
+			return res.status(403).json({
+				message:
+					"Vous n'avez pas les droits suffisants pour effectuer cette action.",
+			});
+		}
+
+		const deletedUser = await UserModel.findByIdAndDelete(userIdFromParams);
 
 		if (!deletedUser) {
 			return res.status(404).json({ message: 'Utilisateur introuvable' });
@@ -96,13 +128,14 @@ module.exports.deleteUser = async (req, res) => {
 			user: deletedUser,
 		});
 	} catch (err) {
+		console.log(err);
 		res.status(500).json({ message: 'Erreur interne du serveur', err });
 	}
 };
 
 module.exports.getUser = async (req, res) => {
 	try {
-		const user = await userModel.findById(req.user._id).select('-password');
+		const user = await UserModel.findById(req.user._id).select('-password');
 		if (!user) {
 			res.status(400).json({ message: 'Utilisateur non trouvé' });
 		}
