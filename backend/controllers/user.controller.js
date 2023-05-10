@@ -1,3 +1,4 @@
+const userModel = require('../models/user.model');
 const UserModel = require('../models/user.model');
 const bcrypt = require('bcryptjs');
 
@@ -96,5 +97,17 @@ module.exports.deleteUser = async (req, res) => {
 		});
 	} catch (err) {
 		res.status(500).json({ message: 'Erreur interne du serveur', err });
+	}
+};
+
+module.exports.getUser = async (req, res) => {
+	try {
+		const user = await userModel.findById(req.user._id).select('-password');
+		if (!user) {
+			res.status(400).json({ message: 'Utilisateur non trouvé' });
+		}
+		res.status(200).json({ user });
+	} catch (err) {
+		res.status(500).json({ message: 'Erreur serveur' });
 	}
 };
