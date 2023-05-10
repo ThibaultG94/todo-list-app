@@ -20,4 +20,4 @@ const setupDataBase = async () => {
 	await new User(userOne).save();
 };
 
-module.exports(userOneId, userOne, setupDataBase);
+module.exports = { userOneId, userOne, setupDataBase };
