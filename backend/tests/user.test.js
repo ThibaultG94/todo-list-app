@@ -1,29 +1,14 @@
 const request = require('supertest');
 const app = require('../server'); // Application Express
 const User = require('../models/user.model'); // Modèle d'utilisateur
-const { userOne, userOneId, setupDatabase } = require('./testUtils');
-const { MongoMemoryServer } = require('mongodb-memory-server');
+const { userOne, userOneId, setupDataBase } = require('./testUtils');
 const mongoose = require('mongoose');
 
-let mongoServer;
-
-before(async () => {
-	mongoServer = new MongoMemoryServer();
-	const mongoUri = await mongoServer.getUri();
-
-	await mongoose.connect(mongoUri, {
-		useNewUrlParser: true,
-		useCreateIndex: true,
-		useUnifiedTopology: true,
-	});
+// beforeEach(setupDataBase);
+beforeEach(async function () {
+	this.timeout(10000);
+	await setupDataBase();
 });
-
-after(async () => {
-	await mongoose.disconnect();
-	await mongoServer.stop();
-});
-
-beforeEach(setupDatabase);
 
 describe('User Registration', () => {
 	it('Should register a new user', async () => {
@@ -85,4 +70,8 @@ describe('User Login', () => {
 			})
 			.expect(400);
 	});
+});
+
+after(async () => {
+	await mongoose.connection.dropDatabase();
 });
