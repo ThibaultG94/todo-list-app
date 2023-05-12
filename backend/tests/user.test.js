@@ -38,7 +38,7 @@ describe('User Registration', () => {
 
 	it('Should not register a user with an email that is already in use', async () => {
 		await request(app)
-			.post('./users/register')
+			.post('/users/register')
 			.send({
 				username: userOne.username,
 				email: userOne.email,
@@ -51,7 +51,7 @@ describe('User Registration', () => {
 describe('User Login', () => {
 	it('Should login existing user and return a token', async () => {
 		const response = (await request(app).post('/users/login'))
-			.setEncoding({
+			.send({
 				email: userOne.email,
 				password: userOne.password,
 			})
@@ -63,7 +63,8 @@ describe('User Login', () => {
 	});
 
 	it('Should not login non-existing user', async () => {
-		(await request(app).post('/users/login'))
+		await request(app)
+			.post('/users/login')
 			.send({
 				email: 'nonexistinguser@example.com',
 				password: 'nonexistingpass',

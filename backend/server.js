@@ -27,3 +27,5 @@ app.use('/user', require('./routes/user.routes'));
 
 // Lancer le serveur
 app.listen(port, () => console.log('Le serveur a démarré au port ' + port));
+
+module.exports = app;

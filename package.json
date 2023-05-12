@@ -4,8 +4,8 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"test": "mocha backend/tests/*.test.js",
-		"server": "nodemon ./backend/server.js"
+		"test": "NODE_ENV=test mocha backend/tests/*.test.js",
+		"server": "NODE_ENV=development nodemon ./backend/server.js"
 	},
 	"repository": {
 		"type": "git",

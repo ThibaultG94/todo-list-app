@@ -3,12 +3,15 @@ const mongoose = require('mongoose');
 const connectDB = async () => {
 	try {
 		mongoose.set('strictQuery', false);
-		mongoose
-			.connect(process.env.MONGO_URI)
-			.then(() => console.log('Mongo connecté'));
+		const dbConnection =
+			process.env.NODE_ENV === 'test'
+				? process.env.TEST_MONGO_URI
+				: process.env.MONGO_URI;
+		await mongoose.connect(dbConnection);
+		console.log(`Succesfully connected to ${dbConnection}`);
 	} catch (err) {
-		console.log(err);
-		process.exit();
+		console.error('Error connecting to MongoDB', err.message);
+		process.exit(1);
 	}
 };
 
