@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 const userOneId = new mongoose.Types.ObjectId();
 const userOne = {
-	_id: userOneId,
+	// _id: userOneId,
 	username: 'testuser',
 	email: 'test@example.com',
 	password: 'Mypassword77',

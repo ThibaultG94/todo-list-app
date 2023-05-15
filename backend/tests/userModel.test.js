@@ -12,8 +12,8 @@ describe('User Model', () => {
 			const user = new UserModel({
 				username: 'testuser',
 				email: 'test@example.com',
-				password: 'password123',
-				role: 'user',
+				password: 'Mypassword77',
+				role: 'admin',
 			});
 
 			// Générer un token pour cet utilisateur
