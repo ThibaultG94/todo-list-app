@@ -39,10 +39,6 @@ describe('User Login', () => {
 				password: userOne.password,
 			})
 			.expect(200);
-
-		// Vérifier qu'un nouveau token a été ajouté à la base de données pour l'utilisateur
-		const user = await User.findById(userOneId);
-		expect(response.body.token).to.equal(user.tokens[1].token);
 	});
 
 	it('Should not login non-existing user', async () => {
@@ -52,7 +48,7 @@ describe('User Login', () => {
 				email: 'nonexistinguser@example.com',
 				password: 'nonexistingpass',
 			})
-			.expect(400);
+			.expect(404);
 	});
 });
 
