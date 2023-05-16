@@ -6,55 +6,27 @@ const mongoose = require('mongoose');
 const chai = require('chai');
 const expect = chai.expect;
 
-beforeEach(async function () {
+before(async function () {
 	this.timeout(2000);
 	await setupDataBase();
 });
 
 describe('User Registration', () => {
 	it('Should register a new user', async () => {
-		const response = await request(app).post('/users/register').send(
-			// 	{
-			// 	username: 'testuser',
-			// 	email: 'test@example.com',
-			// 	password: 'Mypassword77',
-			// }
-			userOne
-		);
+		const response = await request(app)
+			.post('/users/register')
+			.send(userOne)
+			.expect(201);
 
-		await expect(response.status).to.equal(201);
 		await console.log(response.body);
-
-		// Vérifier que l'utilisateur a bien été enregistrer dans la base de données
-		// const user = await User.findById(response.body.user._id);
-		// expect(user).not.toBeNull();
-
-		// Log the user object
-		// console.log(user);
-
-		// Assertions sur la réponse
-		// expect(response.body).toMatchObject({
-		// 	user: {
-		// 		username: 'testuser',
-		// 		email: 'test@example.com',
-		// 	},
-		// 	token: user.tokens[0].token,
-		// });
-		// expect(user.password).not.toBe('Mypassword77'); // Le mot de passe doit être haché
-
-		// Log the response body
-		// console.log(response.body);
 	});
 
 	it('Should not register a user with an email that is already in use', async () => {
-		await request(app)
+		const response = await request(app)
 			.post('/users/register')
-			.send({
-				username: userOne.username,
-				email: userOne.email,
-				password: 'Mypassword77',
-			})
+			.send(userOne)
 			.expect(400);
+		await console.log(response.body);
 	});
 });
 
@@ -85,5 +57,5 @@ describe('User Login', () => {
 });
 
 after(async () => {
-	await mongoose.connection.dropDatabase();
+	await setupDataBase();
 });

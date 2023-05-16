@@ -17,7 +17,6 @@ const userOne = {
 
 const setupDataBase = async () => {
 	await User.deleteMany(); // supprime tous les utilisateurs de la base de données
-	await new User(userOne).save();
 };
 
 module.exports = { userOneId, userOne, setupDataBase };
