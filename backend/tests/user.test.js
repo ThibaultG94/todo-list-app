@@ -1,16 +1,33 @@
 const request = require('supertest');
 const app = require('../server'); // Application Express
 const User = require('../models/user.model'); // Modèle d'utilisateur
-const { userOne, userTwo, adminOne, setupDataBase } = require('./testUtils');
+const {
+	userOne,
+	userTwo,
+	userThree,
+	adminOne,
+	adminTwo,
+	adminThree,
+	superAdmin,
+	setupDataBase,
+} = require('./testUtils');
 const mongoose = require('mongoose');
 const chai = require('chai');
 const expect = chai.expect;
-let userOneId;
-let userTwoId;
-let adminOneId;
-let userOneToken;
-let userTwoToken;
-let adminOneToken;
+let userOneId,
+	userTwoId,
+	userThreeId,
+	adminOneId,
+	adminTwoId,
+	adminThreeId,
+	superAdminId;
+let userOneToken,
+	userTwoToken,
+	userThreeToken,
+	adminOneToken,
+	adminTwoToken,
+	adminThreeToken,
+	superAdminToken;
 
 before(async function () {
 	this.timeout(10000);
@@ -34,6 +51,13 @@ describe('User Registration', () => {
 			.expect(201);
 	});
 
+	it('Should register a third new user', async () => {
+		const response = await request(app)
+			.post('/users/register')
+			.send(userThree)
+			.expect(201);
+	});
+
 	it('Should not register a user with an email that is already in use', async () => {
 		const response = await request(app)
 			.post('/users/register')
@@ -48,6 +72,29 @@ describe('Admin Registration', () => {
 		const response = await request(app)
 			.post('/users/register')
 			.send(adminOne)
+			.expect(201);
+	});
+
+	it('Should register a second admin user', async () => {
+		const response = await request(app)
+			.post('/users/register')
+			.send(adminTwo)
+			.expect(201);
+	});
+
+	it('Should register a third admin user', async () => {
+		const response = await request(app)
+			.post('/users/register')
+			.send(adminThree)
+			.expect(201);
+	});
+});
+
+describe('SuperAdmin Registration', () => {
+	it('Should register a superadmin user', async () => {
+		const response = await request(app)
+			.post('/users/register')
+			.send(superAdmin)
 			.expect(201);
 	});
 });
@@ -78,6 +125,18 @@ describe('User Login', () => {
 		userTwoId = await response.body.user.id;
 	});
 
+	it('Should login existing userThree', async () => {
+		const response = await request(app)
+			.post('/users/login')
+			.send({
+				email: userThree.email,
+				password: userThree.password,
+			})
+			.expect(200);
+		userThreeToken = await response.body.token;
+		userThreeId = await response.body.user.id;
+	});
+
 	it('Should not login non-existing user', async () => {
 		await request(app)
 			.post('/users/login')
@@ -101,6 +160,44 @@ describe('Admin login', async () => {
 		adminOneId = await response.body.user.id;
 		adminOneToken = await response.body.token;
 		await console.log(response.body);
+	});
+
+	it('Should login second admin user', async () => {
+		const response = await request(app)
+			.post('/users/login')
+			.send({
+				email: adminTwo.email,
+				password: adminTwo.password,
+			})
+			.expect(200);
+		adminTwoId = await response.body.user.id;
+		adminTwoToken = await response.body.token;
+	});
+
+	it('Should login third admin user', async () => {
+		const response = await request(app)
+			.post('/users/login')
+			.send({
+				email: adminThree.email,
+				password: adminThree.password,
+			})
+			.expect(200);
+		adminThreeId = await response.body.user.id;
+		adminThreeToken = await response.body.token;
+	});
+});
+
+describe('SuperAdmin Login', () => {
+	it('Should login superadmin', async () => {
+		const response = await request(app)
+			.post('/users/login')
+			.send({
+				email: superAdmin.email,
+				password: superAdmin.password,
+			})
+			.expect(200);
+		superAdminId = await response.body.user.id;
+		superAdminToken = await response.body.token;
 	});
 });
 
@@ -156,6 +253,38 @@ describe('User update', () => {
 			.send({ password: 'wxcvbn' })
 			.expect(200);
 	});
+
+	it("Should not update admin's account from an other admin", async () => {
+		const response = await request(app)
+			.put(`/users/${adminOneId}/update`)
+			.set('Authorization', `Bearer ${adminTwoToken}`)
+			.send({ password: 'adminhackanotheradmin' })
+			.expect(403);
+	});
+
+	it("Should not update superadmin's account from a user", async () => {
+		const response = await request(app)
+			.put(`/users/${superAdminId}/update`)
+			.set('Authorization', `Bearer ${userOneToken}`)
+			.send({ password: 'userhackedsuperadmin' })
+			.expect(403);
+	});
+
+	it("Should not update superadmin's account from an admin", async () => {
+		const response = await request(app)
+			.put(`/users/${superAdminId}/update`)
+			.set('Authorization', `Bearer ${adminOneToken}`)
+			.send({ password: 'adminhackedsuperadmin' })
+			.expect(403);
+	});
+
+	it("Should update superadmin's account from himself", async () => {
+		const response = await request(app)
+			.put(`/users/${superAdminId}/update`)
+			.set('Authorization', `Bearer ${superAdminToken}`)
+			.send({ password: 'thenewsuperadminpassword' })
+			.expect(200);
+	});
 });
 
 describe('User get data', () => {
@@ -201,6 +330,34 @@ describe('User get data', () => {
 			.set('Authorization', `Bearer ${adminOneToken}`)
 			.expect(200);
 	});
+
+	it("Should not get admin's data from an other admin", async () => {
+		const response = await request(app)
+			.get(`/users/${adminTwoId}/account`)
+			.set('Authorization', `Bearer ${adminOneToken}`)
+			.expect(403);
+	});
+
+	it("Should not get superadmin's data from a user", async () => {
+		const response = await request(app)
+			.get(`/users/${superAdminId}/account`)
+			.set('Authorization', `Bearer ${userTwoToken}`)
+			.expect(403);
+	});
+
+	it("Should not get superadmin's data from an admin", async () => {
+		const response = await request(app)
+			.get(`/users/${superAdminId}/account`)
+			.set('Authorization', `Bearer ${adminTwoToken}`)
+			.expect(403);
+	});
+
+	it("Should get superadmin's data from himself", async () => {
+		const response = await request(app)
+			.get(`/users/${superAdminId}/account`)
+			.set('Authorization', `Bearer ${superAdminToken}`)
+			.expect(200);
+	});
 });
 
 describe('Users delete account', () => {
@@ -240,10 +397,38 @@ describe('Users delete account', () => {
 			.expect(200);
 	});
 
+	it("Should not delete admin's account from an other admin", async () => {
+		const response = await request(app)
+			.delete(`/users/${adminOneId}/delete`)
+			.set('Authorization', `Bearer ${adminTwoToken}`)
+			.expect(403);
+	});
+
 	it("Should delete admin's account from himself", async () => {
 		const response = await request(app)
 			.delete(`/users/${adminOneId}/delete`)
 			.set('Authorization', `Bearer ${adminOneToken}`)
+			.expect(200);
+	});
+
+	it('Should not delete superadmin from user', async () => {
+		const response = await request(app)
+			.delete(`/users/${superAdminId}/delete`)
+			.set('Authorization', `Bearer ${userThreeToken}`)
+			.expect(403);
+	});
+
+	it("Should not delete superadmin's account from an admin", async () => {
+		const response = await request(app)
+			.delete(`/users/${superAdminId}/delete`)
+			.set('Authorization', `Bearer ${adminThreeToken}`)
+			.expect(403);
+	});
+
+	it("Should delete superadmin's account from himself", async () => {
+		const response = await request(app)
+			.delete(`/users/${superAdminId}/delete`)
+			.set('Authorization', `Bearer ${superAdminToken}`)
 			.expect(200);
 	});
 });
