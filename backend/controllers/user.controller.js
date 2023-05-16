@@ -2,7 +2,7 @@ const UserModel = require('../models/user.model');
 const bcrypt = require('bcryptjs');
 
 module.exports.registerUser = async (req, res) => {
-	const { username, email, password } = req.body;
+	const { username, email, password, role } = req.body;
 
 	try {
 		const existingUser = await UserModel.findOne({ email });
@@ -14,7 +14,7 @@ module.exports.registerUser = async (req, res) => {
 			});
 		}
 
-		const newUser = new UserModel({ username, email, password });
+		const newUser = new UserModel({ username, email, password, role });
 		await newUser.save();
 
 		res.status(201).json({ message: 'Compte créé', user: newUser });
@@ -69,7 +69,11 @@ module.exports.updateUser = async (req, res) => {
 
 		// Previent qu'un non-superadmin modifie un admin
 
-		if (userToUpdate.role !== 'user' && roleFromToken !== 'superadmin') {
+		if (
+			userToUpdate.role !== 'user' &&
+			userRoleFromToken !== 'superadmin' &&
+			userIdFromToken !== userIdFromParams
+		) {
 			return res.status(403).json({
 				message:
 					"Vous n'avez pas les droits suffisants pour effectuer cette action",
@@ -124,7 +128,11 @@ module.exports.deleteUser = async (req, res) => {
 
 		// Previens qu'un non-superadmin puisse supprimer un admin
 
-		if (userToDelete.role !== 'user' && roleFromToken !== 'superadmin') {
+		if (
+			userToDelete.role !== 'user' &&
+			roleFromToken !== 'superadmin' &&
+			userIdFromToken !== userIdFromParams
+		) {
 			return res.status(403).json({
 				message:
 					"Vous n'avez pas les droits suffisants pour effectuer cette action",
@@ -184,7 +192,11 @@ module.exports.getUser = async (req, res) => {
 		}
 
 		// Si l'utilisateur est admin mais qu'il ne demande pas ses propres données ou que l'utilisateur est superadmin, nié la requête
-		if (user.role !== 'user' && userRoleFromToken !== 'superadmin') {
+		if (
+			user.role !== 'user' &&
+			userRoleFromToken !== 'superadmin' &&
+			userIdFromToken !== userIdFromParams
+		) {
 			return res.status(403).json({
 				message:
 					"Vous n'avez pas les droits suffisants pour effectuer cette action",
