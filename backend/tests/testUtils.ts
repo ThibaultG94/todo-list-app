@@ -50,14 +50,3 @@ export const superAdmin = {
 export const setupDataBase = async () => {
 	await User.deleteMany(); // supprime tous les utilisateurs de la base de données
 };
-
-// module.exports = {
-// 	userOne,
-// 	userTwo,
-// 	userThree,
-// 	adminOne,
-// 	adminTwo,
-// 	adminThree,
-// 	superAdmin,
-// 	setupDataBase,
-// };

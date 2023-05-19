@@ -2,11 +2,11 @@ import mongoose from 'mongoose';
 
 const taskSchema = new mongoose.Schema(
 	{
-		name: {
+		title: {
 			type: String,
 			required: true,
 		},
-		author: {
+		user: {
 			type: String,
 			required: true,
 		},
@@ -14,9 +14,12 @@ const taskSchema = new mongoose.Schema(
 			type: Number,
 			required: true,
 		},
+		description: {
+			type: String,
+			required: false,
+		},
 	},
 	{ timestamps: true }
 );
 
-// module.exports = mongoose.model('task', taskSchema);
 export default mongoose.model('task', taskSchema);
