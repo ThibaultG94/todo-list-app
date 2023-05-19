@@ -1,13 +1,16 @@
-const express = require('express');
-const connectDB = require('./config/db');
-const dotenv = require('dotenv').config();
-const cors = require('cors');
-const port = 5000;
+import express from 'express';
+import { connectDB } from './config/db';
+import dotenv from 'dotenv';
+import cors from 'cors';
+
+const port: number = 5000;
+
+dotenv.config();
 
 // connexion à la DB
 connectDB();
 
-const app = express();
+export const app = express();
 
 // Authorisation CORS
 app.use(
@@ -27,5 +30,3 @@ app.use('/users', require('./routes/user.routes'));
 
 // Lancer le serveur
 app.listen(port, () => console.log('Le serveur a démarré au port ' + port));
-
-module.exports = app;

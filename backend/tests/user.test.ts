@@ -1,5 +1,6 @@
 const request = require('supertest');
-const app = require('../server'); // Application Express
+// const app = require('../server'); // Application Express
+import { app } from '../server';
 const User = require('../models/user.model'); // Modèle d'utilisateur
 const {
 	userOne,

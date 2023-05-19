@@ -1,13 +1,14 @@
 {
 	"compilerOptions": {
 		"moduleResolution": "node",
-		"target": "ES2022",
+		"target": "ES2018",
 		"module": "commonjs",
-		"strict": true,
+		"strict": false,
 		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true,
-		"baseUrl": "."
+		"baseUrl": ".",
+		"noImplicitAny": false
 	},
 	"include": ["./backend/tests/*.ts"],
 	"exclude": ["node_modules", ".vscode"]

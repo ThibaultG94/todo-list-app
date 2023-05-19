@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const connectDB = async () => {
+export const connectDB = async () => {
 	try {
 		mongoose.set('strictQuery', false);
 		const dbConnection =
@@ -12,9 +12,10 @@ const connectDB = async () => {
 		console.log(`Succesfully connected to ${dbConnection}`);
 		console.log(`Etat : ${state}`);
 	} catch (err) {
-		console.error('Error connecting to MongoDB', err.message);
+		const result = (err as Error).message;
+		console.error('Error connecting to MongoDB', result);
 		process.exit(1);
 	}
 };
 
-module.exports = connectDB;
+// module.exports = connectDB;
