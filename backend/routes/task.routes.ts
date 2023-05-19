@@ -1,12 +1,12 @@
 const express = require('express');
-const {
+import {
 	setTasks,
 	getTasks,
 	editTask,
 	deleteTask,
-} = require('../controllers/task.controller');
+} from '../controllers/task.controller';
 const router = express.Router();
-const auth = require('../middlewares/auth.middlewares');
+import { auth } from '../middlewares/auth.middlewares';
 
 router.post('/', auth, setTasks);
 router.get('/', auth, getTasks);

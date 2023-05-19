@@ -1,6 +1,6 @@
-const chai = require('chai');
-const jwt = require('jsonwebtoken');
-const UserModel = require('../models/user.model');
+import chai from 'chai';
+import jwt from 'jsonwebtoken';
+import UserModel from '../models/user.model';
 require('dotenv').config({ path: '.env.test' });
 
 const { expect } = chai;
@@ -9,7 +9,7 @@ describe('User Model', () => {
 	describe('generateAuthToken', () => {
 		it('should generate a valid JWT for a user', async () => {
 			// Créer un nouvel utilisateur
-			const user = new UserModel({
+			const user: any = new UserModel({
 				username: 'testuser',
 				email: 'test@example.com',
 				password: 'Mypassword77',

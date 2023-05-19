@@ -1,7 +1,11 @@
-const UserModel = require('../models/user.model');
+import UserModel from '../models/user.model';
+import express from 'express';
 const bcrypt = require('bcryptjs');
 
-module.exports.registerUser = async (req, res) => {
+export const registerUser = async (
+	req: express.Request,
+	res: express.Response
+) => {
 	const { username, email, password, role } = req.body;
 
 	try {
@@ -19,17 +23,21 @@ module.exports.registerUser = async (req, res) => {
 
 		res.status(201).json({ message: 'Compte créé', user: newUser });
 	} catch (err) {
+		const result = (err as Error).message;
 		res.status(500).json({
 			message: "Erreur dans l'enregistrement du compte",
-			err,
+			result,
 		});
 	}
 };
 
-module.exports.loginUser = async (req, res) => {
+export const loginUser = async (
+	req: express.Request,
+	res: express.Response
+) => {
 	try {
 		const { email, password } = req.body;
-		const user = await UserModel.findOne({ email });
+		const user: any = await UserModel.findOne({ email });
 
 		if (!user) {
 			return res.status(404).json({ message: 'Identifiants incorrects' });
@@ -56,14 +64,15 @@ module.exports.loginUser = async (req, res) => {
 			res.status(400).json({ message: 'Identifiants incorrects' });
 		}
 	} catch (err) {
-		res.status(500).json({ message: 'Erreur interne du serveur', err });
+		const result = (err as Error).message;
+		res.status(500).json({ message: 'Erreur interne du serveur', result });
 	}
 };
 
-module.exports.updateUser = async (req, res) => {
+export const updateUser = async (req: any, res: express.Response) => {
 	try {
-		const userIdFromToken = req.user._id;
-		const userRoleFromToken = req.user.role;
+		const userIdFromToken = await req.user._id;
+		const userRoleFromToken = await req.user.role;
 		const userIdFromParams = req.params.id;
 		const userToUpdate = await UserModel.findById(userIdFromParams);
 
@@ -115,11 +124,12 @@ module.exports.updateUser = async (req, res) => {
 			user: updatedUser,
 		});
 	} catch (err) {
-		res.status(500).json({ message: 'Erreur interne du serveur', err });
+		const result = (err as Error).message;
+		res.status(500).json({ message: 'Erreur interne du serveur', result });
 	}
 };
 
-module.exports.deleteUser = async (req, res) => {
+export const deleteUser = async (req: any, res: express.Response) => {
 	try {
 		const userIdFromToken = req.user._id;
 		const roleFromToken = req.user.role;
@@ -161,12 +171,13 @@ module.exports.deleteUser = async (req, res) => {
 			user: deletedUser,
 		});
 	} catch (err) {
-		console.log(err);
-		res.status(500).json({ message: 'Erreur interne du serveur', err });
+		const result = (err as Error).message;
+		console.log(result);
+		res.status(500).json({ message: 'Erreur interne du serveur', result });
 	}
 };
 
-module.exports.getUser = async (req, res) => {
+export const getUser = async (req: any, res: express.Response) => {
 	try {
 		const userIdFromToken = req.user._id;
 		const userRoleFromToken = req.user.role;
@@ -205,6 +216,7 @@ module.exports.getUser = async (req, res) => {
 
 		res.status(200).json({ user });
 	} catch (err) {
-		res.status(500).json({ message: 'Erreur serveur' });
+		const result = (err as Error).message;
+		res.status(500).json({ message: 'Erreur serveur', result });
 	}
 };

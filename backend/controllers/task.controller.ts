@@ -1,11 +1,12 @@
-const TaskModel = require('../models/task.model');
+import TaskModel from '../models/task.model';
+import express from 'express';
 
-module.exports.getTasks = async (req, res) => {
+export const getTasks = async (req: express.Request, res: express.Response) => {
 	const task = await TaskModel.find();
 	res.status(200).json(task);
 };
 
-module.exports.setTasks = async (req, res) => {
+export const setTasks = async (req: express.Request, res: express.Response) => {
 	if (!req.body.name) {
 		res.status(400).json({ message: "Merci d'ajouter une tâche" });
 	}
@@ -17,8 +18,7 @@ module.exports.setTasks = async (req, res) => {
 	});
 	res.status(200).json(task);
 };
-
-module.exports.editTask = async (req, res) => {
+export const editTask = async (req: express.Request, res: express.Response) => {
 	const task = await TaskModel.findById(req.params.id);
 
 	if (!task) {
@@ -32,7 +32,10 @@ module.exports.editTask = async (req, res) => {
 	res.status(200).json(updateTask);
 };
 
-module.exports.deleteTask = async (req, res) => {
+export const deleteTask = async (
+	req: express.Request,
+	res: express.Response
+) => {
 	const task = await TaskModel.findByIdAndDelete(req.params.id);
 
 	if (!task) {

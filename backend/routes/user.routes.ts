@@ -1,14 +1,14 @@
-const express = require('express');
+import express from 'express';
+import { auth } from '../middlewares/auth.middlewares';
 const router = express.Router();
-const auth = require('../middlewares/auth.middlewares');
 
-const {
+import {
 	registerUser,
 	loginUser,
 	updateUser,
 	deleteUser,
 	getUser,
-} = require('../controllers/user.controller');
+} from '../controllers/user.controller';
 
 router.post('/register', registerUser);
 router.post('/login', loginUser);

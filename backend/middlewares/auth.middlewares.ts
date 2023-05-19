@@ -1,6 +1,7 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
+import express from 'express';
 
-const auth = (req, res, next) => {
+export const auth = (req: any, res: express.Response, next) => {
 	const token = req.header('Authorization')?.replace('Bearer ', '');
 	if (!token) {
 		return res
@@ -13,8 +14,7 @@ const auth = (req, res, next) => {
 		req.user = decoded;
 		next();
 	} catch (err) {
-		res.status(400).json({ message: 'Token invalide.' });
+		const result = (err as Error).message;
+		res.status(400).json({ message: 'Token invalide.', result });
 	}
 };
-
-module.exports = auth;
