@@ -14,20 +14,20 @@ const {
 import mongoose, { ConnectOptions } from 'mongoose';
 const chai = require('chai');
 const expect = chai.expect;
-let userOneId: string,
-	userTwoId: string,
-	userThreeId: string,
-	adminOneId: string,
-	adminTwoId: string,
-	adminThreeId: string,
-	superAdminId: string;
-let userOneToken: string,
-	userTwoToken: string,
-	userThreeToken: string,
-	adminOneToken: string,
-	adminTwoToken: string,
-	adminThreeToken: string,
-	superAdminToken: string;
+let userOneId: number = 0,
+	userTwoId: number = 0,
+	userThreeId: number = 0,
+	adminOneId: number = 0,
+	adminTwoId: number = 0,
+	adminThreeId: number = 0,
+	superAdminId: number = 0;
+let userOneToken: string = '',
+	userTwoToken: string = '',
+	userThreeToken: string = '',
+	adminOneToken: string = '',
+	adminTwoToken: string = '',
+	adminThreeToken: string = '',
+	superAdminToken: string = '';
 
 before(async function () {
 	this.timeout(10000);

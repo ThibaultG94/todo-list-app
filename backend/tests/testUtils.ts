@@ -1,6 +1,6 @@
 import mongoose, { ConnectOptions } from 'mongoose';
 const User = require('../models/user.model');
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
 
 const userOne = {
 	username: 'testuser',

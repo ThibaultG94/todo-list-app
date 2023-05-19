@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"test": "NODE_ENV=test mocha backend/tests/*.test.js",
+		"test": "NODE_ENV=test ts-mocha -r ts-node/register backend/tests/*.test.ts",
 		"server": "NODE_ENV=development nodemon ./backend/server.js"
 	},
 	"repository": {
@@ -36,6 +36,7 @@
 		"mocha": "^10.2.0",
 		"mongodb-memory-server": "^8.12.2",
 		"sinon": "^15.0.4",
-		"supertest": "^6.3.3"
+		"supertest": "^6.3.3",
+		"ts-mocha": "^10.0.0"
 	}
 }
