@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import express from 'express';
 
-export const auth = (req: any, res: express.Response, next) => {
+export const auth = (req: any, res: express.Response, next: any) => {
 	const token = req.header('Authorization')?.replace('Bearer ', '');
 	if (!token) {
 		return res
@@ -10,7 +10,7 @@ export const auth = (req: any, res: express.Response, next) => {
 	}
 
 	try {
-		const decoded = jwt.verify(token, process.env.JWT_SECRET);
+		const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
 		req.user = decoded;
 		next();
 	} catch (err) {

@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 export const connectDB = async () => {
 	try {
 		mongoose.set('strictQuery', false);
-		const dbConnection =
+		const dbConnection: any =
 			process.env.NODE_ENV === 'test'
 				? process.env.TEST_MONGO_URI
 				: process.env.MONGO_URI;

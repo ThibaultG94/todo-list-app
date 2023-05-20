@@ -1,16 +1,15 @@
 import TaskModel from '../models/task.model';
 import express from 'express';
-import jwt from 'jsonwebtoken';
 
 export const getTasks = async (req: any, res: express.Response) => {
-	const task = await TaskModel.findById(req.params.id);
+	const task: any = await TaskModel.findById(req.params.id);
 
 	if (!task) {
 		res.status(400).json({ message: "Cette tâche n'existe pas" });
 	}
 
 	// Vérifier que l'utilisateur est le même que celui qui a créer la tâche
-	if (req.user.id !== task.user.toString()) {
+	if (req.user._id !== task.user) {
 		res.status(403).json({
 			message: "Vous n'avez pas le droit de modifier cette tâche",
 		});
@@ -26,7 +25,7 @@ export const setTasks = async (req: express.Request, res: express.Response) => {
 
 	const task = await TaskModel.create({
 		title: req.body.title,
-		user: req.body.user,
+		userId: req.body.userId,
 		date: req.body.date,
 		description: req.body.description,
 	});
@@ -40,7 +39,8 @@ export const editTask = async (req: any, res: express.Response) => {
 	}
 
 	// Vérifier que l'utilisateur est le même que celui qui a créer la tâche
-	if (req.user.id !== task.user.toString()) {
+	if (task !== null && req.user._id !== task.userId) {
+		console.log(req);
 		res.status(403).json({
 			message: "Vous n'avez pas le droit de modifier cette tâche",
 		});
@@ -61,12 +61,14 @@ export const deleteTask = async (req: any, res: express.Response) => {
 	}
 
 	// Vérifier que l'utilisateur est le même que celui qui a créer la tâche
-	if (req.user.id !== task.user.toString()) {
+	if (task && req.user._id !== task.userId) {
 		res.status(403).json({
 			message: "Vous n'avez pas le droit de modifier cette tâche",
 		});
 	}
 
-	await task.deleteOne();
-	res.status(200).json('Tâche supprimée ' + req.params.id);
+	if (task) {
+		await task.deleteOne();
+		res.status(200).json('Tâche supprimée ' + req.params.id);
+	}
 };

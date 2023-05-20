@@ -1,4 +1,4 @@
-const express = require('express');
+import express from 'express';
 import {
 	setTasks,
 	getTasks,
@@ -9,7 +9,7 @@ const router = express.Router();
 import { auth } from '../middlewares/auth.middlewares';
 
 router.post('/', auth, setTasks);
-router.get('/', auth, getTasks);
+router.get('/:id', auth, getTasks);
 router.put('/:id', auth, editTask);
 router.delete('/:id', auth, deleteTask);
 

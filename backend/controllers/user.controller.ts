@@ -1,6 +1,6 @@
 import UserModel from '../models/user.model';
 import express from 'express';
-const bcrypt = require('bcryptjs');
+import bcrypt from 'bcryptjs';
 
 export const registerUser = async (
 	req: express.Request,
@@ -79,6 +79,7 @@ export const updateUser = async (req: any, res: express.Response) => {
 		// Previent qu'un non-superadmin modifie un admin
 
 		if (
+			userToUpdate &&
 			userToUpdate.role !== 'user' &&
 			userRoleFromToken !== 'superadmin' &&
 			userIdFromToken !== userIdFromParams
@@ -106,7 +107,7 @@ export const updateUser = async (req: any, res: express.Response) => {
 
 		// Trouver l'utilisateur d'abord
 
-		const user = await UserModel.findById(userIdFromParams);
+		const user: any = await UserModel.findById(userIdFromParams);
 		if (!user) {
 			return res.status(404).json({ message: 'Utilisateur introuvable' });
 		}
@@ -139,6 +140,7 @@ export const deleteUser = async (req: any, res: express.Response) => {
 		// Previens qu'un non-superadmin puisse supprimer un admin
 
 		if (
+			userToDelete &&
 			userToDelete.role !== 'user' &&
 			roleFromToken !== 'superadmin' &&
 			userIdFromToken !== userIdFromParams
@@ -195,7 +197,7 @@ export const getUser = async (req: any, res: express.Response) => {
 			});
 		}
 
-		const user = await UserModel.findById(userIdFromParams).select(
+		const user: any = await UserModel.findById(userIdFromParams).select(
 			'-password'
 		);
 		if (!user) {

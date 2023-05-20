@@ -1,8 +1,6 @@
-const request = require('supertest');
-// const app = require('../server'); // Application Express
+import request from 'supertest';
 import { app } from '../server';
-const User = require('../models/user.model'); // Modèle d'utilisateur
-const {
+import {
 	userOne,
 	userTwo,
 	userThree,
@@ -11,10 +9,10 @@ const {
 	adminThree,
 	superAdmin,
 	setupDataBase,
-} = require('./testUtils');
+} from './testUtils';
 import mongoose, { ConnectOptions } from 'mongoose';
-const chai = require('chai');
-const expect = chai.expect;
+import * as chai2 from 'chai';
+const expect = chai2.expect;
 let userOneId: number = 0,
 	userTwoId: number = 0,
 	userThreeId: number = 0,
