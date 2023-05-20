@@ -9,7 +9,7 @@ export const getTasks = async (req: any, res: express.Response) => {
 	}
 
 	// Vérifier que l'utilisateur est le même que celui qui a créer la tâche
-	if (req.user._id !== task.user) {
+	if (task !== null && req.user._id !== task.userId) {
 		res.status(403).json({
 			message: "Vous n'avez pas le droit de modifier cette tâche",
 		});
