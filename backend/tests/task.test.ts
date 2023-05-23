@@ -11,6 +11,16 @@ import {
 	adminFive,
 	superAdminTwo,
 } from './testUtils';
+let userFourId: number = 0,
+	userFiveId: number = 0,
+	adminFourId: number = 0,
+	adminFiveId: number = 0,
+	superAdminTwoId: number = 0;
+let userFourToken: string = '',
+	userFiveToken: string = '',
+	adminFourToken: string = '',
+	adminFiveToken: string = '',
+	superAdminTwoToken: string = '';
 
 before(async function () {
 	this.timeout(10000);
@@ -51,6 +61,75 @@ describe('User Registration', () => {
 			.expect(201);
 	});
 });
+
+describe('Users login', () => {
+	it('Should login existing userFour', async () => {
+		const response = await request(app)
+			.post('/users/login')
+			.send({
+				email: userFour.email,
+				password: userFour.password,
+			})
+			.expect(200);
+		userFourToken = await response.body.token;
+		userFourId = await response.body.user.id;
+		console.log(response.body);
+	});
+
+	it('Should login existing userFive', async () => {
+		const response = await request(app)
+			.post('/users/login')
+			.send({
+				email: userFive.email,
+				password: userFive.password,
+			})
+			.expect(200);
+		userFiveToken = await response.body.token;
+		userFiveId = await response.body.user.id;
+		console.log(response.body);
+	});
+
+	it('Should login existing adminFour', async () => {
+		const response = await request(app)
+			.post('/users/login')
+			.send({
+				email: adminFour.email,
+				password: adminFour.password,
+			})
+			.expect(200);
+		adminFourToken = await response.body.token;
+		adminFourId = await response.body.user.id;
+		console.log(response.body);
+	});
+
+	it('Should login existing adminFive', async () => {
+		const response = await request(app)
+			.post('/users/login')
+			.send({
+				email: adminFive.email,
+				password: adminFive.password,
+			})
+			.expect(200);
+		adminFiveToken = await response.body.token;
+		adminFiveId = await response.body.user.id;
+		console.log(response.body);
+	});
+
+	it('Should login existing superAdminTwo', async () => {
+		const response = await request(app)
+			.post('/users/login')
+			.send({
+				email: superAdminTwo.email,
+				password: superAdminTwo.password,
+			})
+			.expect(200);
+		superAdminTwoToken = await response.body.token;
+		superAdminTwoId = await response.body.user.id;
+		console.log(response.body);
+	});
+});
+
+describe('Tasks creations', () => {});
 
 after(async function () {
 	await setupDataBase();
