@@ -1,5 +1,6 @@
 import mongoose, { ConnectOptions } from 'mongoose';
 import User from '../models/user.model';
+import Task from '../models/task.model';
 
 export const userOne = {
 	username: 'testuser',
@@ -17,6 +18,18 @@ export const userThree = {
 	username: 'testuserthree',
 	email: 'testthree@example.com',
 	password: 'Mythirdpassword99',
+};
+
+export const userFour = {
+	username: 'testuserfour',
+	email: 'testfour@example.com',
+	password: 'MyFourthpassword99',
+};
+
+export const userFive = {
+	username: 'testuserfive',
+	email: 'testfive@example.com',
+	password: 'MyFifthpassword99',
 };
 
 export const adminOne = {
@@ -40,6 +53,20 @@ export const adminThree = {
 	role: 'admin',
 };
 
+export const adminFour = {
+	username: 'testadminfour',
+	email: 'testadminfour@example.com',
+	password: 'qsdfghjklm',
+	role: 'admin',
+};
+
+export const adminFive = {
+	username: 'testadminfive',
+	email: 'testadminfive@example.com',
+	password: 'qsdfghjklm',
+	role: 'admin',
+};
+
 export const superAdmin = {
 	username: 'superAdmin',
 	email: 'superadmin@example.com',
@@ -47,6 +74,14 @@ export const superAdmin = {
 	role: 'superadmin',
 };
 
+export const superAdminTwo = {
+	username: 'superAdminTwo',
+	email: 'superadmintwo@example.com',
+	password: 'therealsuperadminpassword',
+	role: 'superadmin',
+};
+
 export const setupDataBase = async () => {
 	await User.deleteMany(); // supprime tous les utilisateurs de la base de données
+	await Task.deleteMany(); // supprime toutes les tâches de la base de données
 };
