@@ -22,6 +22,10 @@ let userFourToken: string = '',
 	adminFiveToken: string = '',
 	superAdminTwoToken: string = '';
 
+let firstTaskId: number = 0,
+	firstAdminTaskId: number = 0,
+	firstSuperAdminTaskId: number = 0;
+
 before(async function () {
 	this.timeout(10000);
 	await setupDataBase();
@@ -129,7 +133,150 @@ describe('Users login', () => {
 	});
 });
 
-describe('Tasks creations', () => {});
+describe('Tasks creations', () => {
+	it("Shouldn't register a first task by userFour without token", async () => {
+		const response = await request(app)
+			.post('/task/')
+			.send({
+				title: 'Second Task',
+				userId: userFourId,
+				date: Date.now(),
+				description: 'This is the second task',
+			})
+			.expect(401);
+	});
+
+	it('Should create a task from userFour', async () => {
+		const response = await request(app)
+			.post('/task/')
+			.set('Authorization', `Bearer ${userFourToken}`)
+			.send({
+				title: 'First Task',
+				userId: userFourId,
+				date: Date.now(),
+				description: 'This is the first task',
+			})
+			.expect(200);
+
+		await console.log(response.body);
+		firstTaskId = response.body._id;
+	});
+
+	it('Should create a task from an admin', async () => {
+		const response = await request(app)
+			.post('/task/')
+			.set('Authorization', `Bearer ${adminFourToken}`)
+			.send({
+				title: 'First task admin',
+				userId: adminFourId,
+				date: Date.now(),
+				description: 'This is the first admin task',
+			})
+			.expect(200);
+
+		firstAdminTaskId = response.body._id;
+	});
+
+	it('Should create a task from the superadmin', async () => {
+		const response = await request(app)
+			.post('/task/')
+			.set('Authorization', `Bearer ${superAdminTwoToken}`)
+			.send({
+				title: 'First SuperAdmin Task',
+				userId: superAdminTwoId,
+				date: Date.now(),
+				description: 'This is the first superadmin task',
+			})
+			.expect(200);
+
+		firstSuperAdminTaskId = response.body._id;
+	});
+});
+
+describe('Get Tasks', () => {
+	it('Should userFour gets his own tasks', async () => {
+		const response = await request(app)
+			.get(`/task/${firstTaskId}/`)
+			.set('Authorization', `Bearer ${userFourToken}`)
+			.expect(200);
+	});
+
+	it("Shouldn't userFive gets userFour's task", async () => {
+		const response = await request(app)
+			.get(`/task/${firstTaskId}`)
+			.set('Authorization', `Bearer ${userFiveToken}`)
+			.expect(403);
+	});
+
+	it("Shouldn't get task without token", async () => {
+		const response = await request(app)
+			.get(`/task/${firstTaskId}`)
+			.expect(401);
+	});
+
+	it('Admin should not get user task', async () => {
+		const response = await request(app)
+			.get(`/task/${firstTaskId}`)
+			.set('Authorization', `Bearer ${adminFourToken}`)
+			.expect(403);
+	});
+
+	it('Superadmin should not get user task', async () => {
+		const response = await request(app)
+			.get(`/task/${firstTaskId}`)
+			.set('Authorization', `Bearer ${superAdminTwoToken}`)
+			.expect(403);
+	});
+
+	it("Shouldn't user get admin's task", async () => {
+		const response = await request(app)
+			.get(`/task/${firstAdminTaskId}`)
+			.set('Authorization', `Bearer ${userFiveToken}`)
+			.expect(403);
+	});
+
+	it("Shouldn't admin get an other admin's task", async () => {
+		const response = await request(app)
+			.get(`/task/${firstAdminTaskId}`)
+			.set('Authorization', `Bearer ${adminFiveToken}`)
+			.expect(403);
+	});
+
+	it("Shouldn't superadmin get an admin's task", async () => {
+		const response = await request(app)
+			.get(`/task/${firstAdminTaskId}`)
+			.set('Authorization', `Bearer ${superAdminTwoToken}`)
+			.expect(403);
+	});
+
+	it('Should admin gets his own task', async () => {
+		const response = await request(app)
+			.get(`/task/${firstAdminTaskId}`)
+			.set('Authorization', `Bearer ${adminFourToken}`)
+			.expect(200);
+	});
+
+	it("Shouldn't user get superadmin's task", async () => {
+		const response = await request(app)
+			.get(`/task/${firstSuperAdminTaskId}`)
+			.set('Authorization', `Bearer ${userFiveToken}`)
+			.expect(403);
+	});
+
+	it("Shouldn't admin get superadmin's task", async () => {
+		const response = await request(app)
+			.get(`/task/${firstSuperAdminTaskId}`)
+			.set('Authorization', `Bearer ${adminFiveToken}`)
+			.expect(403);
+	});
+
+	it('Should superadmin get his own task', async () => {
+		const response = await request(app)
+			.get(`/task/${firstSuperAdminTaskId}`)
+			.set('Authorization', `Bearer ${superAdminTwoToken}`)
+			.expect(200);
+	});
+});
 
 after(async function () {
 	await setupDataBase();
