@@ -2,20 +2,33 @@ import TaskModel from '../models/task.model';
 import express from 'express';
 
 export const getTasks = async (req: any, res: express.Response) => {
-	const task: any = await TaskModel.findById(req.params.id);
+	try {
+		const page = parseInt(req.query.page, 10) || 1;
+		const limit = parseInt(req.query.limit, 10) || 10;
+		const skip = (page - 1) * limit;
 
-	if (!task) {
-		return res.status(400).json({ message: "Cette tâche n'existe pas" });
+		const task: any = await TaskModel.findById(req.params.id)
+			.skip(skip)
+			.limit(limit);
+
+		if (!task) {
+			return res
+				.status(400)
+				.json({ message: "Cette tâche n'existe pas" });
+		}
+
+		// Vérifier que l'utilisateur est le même que celui qui a créer la tâche
+		if (task !== null && req.user._id !== task.userId) {
+			return res.status(403).json({
+				message: "Vous n'avez pas le droit de modifier cette tâche",
+			});
+		}
+
+		res.status(200).json(task);
+	} catch (err) {
+		const result = (err as Error).message;
+		res.status(500).json({ message: 'Erreur interne du serveur', result });
 	}
-
-	// Vérifier que l'utilisateur est le même que celui qui a créer la tâche
-	if (task !== null && req.user._id !== task.userId) {
-		return res.status(403).json({
-			message: "Vous n'avez pas le droit de modifier cette tâche",
-		});
-	}
-
-	res.status(200).json(task);
 };
 
 export const setTasks = async (req: express.Request, res: express.Response) => {
