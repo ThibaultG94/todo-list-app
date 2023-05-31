@@ -275,6 +275,141 @@ describe('Get Tasks', () => {
 			.get(`/task/${firstSuperAdminTaskId}`)
 			.set('Authorization', `Bearer ${superAdminTwoToken}`)
 			.expect(200);
+
+		console.log(response.body);
+	});
+});
+
+describe('Update Task', async () => {
+	it('Should user update his own task', async () => {
+		const response = await request(app)
+			.put(`/task/${firstTaskId}/`)
+			.set('Authorization', `Bearer ${userFourToken}`)
+			.send({
+				title: 'New First Task Title',
+				userId: userFourId,
+				date: Date.now(),
+				description:
+					"This is the new description of the first task's user",
+				status: 'In Progress',
+			})
+			.expect(200);
+
+		await console.log(response.body);
+	});
+
+	it("Shouldn't user update an other user's task", async () => {
+		const response = await request(app)
+			.put(`/task/${firstTaskId}`)
+			.set('Authorization', `Bearer ${userFiveToken}`)
+			.send({
+				title: 'Title hacked by an other user',
+				userId: userFiveId,
+			})
+			.expect(403);
+	});
+
+	it("Shouldn't admin update an other user's task", async () => {
+		const response = await request(app)
+			.put(`/task/${firstTaskId}`)
+			.set('Authorization', `Bearer ${adminFourToken}`)
+			.send({
+				title: 'Title hacked by an admin',
+				userId: adminFourId,
+			})
+			.expect(403);
+	});
+
+	it("Shouldn't superadmin update an other user's task", async () => {
+		const response = await request(app)
+			.put(`/task/${firstTaskId}`)
+			.set('Authorization', `Bearer ${superAdminTwoToken}`)
+			.send({
+				title: 'Title hacked by the superadmin',
+				userId: superAdminTwoId,
+			})
+			.expect(403);
+	});
+
+	it('Should admin update his own task', async () => {
+		const response = await request(app)
+			.put(`/task/${firstAdminTaskId}`)
+			.set('Authorization', `Bearer ${adminFourToken}`)
+			.send({
+				title: 'The new title of the first Admin task',
+				userId: adminFourId,
+				status: 'Completed',
+			})
+			.expect(200);
+	});
+
+	it("Shouldn't user update admin's task", async () => {
+		const response = await request(app)
+			.put(`/task/${firstAdminTaskId}`)
+			.set('Authorization', `Bearer ${userFourToken}`)
+			.send({
+				title: 'task hacked by a user',
+				userId: userFourId,
+			})
+			.expect(403);
+	});
+
+	it("Shouldn't admin update other admin's task", async () => {
+		const response = await request(app)
+			.put(`/task/${firstAdminTaskId}`)
+			.set('Authorization', `Bearer ${adminFiveToken}`)
+			.send({
+				title: 'task hacked by an other admin',
+				userId: adminFiveId,
+			})
+			.expect(403);
+	});
+
+	it("Shouldn't superadmin update admin's task", async () => {
+		const response = await request(app)
+			.put(`/task/${firstAdminTaskId}`)
+			.set('Authorization', `Bearer ${superAdminTwoToken}`)
+			.send({
+				title: 'task hacked by the superadmin',
+				userId: superAdminTwoId,
+			})
+			.expect(403);
+	});
+
+	it("Shouldn't user update superadmin's task", async () => {
+		const response = await request(app)
+			.put(`/task/${firstSuperAdminTaskId}`)
+			.set('Authorization', `Bearer ${userFiveToken}`)
+			.send({
+				title: 'task hacked by a random user',
+				userId: userFiveId,
+			})
+			.expect(403);
+	});
+
+	it("Shouldn't admin update superadmin's task", async () => {
+		const response = await request(app)
+			.put(`/task/${firstSuperAdminTaskId}`)
+			.set('Authorization', `Bearer ${adminFiveToken}`)
+			.send({
+				title: 'task hacked by an admin',
+				userId: adminFiveId,
+			})
+			.expect(403);
+	});
+
+	it('Should superadmin update his own task', async () => {
+		const response = await request(app)
+			.put(`/task/${firstSuperAdminTaskId}`)
+			.set('Authorization', `Bearer ${superAdminTwoToken}`)
+			.send({
+				title: 'The new title of the first SuperAdmin task',
+				userId: superAdminTwoId,
+				status: 'Archived',
+			})
+			.expect(200);
+
+		await console.log(response.body);
 	});
 });
 

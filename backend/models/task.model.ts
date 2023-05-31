@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { registerUser } from '../controllers/user.controller';
 
 const taskSchema = new mongoose.Schema(
 	{
@@ -16,6 +17,23 @@ const taskSchema = new mongoose.Schema(
 		},
 		description: {
 			type: String,
+			required: false,
+		},
+		status: {
+			type: String,
+			enum: ['Pending', 'In Progress', 'Completed', 'Archived'],
+			default: 'Pending',
+		},
+		estimatedTime: {
+			type: Number,
+			required: false,
+		},
+		comments: {
+			type: String,
+			required: false,
+		},
+		priority: {
+			type: 'String',
 			required: false,
 		},
 	},
