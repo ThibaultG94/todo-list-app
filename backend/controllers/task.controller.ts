@@ -31,7 +31,7 @@ export const getUserTasks = async (req: any, res: express.Response) => {
 		const page = parseInt(req.query.page, 10) || 1;
 		const limit = parseInt(req.query.limit, 10) || 10;
 		const skip = (page - 1) * limit;
-		const { userId } = req.params;
+		const userId = req.params._id;
 		const key = `task:${userId}`;
 
 		// Vérifie d'abord si les tâches sont en cache
@@ -43,9 +43,7 @@ export const getUserTasks = async (req: any, res: express.Response) => {
 			tasks = JSON.parse(cachedTasks);
 		} else {
 			// Si les tâches ne sont pas en cache, récupère les tâches depuis la base de données
-			tasks = await TaskModel.findById({ userId })
-				.skip(skip)
-				.limit(limit);
+			tasks = await TaskModel.find(userId).skip(skip).limit(limit);
 
 			// Mets les tâches en cache pour les requêtes futur
 			await client.setEx(key, 3600, JSON.stringify(tasks));

@@ -2,6 +2,7 @@ import express from 'express';
 import { connectDB } from './config/db';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import './utils/redisClient';
 
 const port: number = 5000;
 
