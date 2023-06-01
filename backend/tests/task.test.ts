@@ -193,7 +193,7 @@ describe('Tasks creations', () => {
 	});
 });
 
-describe('Get Tasks', () => {
+describe('Get Task', () => {
 	it('Should userFour gets his own tasks', async () => {
 		const response = await request(app)
 			.get(`/task/${firstTaskId}/`)
