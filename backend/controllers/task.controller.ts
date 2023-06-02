@@ -31,8 +31,17 @@ export const getUserTasks = async (req: any, res: express.Response) => {
 		const page = parseInt(req.query.page, 10) || 1;
 		const limit = parseInt(req.query.limit, 10) || 10;
 		const skip = (page - 1) * limit;
-		const userId = req.params._id;
+		const userId = req.params.id;
 		const key = `task:${userId}`;
+
+		// Vérifier que l'utilisateur est le même que celui qui a créer la tâche
+		console.log(req.user._id, userId);
+		if (req.user._id !== userId) {
+			return res.status(403).json({
+				message:
+					'Vous ne disposez pas des droits suffisants pour effectuer cette action',
+			});
+		}
 
 		// Vérifie d'abord si les tâches sont en cache
 		const cachedTasks = await client.get(key);
@@ -43,7 +52,7 @@ export const getUserTasks = async (req: any, res: express.Response) => {
 			tasks = JSON.parse(cachedTasks);
 		} else {
 			// Si les tâches ne sont pas en cache, récupère les tâches depuis la base de données
-			tasks = await TaskModel.find(userId).skip(skip).limit(limit);
+			tasks = await TaskModel.find({ userId }).skip(skip).limit(limit);
 
 			// Mets les tâches en cache pour les requêtes futur
 			await client.setEx(key, 3600, JSON.stringify(tasks));

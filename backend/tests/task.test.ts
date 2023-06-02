@@ -162,6 +162,22 @@ describe('Tasks creations', () => {
 		firstTaskId = response.body._id;
 	});
 
+	it('Should create a second task from userFour', async () => {
+		const response = await request(app)
+			.post('/task/')
+			.set('Authorization', `Bearer ${userFourToken}`)
+			.send({
+				title: 'Second Task',
+				userId: userFourId,
+				date: Date.now(),
+				description: 'This is the second task',
+			})
+			.expect(200);
+
+		await console.log(response.body);
+		firstTaskId = response.body._id;
+	});
+
 	it('Should create a task from an admin', async () => {
 		const response = await request(app)
 			.post('/task/')
@@ -277,6 +293,22 @@ describe('Get Task', () => {
 			.expect(200);
 
 		console.log(response.body);
+	});
+});
+
+describe("Get User's Tasks", async () => {
+	it('Should user get his own tasks', async () => {
+		const response = await request(app)
+			.get(`/task/user/${userFourId}`)
+			.set('Authorization', `Bearer ${userFourToken}`)
+			.expect(200);
+	});
+
+	it("Should not admin get an other user's tasks", async () => {
+		const response = await request(app)
+			.get(`/task/user/${userFourId}`)
+			.set('Authorization', `Bearer ${adminFiveToken}`)
+			.expect(403);
 	});
 });
 
