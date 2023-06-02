@@ -1,10 +1,12 @@
-import TaskModel from '../models/task.model';
+import TaskModel, { taskValidationSchema } from '../models/task.model';
 import express from 'express';
 import client from '../utils/redisClient';
 
 export const getTask = async (req: any, res: express.Response) => {
 	try {
 		const task: any = await TaskModel.findById(req.params.id);
+
+		const validatedTask = await taskValidationSchema.validate(req.body);
 
 		if (!task) {
 			return res
@@ -33,6 +35,8 @@ export const getUserTasks = async (req: any, res: express.Response) => {
 		const skip = (page - 1) * limit;
 		const userId = req.params.id;
 		const key = `task:${userId}`;
+
+		const validatedTask = await taskValidationSchema.validate(req.body);
 
 		// Vérifier que l'utilisateur est le même que celui qui a créer la tâche
 		console.log(req.user._id, userId);
@@ -66,22 +70,36 @@ export const getUserTasks = async (req: any, res: express.Response) => {
 };
 
 export const setTasks = async (req: express.Request, res: express.Response) => {
-	if (!req.body.title) {
-		return res.status(400).json({ message: "Merci d'ajouter une tâche" });
-	}
+	try {
+		if (!req.body.title) {
+			return res
+				.status(400)
+				.json({ message: "Merci d'ajouter une tâche" });
+		}
 
-	const task = await TaskModel.create({
-		title: req.body.title,
-		userId: req.body.userId,
-		date: req.body.date,
-		description: req.body.description,
-	});
-	res.status(200).json(task);
+		const validatedTask = await taskValidationSchema.validate(req.body);
+
+		const task = await TaskModel.create({
+			title: req.body.title,
+			userId: req.body.userId,
+			date: req.body.date,
+			description: req.body.description,
+		});
+		res.status(200).json(task);
+	} catch (err) {
+		const result = (err as Error).message;
+		return res
+			.status(500)
+			.json({ message: 'Erreur interne du serveur', result });
+	}
 };
+
 export const editTask = async (req: any, res: express.Response) => {
 	try {
 		// Les données à mettre à jour
 		const updates = req.body;
+
+		const validatedTask = await taskValidationSchema.validate(req.body);
 
 		const task: any = await TaskModel.findById(req.params.id);
 
@@ -128,6 +146,8 @@ export const editTask = async (req: any, res: express.Response) => {
 
 export const deleteTask = async (req: any, res: express.Response) => {
 	const task = await TaskModel.findByIdAndDelete(req.params.id);
+
+	const validatedTask = await taskValidationSchema.validate(req.body);
 
 	if (!task) {
 		return res.status(400).json({ message: "Cette tâche n'existe pas" });

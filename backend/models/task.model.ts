@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { registerUser } from '../controllers/user.controller';
+import * as yup from 'yup';
 
 const taskSchema = new mongoose.Schema(
 	{
@@ -39,6 +40,19 @@ const taskSchema = new mongoose.Schema(
 	},
 	{ timestamps: true }
 );
+
+export const taskValidationSchema = yup.object().shape({
+	title: yup.string().required(),
+	userId: yup.string().required(),
+	date: yup.number().required(),
+	description: yup.string(),
+	status: yup
+		.string()
+		.oneOf(['Pending', 'In Progress', 'Completed', 'Archived']),
+	estimedTime: yup.number(),
+	comments: yup.string(),
+	priority: yup.string(),
+});
 
 taskSchema.index({ userId: 1 });
 
