@@ -1,7 +1,7 @@
-import TaskModel, { taskValidationSchema } from '../models/task.model';
+import TaskModel from '../models/task.model';
 import express from 'express';
 import client from '../utils/redisClient';
-import * as yup from 'yup';
+import userModel from '../models/user.model';
 
 export const getTask = async (req: any, res: express.Response) => {
 	try {
@@ -66,7 +66,7 @@ export const getUserTasks = async (req: any, res: express.Response) => {
 	}
 };
 
-export const setTasks = async (req: express.Request, res: express.Response) => {
+export const setTasks = async (req: any, res: express.Response) => {
 	try {
 		if (!req.body.title) {
 			return res
@@ -74,7 +74,14 @@ export const setTasks = async (req: express.Request, res: express.Response) => {
 				.json({ message: "Merci d'ajouter une tâche" });
 		}
 
-		const validatedTask = await taskValidationSchema.validate(req.body);
+		const userId = req.user._id;
+
+		const userExists = await userModel.exists({ _id: userId });
+		if (!userExists) {
+			return res
+				.status(404)
+				.json({ message: "L'utilisateur spécifié n'existe pas" });
+		}
 
 		const task = await TaskModel.create({
 			title: req.body.title,
@@ -85,14 +92,9 @@ export const setTasks = async (req: express.Request, res: express.Response) => {
 		res.status(200).json(task);
 	} catch (error) {
 		const result = (error as Error).message;
-		if (error instanceof yup.ValidationError) {
-			res.status(400).json({ error: error.errors });
-		} else {
-			// Ici, vous pouvez retourner un statut 500 car il s'agit d'une erreur côté serveur.
-			return res
-				.status(500)
-				.json({ message: 'Erreur interne du serveur', result });
-		}
+		return res
+			.status(500)
+			.json({ message: 'Erreur interne du serveur', result });
 	}
 };
 
@@ -134,7 +136,6 @@ export const editTask = async (req: any, res: express.Response) => {
 		});
 	} catch (error) {
 		const result = (error as Error).message;
-		// Ici, vous pouvez retourner un statut 500 car il s'agit d'une erreur côté serveur.
 		return res
 			.status(500)
 			.json({ message: 'Erreur interne du serveur', result });

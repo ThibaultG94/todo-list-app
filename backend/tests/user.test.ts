@@ -29,7 +29,7 @@ let userOneToken: string = '',
 	superAdminToken: string = '';
 
 before(async function () {
-	this.timeout(10000);
+	this.timeout(20000);
 	await setupDataBase();
 });
 

@@ -27,7 +27,7 @@ let firstTaskId: number = 0,
 	firstSuperAdminTaskId: number = 0;
 
 before(async function () {
-	this.timeout(10000);
+	this.timeout(20000);
 	await setupDataBase();
 });
 

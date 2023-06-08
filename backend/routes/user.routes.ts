@@ -9,11 +9,12 @@ import {
 	deleteUser,
 	getUser,
 } from '../controllers/user.controller';
+import { validateUserID } from '../middlewares/validation.middlewares';
 
 router.post('/register', registerUser);
 router.post('/login', loginUser);
-router.get('/:id/account', auth, getUser);
-router.put('/:id/update', auth, updateUser);
-router.delete('/:id/delete', auth, deleteUser);
+router.get('/:id/account', validateUserID, auth, getUser);
+router.put('/:id/update', validateUserID, auth, updateUser);
+router.delete('/:id/delete', validateUserID, auth, deleteUser);
 
 module.exports = router;

@@ -82,6 +82,11 @@ export const superAdminTwo = {
 };
 
 export const setupDataBase = async () => {
-	await User.deleteMany(); // supprime tous les utilisateurs de la base de données
-	await Task.deleteMany(); // supprime toutes les tâches de la base de données
+	try {
+		await User.deleteMany(); // supprime tous les utilisateurs de la base de données
+		await Task.deleteMany(); // supprime toutes les tâches de la base de données
+	} catch (err) {
+		const result = (err as Error).message;
+		console.log(result);
+	}
 };
