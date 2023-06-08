@@ -1,12 +1,11 @@
 import TaskModel, { taskValidationSchema } from '../models/task.model';
 import express from 'express';
 import client from '../utils/redisClient';
+import * as yup from 'yup';
 
 export const getTask = async (req: any, res: express.Response) => {
 	try {
 		const task: any = await TaskModel.findById(req.params.id);
-
-		const validatedTask = await taskValidationSchema.validate(req.body);
 
 		if (!task) {
 			return res
@@ -22,8 +21,8 @@ export const getTask = async (req: any, res: express.Response) => {
 		}
 
 		res.status(200).json(task);
-	} catch (err) {
-		const result = (err as Error).message;
+	} catch (error) {
+		const result = (error as Error).message;
 		res.status(500).json({ message: 'Erreur interne du serveur', result });
 	}
 };
@@ -35,8 +34,6 @@ export const getUserTasks = async (req: any, res: express.Response) => {
 		const skip = (page - 1) * limit;
 		const userId = req.params.id;
 		const key = `task:${userId}`;
-
-		const validatedTask = await taskValidationSchema.validate(req.body);
 
 		// Vérifier que l'utilisateur est le même que celui qui a créer la tâche
 		console.log(req.user._id, userId);
@@ -86,11 +83,16 @@ export const setTasks = async (req: express.Request, res: express.Response) => {
 			description: req.body.description,
 		});
 		res.status(200).json(task);
-	} catch (err) {
-		const result = (err as Error).message;
-		return res
-			.status(500)
-			.json({ message: 'Erreur interne du serveur', result });
+	} catch (error) {
+		const result = (error as Error).message;
+		if (error instanceof yup.ValidationError) {
+			res.status(400).json({ error: error.errors });
+		} else {
+			// Ici, vous pouvez retourner un statut 500 car il s'agit d'une erreur côté serveur.
+			return res
+				.status(500)
+				.json({ message: 'Erreur interne du serveur', result });
+		}
 	}
 };
 
@@ -98,8 +100,6 @@ export const editTask = async (req: any, res: express.Response) => {
 	try {
 		// Les données à mettre à jour
 		const updates = req.body;
-
-		const validatedTask = await taskValidationSchema.validate(req.body);
 
 		const task: any = await TaskModel.findById(req.params.id);
 
@@ -119,10 +119,6 @@ export const editTask = async (req: any, res: express.Response) => {
 			});
 		}
 
-		// const updateTask = await TaskModel.findByIdAndUpdate(task, req.body, {
-		// 	new: true,
-		// });
-
 		// Mettre à jour les champs de l'utilisateur
 		Object.keys(updates).forEach((update) => {
 			task[update] = updates[update];
@@ -136,8 +132,9 @@ export const editTask = async (req: any, res: express.Response) => {
 			message: 'Utilisateur mis à jour',
 			task: updatedTask,
 		});
-	} catch (err) {
-		const result = (err as Error).message;
+	} catch (error) {
+		const result = (error as Error).message;
+		// Ici, vous pouvez retourner un statut 500 car il s'agit d'une erreur côté serveur.
 		return res
 			.status(500)
 			.json({ message: 'Erreur interne du serveur', result });
@@ -146,8 +143,6 @@ export const editTask = async (req: any, res: express.Response) => {
 
 export const deleteTask = async (req: any, res: express.Response) => {
 	const task = await TaskModel.findByIdAndDelete(req.params.id);
-
-	const validatedTask = await taskValidationSchema.validate(req.body);
 
 	if (!task) {
 		return res.status(400).json({ message: "Cette tâche n'existe pas" });
