@@ -33,7 +33,7 @@ export const getUserTasks = async (req: any, res: express.Response) => {
 		const limit = parseInt(req.query.limit, 10) || 10;
 		const skip = (page - 1) * limit;
 		const userId = req.params.id;
-		const key = `task:${userId}`;
+		const key = `task:${userId}:${page}:${limit}`;
 
 		// Vérifier que l'utilisateur est le même que celui qui a créer la tâche
 		console.log(req.user._id, userId);
@@ -89,9 +89,17 @@ export const setTasks = async (req: any, res: express.Response) => {
 			date: req.body.date,
 			description: req.body.description,
 		});
+
+		// Invalide toutes les clés de cache pour cet utilisateur
+		const keys = await client.keys(`task:${userId}:*`);
+		keys &&
+			keys.forEach(async (key) => {
+				await client.del(key);
+			});
 		res.status(200).json(task);
 	} catch (error) {
 		const result = (error as Error).message;
+		console.log(result);
 		return res
 			.status(500)
 			.json({ message: 'Erreur interne du serveur', result });
