@@ -18,6 +18,7 @@
 	},
 	"homepage": "https://github.com/ThibaultG94/todo-list-app#readme",
 	"dependencies": {
+		"@sentry/node": "^7.54.0",
 		"bcryptjs": "^2.4.3",
 		"cors": "^2.8.5",
 		"dotenv": "^16.0.3",
