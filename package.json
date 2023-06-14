@@ -4,6 +4,7 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
+		"start": "pm2 start -x ts-node -- server.ts",
 		"test": "NODE_ENV=test mocha -r ts-node/register backend/tests/*.test.ts",
 		"server": "NODE_ENV=development nodemon ./backend/server.ts"
 	},
