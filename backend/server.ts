@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import './utils/redisClient';
 import * as Sentry from '@sentry/node';
+import taskRoutes from './routes/task.routes';
+import userRoutes from './routes/user.routes';
 
 const port: number = 5000;
 
@@ -27,8 +29,8 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use('/task', require('./routes/task.routes'));
-app.use('/users', require('./routes/user.routes'));
+app.use('/task', taskRoutes);
+app.use('/users', userRoutes);
 
 Sentry.init({
 	dsn: process.env.SENTRY_DSN,

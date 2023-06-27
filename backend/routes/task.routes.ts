@@ -25,4 +25,4 @@ router.get(
 router.put('/:id', auth, editTask);
 router.delete('/:id', auth, deleteTask);
 
-module.exports = router;
+export default router;

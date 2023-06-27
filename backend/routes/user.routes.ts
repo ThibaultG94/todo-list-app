@@ -17,4 +17,4 @@ router.get('/:id/account', validateUserID, auth, getUser);
 router.put('/:id/update', validateUserID, auth, updateUser);
 router.delete('/:id/delete', validateUserID, auth, deleteUser);
 
-module.exports = router;
+export default router;

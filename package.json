@@ -4,9 +4,9 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
+		"server": "NODE_ENV=development nodemon ./backend/server.ts",
 		"start": "pm2 start -x ts-node -- server.ts",
-		"test": "NODE_ENV=test mocha -r ts-node/register backend/tests/*.test.ts",
-		"server": "NODE_ENV=development nodemon ./backend/server.ts"
+		"test": "NODE_ENV=test mocha -r ts-node/register backend/tests/*.test.ts"
 	},
 	"repository": {
 		"type": "git",
@@ -30,6 +30,8 @@
 		"passport": "^0.6.0",
 		"passport-local": "^1.0.0",
 		"redis": "^4.6.7",
+		"swagger-express-ts": "^1.1.0",
+		"typedoc": "^0.24.8",
 		"yup": "^1.2.0"
 	},
 	"devDependencies": {
