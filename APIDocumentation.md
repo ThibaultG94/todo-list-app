@@ -13,3 +13,45 @@ Before users can interact with their tasks, they need to register for an account
 Upon successful login, the user is provided with an authentication token. This token must be included in the `Authorization` header in all requests to the task endpoints, as follows:
 
 `Authorization: Bearer <token>`
+
+## Endpoints
+
+### User Registration
+
+-   **URL** : `/register`
+-   **Method**: `POST`
+-   **Description**: Register a new user.
+-   **Request body**:
+
+    | Field      | Type   | Description                                  |
+    | ---------- | ------ | -------------------------------------------- |
+    | `email`    | string | User's email address.                        |
+    | `password` | string | User's password.                             |
+    | `username` | string | User's usersame.                             |
+    | `role`     | string | User's role (e.g., user, admin, superadmin). |
+
+-   **Success Response**:
+
+    -   **Code**: `201 Created`
+    -   **Content**: `{ "message": "Account created", "user": <User Object> }`
+
+-   **Error Responses**:
+
+    -   **Code**: `400 Bad Request`
+    -   **Content**: `{ "message": "Email already in use. Please change email address or login." }`
+
+    or
+
+    -   **Code**: `500 Internal Server Error`
+    -   **Content**: `{ "message": "Error registering account" }`
+
+## Common Errors
+
+The API uses conventionnal HTTP response codes to indicate the success or failure of an API request.
+
+-   `200 OK`: The request was successful.
+-   `201 Created`: The request was successful, and a resource was created as a result.
+-   `400 Bad Request`: The server could not understand the request due to invalide syntax.
+-   `403 Forbidden`: The client does not have access rights to the content.
+-   `404 Not Found`:The server can not find the requested resource.
+-   `500 Internal Server Error`: The server has encountered a situation it doesn't know how to handle.
