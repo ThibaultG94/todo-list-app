@@ -84,6 +84,7 @@ Upon successful login, the user is provided with an authentication token. This t
 -   **URL** : `/:id/update`
 -   **Method**: `PUT`
 -   **Description**: Update a user.
+-   **Authorization**: `Bearer <JWT>`
 
 -   **URL Parameters**:
 
@@ -131,12 +132,13 @@ Upon successful login, the user is provided with an authentication token. This t
 -   **URL** : `/:id/delete`
 -   **Method**: `DELETE`
 -   **Description**: Delete a user.
+-   **Authorization**: `Bearer <JWT>`
 
 -   **URL Parameters**:
 
     | Parameter | Type       | Description              |
     | --------- | ---------- | ------------------------ |
-    | `id`      | `ObjectId` | ID of the user to update |
+    | `id`      | `ObjectId` | ID of the user to delete |
 
 -   **Success Response**:
 
@@ -163,6 +165,46 @@ Upon successful login, the user is provided with an authentication token. This t
     1. Only the user himself or an `admin` or `superadmin` can delete the user's account.
     2. A non-superadmin user cannot delete an `admin` or `superadmin` user's account.
     3. The `Authorization` header should contain a valid JWT token in the format `Bearer <JWT>`.
+
+#### Get User Information
+
+-   **URL** : `/:id/account`
+-   **Method**: `GET`
+-   **Description**: Retrieve information about a user.
+-   **Authorization**: `Bearer <JWT>`
+
+-   **URL Parameters**:
+
+    | Parameter | Type       | Description                |
+    | --------- | ---------- | -------------------------- |
+    | `id`      | `ObjectId` | ID of the user to retrieve |
+
+-   **Success Response**:
+
+    -   **Code**: `200 OK`
+    -   **Content**: `{ "user": "<User Object without password>" }`
+
+-   **Error Responses**:
+
+    -   **Code**: `403 Forbidden`
+    -   **Content**: `{ "message": "You do not have sufficient rights to perform this action" }`
+
+    or
+
+    -   **Code**: `404 Not Found`
+    -   **Content**: `{ "message": "User not found" }`
+
+    or
+
+    -   **Code**: `500 Internal Server Error`
+    -   **Content**: `{ "message": "Internal server error", "result": "<Error Details>" }`
+
+    **Notes**:
+
+    1. A user can only request his own data, unless they are `admin` or `superadmin`.
+    2. An `admin` can request the data of any user, except for other `admin` and `superadmin` user's.
+    3. A `superadmin` can request data from any user.
+    4. The `Authorization` header should contain a valid JWT token in the format `Bearer <JWT>`.
 
 ## Common Errors
 

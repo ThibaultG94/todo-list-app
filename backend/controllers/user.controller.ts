@@ -201,7 +201,7 @@ export const getUser = async (req: any, res: express.Response) => {
 			'-password'
 		);
 		if (!user) {
-			res.status(400).json({ message: 'Utilisateur non trouvé' });
+			res.status(400).json({ message: 'User not found' });
 		}
 
 		// Si l'utilisateur est admin mais qu'il ne demande pas ses propres données ou que l'utilisateur est superadmin, nié la requête
@@ -212,13 +212,13 @@ export const getUser = async (req: any, res: express.Response) => {
 		) {
 			return res.status(403).json({
 				message:
-					"Vous n'avez pas les droits suffisants pour effectuer cette action",
+					'You do not have sufficient rights to perform this action',
 			});
 		}
 
 		res.status(200).json({ user });
 	} catch (err) {
 		const result = (err as Error).message;
-		res.status(500).json({ message: 'Erreur serveur', result });
+		res.status(500).json({ message: 'Internal server error', result });
 	}
 };
