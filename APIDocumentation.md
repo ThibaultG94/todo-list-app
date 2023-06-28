@@ -62,12 +62,7 @@ Upon successful login, the user is provided with an authentication token. This t
 -   **Success Response**:
 
     -   **Code**: `200 OK`
-    -   **Content**: `{ "message": "Authentication successful", "token": "<User token>", "user": "{
-        "id": "<User ID>",
-        "username": "<User username>",
-        "email": "<User email>"
-
-        }" }`
+    -   **Content**: `{ "message": "Authentication successful", "token": "<User token>", "user": {"id": "<User ID>", "username": "<User username>", "email": "<User email>"} }`
 
 -   **Error Responses**:
 
