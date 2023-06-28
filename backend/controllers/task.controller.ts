@@ -70,9 +70,7 @@ export const getUserTasks = async (req: any, res: express.Response) => {
 export const setTasks = async (req: any, res: express.Response) => {
 	try {
 		if (!req.body.title) {
-			return res
-				.status(400)
-				.json({ message: "Merci d'ajouter une tâche" });
+			return res.status(400).json({ message: 'Please add a task' });
 		}
 
 		const userId = req.user._id;
@@ -81,7 +79,7 @@ export const setTasks = async (req: any, res: express.Response) => {
 		if (!userExists) {
 			return res
 				.status(404)
-				.json({ message: "L'utilisateur spécifié n'existe pas" });
+				.json({ message: 'The specified user does not exist' });
 		}
 
 		const task = await TaskModel.create({
@@ -103,7 +101,7 @@ export const setTasks = async (req: any, res: express.Response) => {
 		console.log(result);
 		return res
 			.status(500)
-			.json({ message: 'Erreur interne du serveur', result });
+			.json({ message: 'Internal server error', result });
 	}
 };
 

@@ -292,6 +292,48 @@ Upon successful login, the user is provided with an authentication token. This t
     2. The `Authorization` header should contain a valid JWT token in the format `Bearer <JWT>`.
     3. This endpoint uses caching. If the tasks are in cache, they will be retrieved from ther, oserwise, they will be retrieved from the database and then cached for future requests.
 
+    #### Set Task
+
+-   **URL** : `/tasks`
+-   **Method**: `POST`
+-   **Description**: Create a new task.
+-   **Authorization**: `Bearer <JWT>`
+
+-   **Request body**:
+
+    | Field         | Type   | Description                     |
+    | ------------- | ------ | ------------------------------- |
+    | `title`       | string | Title of the task.              |
+    | `userId`      | string | User's ID who created the task. |
+    | `date`        | string | Due date of the task.           |
+    | `description` | string | Description of the task.        |
+
+-   **Success Response**:
+
+    -   **Code**: `200 OK`
+    -   **Content**: `{ "task": "<Task Objects>" }`
+
+-   **Error Responses**:
+
+    -   **Code**: `400 Forbidden`
+    -   **Content**: `{ "message": "Please add a task" }`
+
+    or
+
+    -   **Code**: `404 Not Found`
+    -   **Content**: `{ "message": "The specified user does not exist" }`
+
+    or
+
+    -   **Code**: `500 Internal Server Error`
+    -   **Content**: `{ "message": "Internal server error", "result": "<Error Details>" }`
+
+    **Notes**:
+
+    1. A task can be only created by a logged-in user, who is then associated with the task.
+    2. The `Authorization` header should contain a valid JWT token in the format `Bearer <JWT>`.
+    3. When a new task is created, all cached task keys for this user are invalidated.
+
 ## Common Errors
 
 The API uses conventionnal HTTP response codes to indicate the success or failure of an API request.
