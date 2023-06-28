@@ -20,7 +20,7 @@ Upon successful login, the user is provided with an authentication token. This t
 
 #### User Registration
 
--   **URL** : `/register`
+-   **URL** : `/user/register`
 -   **Method**: `POST`
 -   **Description**: Register a new user.
 -   **Request body**:
@@ -49,7 +49,7 @@ Upon successful login, the user is provided with an authentication token. This t
 
 #### User Login
 
--   **URL** : `/login`
+-   **URL** : `/user/login`
 -   **Method**: `POST`
 -   **Description**: Login a user.
 -   **Request body**:
@@ -81,7 +81,7 @@ Upon successful login, the user is provided with an authentication token. This t
 
 #### User Update
 
--   **URL** : `/:id/update`
+-   **URL** : `/user/:id/update`
 -   **Method**: `PUT`
 -   **Description**: Update a user.
 -   **Authorization**: `Bearer <JWT>`
@@ -129,7 +129,7 @@ Upon successful login, the user is provided with an authentication token. This t
 
 #### User Deletion
 
--   **URL** : `/:id/delete`
+-   **URL** : `/user/:id/delete`
 -   **Method**: `DELETE`
 -   **Description**: Delete a user.
 -   **Authorization**: `Bearer <JWT>`
@@ -168,7 +168,7 @@ Upon successful login, the user is provided with an authentication token. This t
 
 #### Get User Information
 
--   **URL** : `/:id/account`
+-   **URL** : `/user/:id/account`
 -   **Method**: `GET`
 -   **Description**: Retrieve information about a user.
 -   **Authorization**: `Bearer <JWT>`
@@ -205,6 +205,46 @@ Upon successful login, the user is provided with an authentication token. This t
     2. An `admin` can request the data of any user, except for other `admin` and `superadmin` user's.
     3. A `superadmin` can request data from any user.
     4. The `Authorization` header should contain a valid JWT token in the format `Bearer <JWT>`.
+
+### Task Endpoints
+
+#### Get Task Information
+
+-   **URL** : `/tasks/:id`
+-   **Method**: `GET`
+-   **Description**: Retrieve information about a specific task.
+-   **Authorization**: `Bearer <JWT>`
+
+-   **URL Parameters**:
+
+    | Parameter | Type       | Description                |
+    | --------- | ---------- | -------------------------- |
+    | `id`      | `ObjectId` | ID of the task to retrieve |
+
+-   **Success Response**:
+
+    -   **Code**: `200 OK`
+    -   **Content**: `{ "<Task Object>" }`
+
+-   **Error Responses**:
+
+    -   **Code**: `403 Forbidden`
+    -   **Content**: `{ "message": "You do not have sufficient rights to perform this action" }`
+
+    or
+
+    -   **Code**: `404 Not Found`
+    -   **Content**: `{ "message": "This task does not exist" }`
+
+    or
+
+    -   **Code**: `500 Internal Server Error`
+    -   **Content**: `{ "message": "Internal server error", "result": "<Error Details>" }`
+
+    **Notes**:
+
+    1. A user can only retrieve tasks that they have created.
+    2. The `Authorization` header should contain a valid JWT token in the format `Bearer <JWT>`.
 
 ## Common Errors
 

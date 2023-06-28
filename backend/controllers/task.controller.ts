@@ -10,20 +10,21 @@ export const getTask = async (req: any, res: express.Response) => {
 		if (!task) {
 			return res
 				.status(400)
-				.json({ message: "Cette tâche n'existe pas" });
+				.json({ message: 'This task does not exist' });
 		}
 
 		// Vérifier que l'utilisateur est le même que celui qui a créer la tâche
 		if (task !== null && req.user._id !== task.userId) {
 			return res.status(403).json({
-				message: "Vous n'avez pas le droit de modifier cette tâche",
+				message:
+					'You do not have sufficient rights to perform this action',
 			});
 		}
 
 		res.status(200).json(task);
 	} catch (error) {
 		const result = (error as Error).message;
-		res.status(500).json({ message: 'Erreur interne du serveur', result });
+		res.status(500).json({ message: 'Internal server error', result });
 	}
 };
 
