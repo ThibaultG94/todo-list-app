@@ -51,7 +51,7 @@ Upon successful login, the user is provided with an authentication token. This t
 
 -   **URL** : `/login`
 -   **Method**: `POST`
--   **Description**: Login an existing user.
+-   **Description**: Login a user.
 -   **Request body**:
 
     | Field      | Type   | Description           |
@@ -78,6 +78,53 @@ Upon successful login, the user is provided with an authentication token. This t
 
     -   **Code**: `500 Internal Server Error`
     -   **Content**: `{ "message": "Internal server error", "result": "<Error Details>" }`
+
+#### User Update
+
+-   **URL** : `/:id/update`
+-   **Method**: `PUT`
+-   **Description**: Update a user.
+
+-   **URL Parameters**:
+
+    | Parameter | Type       | Description              |
+    | --------- | ---------- | ------------------------ |
+    | `id`      | `ObjectId` | ID of the user to update |
+
+-   **Request body**:
+
+    | Field      | Type   | Description                      |
+    | ---------- | ------ | -------------------------------- |
+    | `email`    | string | (Optional) User's email address. |
+    | `password` | string | (Optional) User's password.      |
+    | `username` | string | (Optional) User's username.      |
+    | `role`     | string | (Optional) User's role.          |
+
+-   **Success Response**:
+
+    -   **Code**: `200 OK`
+    -   **Content**: `{ "message": "User updated", "user": "<User Object>" }`
+
+-   **Error Responses**:
+
+    -   **Code**: `403 Forbidden`
+    -   **Content**: `{ "message": "You do not have sufficient rights to perform this action" }`
+
+    or
+
+    -   **Code**: `404 Not Found`
+    -   **Content**: `{ "message": "User not found" }`
+
+    or
+
+    -   **Code**: `500 Internal Server Error`
+    -   **Content**: `{ "message": "Internal server error", "result": "<Error Details>" }`
+
+    **Notes**:
+
+    1. The user himself or an `admin` or `superadmin` can update the user's data.
+    2. A non-superadmin user cannot update an `admin` or `superadmin` user's data.
+    3. The `Authorization` header should contain a valid JWT token in the format `Bearer <JWT>`.
 
 ## Common Errors
 
