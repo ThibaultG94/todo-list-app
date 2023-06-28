@@ -41,7 +41,7 @@ export const getUserTasks = async (req: any, res: express.Response) => {
 		if (req.user._id !== userId) {
 			return res.status(403).json({
 				message:
-					'Vous ne disposez pas des droits suffisants pour effectuer cette action',
+					'You do not have sufficient rights to perform this action',
 			});
 		}
 
@@ -63,7 +63,7 @@ export const getUserTasks = async (req: any, res: express.Response) => {
 		res.status(200).json(tasks);
 	} catch (err) {
 		const result = (err as Error).message;
-		res.status(500).json({ message: 'Erreur interne du serveur', result });
+		res.status(500).json({ message: 'Internal server error', result });
 	}
 };
 

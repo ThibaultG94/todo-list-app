@@ -246,6 +246,52 @@ Upon successful login, the user is provided with an authentication token. This t
     1. A user can only retrieve tasks that they have created.
     2. The `Authorization` header should contain a valid JWT token in the format `Bearer <JWT>`.
 
+    #### Get User's Tasks
+
+-   **URL** : `/tasks/user/:id`
+-   **Method**: `GET`
+-   **Description**: Retrieve all tasks associated with a specific user.
+-   **Authorization**: `Bearer <JWT>`
+
+-   **URL Parameters**:
+
+    | Parameter | Type       | Description                          |
+    | --------- | ---------- | ------------------------------------ |
+    | `id`      | `ObjectId` | ID of the user to retrieve tasks for |
+
+-   **Query Parameters**:
+
+    | Parameter | Type     | Description                | Default |
+    | --------- | -------- | -------------------------- | ------- |
+    | `page`    | `Number` | Page number for pagination | 1       |
+    | `limit`   | `Number` | Number of tasks per page   | 10      |
+
+-   **Success Response**:
+
+    -   **Code**: `200 OK`
+    -   **Content**: `[ "<Task Objects>" ]`
+
+-   **Error Responses**:
+
+    -   **Code**: `403 Forbidden`
+    -   **Content**: `{ "message": "You do not have sufficient rights to perform this action" }`
+
+    or
+
+    -   **Code**: `404 Not Found`
+    -   **Content**: `{ "message": "This task does not exist" }`
+
+    or
+
+    -   **Code**: `500 Internal Server Error`
+    -   **Content**: `{ "message": "Internal server error", "result": "<Error Details>" }`
+
+    **Notes**:
+
+    1. A user can only retrieve their own tasks.
+    2. The `Authorization` header should contain a valid JWT token in the format `Bearer <JWT>`.
+    3. This endpoint uses caching. If the tasks are in cache, they will be retrieved from ther, oserwise, they will be retrieved from the database and then cached for future requests.
+
 ## Common Errors
 
 The API uses conventionnal HTTP response codes to indicate the success or failure of an API request.
