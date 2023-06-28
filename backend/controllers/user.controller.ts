@@ -14,14 +14,14 @@ export const registerUser = async (
 		if (existingUser) {
 			return res.status(400).json({
 				message:
-					"L'email est déjà utilisé. Veuillez changer d'adresse email ou vous connecter",
+					'Email already in use. Please change email address or login.',
 			});
 		}
 
 		const newUser = new UserModel({ username, email, password, role });
 		await newUser.save();
 
-		res.status(201).json({ message: 'Compte créé', user: newUser });
+		res.status(201).json({ message: 'Account created', user: newUser });
 	} catch (err) {
 		const result = (err as Error).message;
 		res.status(500).json({
@@ -40,19 +40,19 @@ export const loginUser = async (
 		const user: any = await UserModel.findOne({ email });
 
 		if (!user) {
-			return res.status(404).json({ message: 'Identifiants incorrects' });
+			return res.status(404).json({ message: 'User not found' });
 		}
 
 		const isPasswordValid = await bcrypt.compare(password, user.password);
 
 		if (!isPasswordValid) {
-			return res.status(401).json({ message: 'Mot de passe invalide' });
+			return res.status(401).json({ message: 'Invalid password' });
 		}
 
 		if (user && isPasswordValid) {
 			const token = user.generateAuthToken();
 			res.status(200).json({
-				message: 'Authentification réussie',
+				message: 'Authentication successful',
 				token,
 				user: {
 					id: user._id,
@@ -65,7 +65,7 @@ export const loginUser = async (
 		}
 	} catch (err) {
 		const result = (err as Error).message;
-		res.status(500).json({ message: 'Erreur interne du serveur', result });
+		res.status(500).json({ message: 'Internal server error', result });
 	}
 };
 

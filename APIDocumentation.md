@@ -16,7 +16,9 @@ Upon successful login, the user is provided with an authentication token. This t
 
 ## Endpoints
 
-### User Registration
+### User Endpoints
+
+#### User Registration
 
 -   **URL** : `/register`
 -   **Method**: `POST`
@@ -44,6 +46,43 @@ Upon successful login, the user is provided with an authentication token. This t
 
     -   **Code**: `500 Internal Server Error`
     -   **Content**: `{ "message": "Error registering account" }`
+
+#### User Login
+
+-   **URL** : `/login`
+-   **Method**: `POST`
+-   **Description**: Login an existing user.
+-   **Request body**:
+
+    | Field      | Type   | Description           |
+    | ---------- | ------ | --------------------- |
+    | `email`    | string | User's email address. |
+    | `password` | string | User's password.      |
+
+-   **Success Response**:
+
+    -   **Code**: `200 OK`
+    -   **Content**: `{ "message": "Authentication successful", "token": "<User token>", "user": `{
+        "id": "<User ID>",
+        "username": "<User username>",
+        "email": "<User email>"
+
+        }` }`
+
+-   **Error Responses**:
+
+    -   **Code**: `401 Unauthorized`
+    -   **Content**: `{ "message": "Invalid password" }`
+
+    or
+
+    -   **Code**: `404 Not Found`
+    -   **Content**: `{ "message": "User not found" }`
+
+    or
+
+    -   **Code**: `500 Internal Server Error`
+    -   **Content**: `{ "message": "Internal server error", "result": "<Error Details>" }`
 
 ## Common Errors
 
