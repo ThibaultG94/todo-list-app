@@ -158,24 +158,24 @@ export const deleteUser = async (req: any, res: express.Response) => {
 		) {
 			return res.status(403).json({
 				message:
-					"Vous n'avez pas les droits suffisants pour effectuer cette action.",
+					'You do not have sufficient rights to perform this action',
 			});
 		}
 
 		const deletedUser = await UserModel.findByIdAndDelete(userIdFromParams);
 
 		if (!deletedUser) {
-			return res.status(404).json({ message: 'Utilisateur introuvable' });
+			return res.status(404).json({ message: 'User not found' });
 		}
 
 		res.status(200).json({
-			message: 'Utilisateur supprimé',
+			message: 'User deleted',
 			user: deletedUser,
 		});
 	} catch (err) {
 		const result = (err as Error).message;
 		console.log(result);
-		res.status(500).json({ message: 'Erreur interne du serveur', result });
+		res.status(500).json({ message: 'Internal server error', result });
 	}
 };
 
