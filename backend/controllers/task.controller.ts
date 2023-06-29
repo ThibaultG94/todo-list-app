@@ -2,18 +2,24 @@ import TaskModel from '../models/task.model';
 import express from 'express';
 import client from '../utils/redisClient';
 import userModel from '../models/user.model';
+import { RequestWithUser, Task } from '../types/types';
 
-export const getTask = async (req: any, res: express.Response) => {
+// Endpoint to get a task by id
+export const getTask = async (req: RequestWithUser, res: express.Response) => {
 	try {
-		const task: any = await TaskModel.findById(req.params.id);
+		// Find the task with the id provided in params
+		const task: Task = await TaskModel.findById(req.params.id);
 
+		// If the task does not exist, return a 400 status
 		if (!task) {
 			return res
 				.status(400)
 				.json({ message: 'This task does not exist' });
 		}
 
-		// Vérifier que l'utilisateur est le même que celui qui a créer la tâche
+		// Check if the user making the request is the owner of the task
+		// by comparing the user's ID from the request (req.user._id)
+		// with the ID of the user who owns the task (task.userId)
 		if (task !== null && req.user._id !== task.userId) {
 			return res.status(403).json({
 				message:
@@ -21,22 +27,34 @@ export const getTask = async (req: any, res: express.Response) => {
 			});
 		}
 
+		// If everything is okay, return the task
 		res.status(200).json(task);
 	} catch (error) {
+		// In case of error, return a 500 status with the error message
 		const result = (error as Error).message;
 		res.status(500).json({ message: 'Internal server error', result });
 	}
 };
 
-export const getUserTasks = async (req: any, res: express.Response) => {
+// Endpoint to get tasks of a specific user
+export const getUserTasks = async (
+	req: RequestWithUser,
+	res: express.Response
+) => {
 	try {
-		const page = parseInt(req.query.page, 10) || 1;
-		const limit = parseInt(req.query.limit, 10) || 10;
+		// Parsing the page and limit query parameters. If not provided, default value are used.
+		const page = parseInt(req.query.page as string, 10) || 1;
+		const limit = parseInt(req.query.limit as string, 10) || 10;
+
+		// Calculate the number of tasks to skip based on the page and limit.
 		const skip = (page - 1) * limit;
+
 		const userId = req.params.id;
+
+		// Generate a unique key for caching purposes using the user ID, page, and limit.
 		const key = `task:${userId}:${page}:${limit}`;
 
-		// Vérifier que l'utilisateur est le même que celui qui a créer la tâche
+		// Check if the user making the request is the one who created the task
 		console.log(req.user._id, userId);
 		if (req.user._id !== userId) {
 			return res.status(403).json({
@@ -45,21 +63,22 @@ export const getUserTasks = async (req: any, res: express.Response) => {
 			});
 		}
 
-		// Vérifie d'abord si les tâches sont en cache
+		// First, check if the tasks are already cached
 		const cachedTasks = await client.get(key);
 
-		let tasks;
+		let tasks: Task[] | null;
 		if (cachedTasks) {
-			// Si les tâches sont en cache, les utilisés
+			// If the tasks are cached, use them
 			tasks = JSON.parse(cachedTasks);
 		} else {
-			// Si les tâches ne sont pas en cache, récupère les tâches depuis la base de données
+			// If the tasks are not cached, fetch the tasks from the database
 			tasks = await TaskModel.find({ userId }).skip(skip).limit(limit);
 
-			// Mets les tâches en cache pour les requêtes futur
+			// Then, cache the fetched tasks for future requests
 			await client.setEx(key, 3600, JSON.stringify(tasks));
 		}
 
+		// Return the tasks
 		res.status(200).json(tasks);
 	} catch (err) {
 		const result = (err as Error).message;
@@ -67,14 +86,17 @@ export const getUserTasks = async (req: any, res: express.Response) => {
 	}
 };
 
-export const setTasks = async (req: any, res: express.Response) => {
+// Endpoint to create a task
+export const setTasks = async (req: RequestWithUser, res: express.Response) => {
 	try {
+		// Check if the request includes task title
 		if (!req.body.title) {
 			return res.status(400).json({ message: 'Please add a task' });
 		}
 
 		const userId = req.user._id;
 
+		// Check if the user exists
 		const userExists = await userModel.exists({ _id: userId });
 		if (!userExists) {
 			return res
@@ -82,6 +104,7 @@ export const setTasks = async (req: any, res: express.Response) => {
 				.json({ message: 'The specified user does not exist' });
 		}
 
+		// Create a new task
 		const task = await TaskModel.create({
 			title: req.body.title,
 			userId: req.body.userId,
@@ -89,14 +112,16 @@ export const setTasks = async (req: any, res: express.Response) => {
 			description: req.body.description,
 		});
 
-		// Invalide toutes les clés de cache pour cet utilisateur
+		// Invalide all cache keys for this user
 		const keys = await client.keys(`task:${userId}:*`);
 		keys &&
 			keys.forEach(async (key) => {
 				await client.del(key);
 			});
+
 		res.status(200).json(task);
 	} catch (error) {
+		// If something goes wrong, log the error and send a server error response
 		const result = (error as Error).message;
 		console.log(result);
 		return res
@@ -105,30 +130,34 @@ export const setTasks = async (req: any, res: express.Response) => {
 	}
 };
 
-export const editTask = async (req: any, res: express.Response) => {
+// Endpoint to edit a task
+export const editTask = async (req: RequestWithUser, res: express.Response) => {
 	try {
-		// Les données à mettre à jour
+		// Data to be updated
 		const updates = req.body;
 
+		// Find the task by ID
 		const task: any = await TaskModel.findById(req.params.id);
 
+		// Check if the task exists
 		if (!task) {
 			console.log(res);
 			return res
 				.status(400)
-				.json({ message: "Cette tâche n'existe pas" });
+				.json({ message: 'This task does not exist' });
 		}
 
-		// Vérifier que l'utilisateur est le même que celui qui a créer la tâche
+		// Check if the user making the request is the owner of the task
 		if (task && req.user._id !== task.userId) {
 			console.log(req.user._id);
 			console.log(task.userId);
 			return res.status(403).json({
-				message: "Vous n'avez pas le droit de modifier cette tâche",
+				message:
+					'You do not have sufficients rights to perform this action',
 			});
 		}
 
-		// Mettre à jour les champs de l'utilisateur
+		// Update the fields of the task
 		Object.keys(updates).forEach((update) => {
 			task[update] = updates[update];
 		});
@@ -142,6 +171,7 @@ export const editTask = async (req: any, res: express.Response) => {
 			task: updatedTask,
 		});
 	} catch (error) {
+		// If something goes wrong, log the error and a server error response
 		const result = (error as Error).message;
 		return res
 			.status(500)
