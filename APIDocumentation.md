@@ -379,6 +379,42 @@ Upon successful login, the user is provided with an authentication token. This t
     1. A task can only be updated by the user who created id.
     2. The `Authorization` header should contain a valid JWT token in the format `Bearer <JWT>`.
 
+#### Delete Task
+
+-   **URL** : `/tasks/:id`
+-   **Method**: `DELETE`
+-   **Description**: Delete a task.
+-   **Authorization**: `Bearer <JWT>`
+
+-   **URL Parameters**:
+
+    -   `id` : ID of the task to update.
+
+-   **Success Response**:
+
+    -   **Code**: `200 OK`
+    -   **Content**: `{ "message": "Task deleted `req.params.id`", }`
+
+-   **Error Responses**:
+
+    -   **Code**: `400 Bad Request`
+    -   **Content**: `{ "message": "This task does not exist" }`
+
+    or
+
+    -   **Code**: `403 Forbidden`
+    -   **Content**: `{ "message": "You do not have the right to modify this task" }`
+
+    or
+
+    -   **Code**: `500 Internal Server Error`
+    -   **Content**: `{ "message": "Internal server error", "result": "<Error Details>" }`
+
+    **Notes**:
+
+    1. A task can only be deleted by the user who created id.
+    2. The `Authorization` header should contain a valid JWT token in the format `Bearer <JWT>`.
+
 ## Common Errors
 
 The API uses conventionnal HTTP response codes to indicate the success or failure of an API request.

@@ -165,6 +165,6 @@ export const deleteTask = async (req: any, res: express.Response) => {
 
 	if (task) {
 		await task.deleteOne();
-		res.status(200).json('Tâche supprimée ' + req.params.id);
+		res.status(200).json('Task deleted ' + req.params.id);
 	}
 };
