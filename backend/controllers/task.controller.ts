@@ -138,14 +138,14 @@ export const editTask = async (req: any, res: express.Response) => {
 		console.log(req.user._id);
 		console.log(task.userId);
 		res.status(200).json({
-			message: 'Utilisateur mis à jour',
+			message: 'Task updated',
 			task: updatedTask,
 		});
 	} catch (error) {
 		const result = (error as Error).message;
 		return res
 			.status(500)
-			.json({ message: 'Erreur interne du serveur', result });
+			.json({ message: 'Internal server error', result });
 	}
 };
 
@@ -153,13 +153,13 @@ export const deleteTask = async (req: any, res: express.Response) => {
 	const task = await TaskModel.findByIdAndDelete(req.params.id);
 
 	if (!task) {
-		return res.status(400).json({ message: "Cette tâche n'existe pas" });
+		return res.status(400).json({ message: 'This task does not exist' });
 	}
 
 	// Vérifier que l'utilisateur est le même que celui qui a créer la tâche
 	if (task && req.user._id !== task.userId) {
 		return res.status(403).json({
-			message: "Vous n'avez pas le droit de modifier cette tâche",
+			message: 'You do not have the right to modify this task',
 		});
 	}
 

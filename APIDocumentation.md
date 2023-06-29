@@ -269,7 +269,7 @@ Upon successful login, the user is provided with an authentication token. This t
 -   **Success Response**:
 
     -   **Code**: `200 OK`
-    -   **Content**: `[ "<Task Objects>" ]`
+    -   **Content**: `[ "<Task Object>" ]`
 
 -   **Error Responses**:
 
@@ -305,17 +305,17 @@ Upon successful login, the user is provided with an authentication token. This t
     | ------------- | ------ | ------------------------------- |
     | `title`       | string | Title of the task.              |
     | `userId`      | string | User's ID who created the task. |
-    | `date`        | string | Due date of the task.           |
+    | `date`        | number | Due date of the task.           |
     | `description` | string | Description of the task.        |
 
 -   **Success Response**:
 
     -   **Code**: `200 OK`
-    -   **Content**: `{ "task": "<Task Objects>" }`
+    -   **Content**: `{ "task": "<Task Object>" }`
 
 -   **Error Responses**:
 
-    -   **Code**: `400 Forbidden`
+    -   **Code**: `400 Bad Request`
     -   **Content**: `{ "message": "Please add a task" }`
 
     or
@@ -333,6 +333,51 @@ Upon successful login, the user is provided with an authentication token. This t
     1. A task can be only created by a logged-in user, who is then associated with the task.
     2. The `Authorization` header should contain a valid JWT token in the format `Bearer <JWT>`.
     3. When a new task is created, all cached task keys for this user are invalidated.
+
+    #### Edit Task
+
+-   **URL** : `/tasks/:id`
+-   **Method**: `PUT`
+-   **Description**: Update an existing task.
+-   **Authorization**: `Bearer <JWT>`
+
+-   **URL Parameters**:
+
+    -   `id` : ID of the task to update.
+
+-   **Request body**:
+
+    | Field         | Type   | Description                     |
+    | ------------- | ------ | ------------------------------- |
+    | `title`       | string | Title of the task.              |
+    | `userId`      | string | User's ID who created the task. |
+    | `date`        | number | Due date of the task.           |
+    | `description` | string | Description of the task.        |
+
+-   **Success Response**:
+
+    -   **Code**: `200 OK`
+    -   **Content**: `{ "message": "Task updated", task": "<Task Object>" }`
+
+-   **Error Responses**:
+
+    -   **Code**: `400 Bad Request`
+    -   **Content**: `{ "message": "This task does not exist" }`
+
+    or
+
+    -   **Code**: `403 Forbidden`
+    -   **Content**: `{ "message": "You do not have the right to modify this task" }`
+
+    or
+
+    -   **Code**: `500 Internal Server Error`
+    -   **Content**: `{ "message": "Internal server error", "result": "<Error Details>" }`
+
+    **Notes**:
+
+    1. A task can only be updated by the user who created id.
+    2. The `Authorization` header should contain a valid JWT token in the format `Bearer <JWT>`.
 
 ## Common Errors
 
