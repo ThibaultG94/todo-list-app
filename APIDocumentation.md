@@ -376,7 +376,7 @@ Upon successful login, the user is provided with an authentication token. This t
 
     **Notes**:
 
-    1. A task can only be updated by the user who created id.
+    1. A task can only be updated by the user who created it.
     2. The `Authorization` header should contain a valid JWT token in the format `Bearer <JWT>`.
 
 #### Delete Task
@@ -412,7 +412,7 @@ Upon successful login, the user is provided with an authentication token. This t
 
     **Notes**:
 
-    1. A task can only be deleted by the user who created id.
+    1. A task can only be deleted by the user who created it.
     2. The `Authorization` header should contain a valid JWT token in the format `Bearer <JWT>`.
 
 ## Common Errors
