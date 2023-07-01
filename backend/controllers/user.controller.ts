@@ -1,14 +1,18 @@
 import UserModel from '../models/user.model';
 import express from 'express';
 import bcrypt from 'bcryptjs';
+import { User } from '../types/types';
 
+// Enpoint to create a user
 export const registerUser = async (
 	req: express.Request,
 	res: express.Response
 ) => {
+	// Extract username, email, password and role from the request body
 	const { username, email, password, role } = req.body;
 
 	try {
+		// Attempt to find an existing user with the provided email
 		const existingUser = await UserModel.findOne({ email });
 
 		if (existingUser) {
@@ -18,6 +22,8 @@ export const registerUser = async (
 			});
 		}
 
+		// If no user with the provided email exists, create a new user
+		// with the provided details and save them to the database
 		const newUser = new UserModel({ username, email, password, role });
 		await newUser.save();
 
@@ -31,26 +37,36 @@ export const registerUser = async (
 	}
 };
 
+// Endpoint to login a user
 export const loginUser = async (
 	req: express.Request,
 	res: express.Response
 ) => {
 	try {
+		// Extract email and password from the request body
 		const { email, password } = req.body;
-		const user: any = await UserModel.findOne({ email });
 
+		// Attempt to find a user with the provided email
+		const user: User = await UserModel.findOne({ email });
+
+		// If no user with the provided email exists, return a 404 status
 		if (!user) {
 			return res.status(404).json({ message: 'User not found' });
 		}
 
+		// If a user with the provided email exists, validate the provided password
 		const isPasswordValid = await bcrypt.compare(password, user.password);
 
+		// If the password is not valid, return a 401 status
 		if (!isPasswordValid) {
 			return res.status(401).json({ message: 'Invalid password' });
 		}
 
+		// If the user exists and the password is valid,
+		// generate an authentication token for the user
 		if (user && isPasswordValid) {
 			const token = user.generateAuthToken();
+
 			res.status(200).json({
 				message: 'Authentication successful',
 				token,
@@ -61,6 +77,7 @@ export const loginUser = async (
 				},
 			});
 		} else {
+			// If the user does not exist or the password is not valid, return a 400 status
 			res.status(400).json({ message: 'Identifiants incorrects' });
 		}
 	} catch (err) {
@@ -69,10 +86,16 @@ export const loginUser = async (
 	}
 };
 
-export const updateUser = async (req: any, res: express.Response) => {
+// Endpoint to edit a user
+export const updateUser = async (
+	req: express.Request,
+	res: express.Response
+) => {
 	try {
+		// Extract ID and Role from Token
 		const userIdFromToken = await req.user._id;
 		const userRoleFromToken = await req.user.role;
+
 		const userIdFromParams = req.params.id;
 		const userToUpdate = await UserModel.findById(userIdFromParams);
 
@@ -107,7 +130,7 @@ export const updateUser = async (req: any, res: express.Response) => {
 
 		// Trouver l'utilisateur d'abord
 
-		const user: any = await UserModel.findById(userIdFromParams);
+		const user: User = await UserModel.findById(userIdFromParams);
 		if (!user) {
 			return res.status(404).json({ message: 'User not found' });
 		}
@@ -130,7 +153,11 @@ export const updateUser = async (req: any, res: express.Response) => {
 	}
 };
 
-export const deleteUser = async (req: any, res: express.Response) => {
+// Endpoint to delete a user
+export const deleteUser = async (
+	req: express.Request,
+	res: express.Response
+) => {
 	try {
 		const userIdFromToken = req.user._id;
 		const roleFromToken = req.user.role;
