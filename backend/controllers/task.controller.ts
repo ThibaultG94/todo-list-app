@@ -141,7 +141,7 @@ export const editTask = async (req: express.Request, res: express.Response) => {
 		const updates = req.body;
 
 		// Find the task by ID
-		const task: any = await TaskModel.findById(req.params.id);
+		const task = (await TaskModel.findById(req.params.id)) as Task;
 
 		// Check if the task exists
 		if (!task) {
@@ -162,9 +162,30 @@ export const editTask = async (req: express.Request, res: express.Response) => {
 		}
 
 		// Update the fields of the task
-		Object.keys(updates).forEach((update) => {
-			task[update] = updates[update];
-		});
+		if (updates.title !== undefined) {
+			task.title = updates.title;
+		}
+		if (updates.userId !== undefined) {
+			task.userId = updates.userId;
+		}
+		if (updates.date !== undefined) {
+			task.date = updates.date;
+		}
+		if (updates.description !== undefined) {
+			task.description = updates.description;
+		}
+		if (updates.status !== undefined) {
+			task.status = updates.status;
+		}
+		if (updates.estimatedTime !== undefined) {
+			task.estimatedTime = updates.estimatedTime;
+		}
+		if (updates.comments !== undefined) {
+			task.comments = updates.comments;
+		}
+		if (updates.priority !== undefined) {
+			task.priority = updates.priority;
+		}
 
 		const updatedTask = await task.save();
 
@@ -183,23 +204,27 @@ export const editTask = async (req: express.Request, res: express.Response) => {
 	}
 };
 
+// Endpoint to delete a task
 export const deleteTask = async (
 	req: express.Request,
 	res: express.Response
 ) => {
+	// Attempt to find and delete the task by the provided id
 	const task = await TaskModel.findByIdAndDelete(req.params.id);
 
+	// If no task is found, return a 400 status
 	if (!task) {
 		return res.status(400).json({ message: 'This task does not exist' });
 	}
 
-	// Vérifier que l'utilisateur est le même que celui qui a créer la tâche
+	// If a task is found, check if the user making the request is the same as the one who created the task
 	if (task && req.user._id !== task.userId) {
 		return res.status(403).json({
 			message: 'You do not have the right to modify this task',
 		});
 	}
 
+	// If the task is found and the user has sufficients rights, delete the task
 	if (task) {
 		await task.deleteOne();
 		res.status(200).json('Task deleted ' + req.params.id);

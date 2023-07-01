@@ -2,6 +2,7 @@ import { Request } from 'express';
 import { Document } from 'mongoose';
 
 export interface Task extends Document {
+	// [key: string]: any;
 	title: string;
 	userId: string;
 	date: number;
