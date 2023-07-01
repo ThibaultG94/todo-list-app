@@ -2,13 +2,17 @@ import TaskModel from '../models/task.model';
 import express from 'express';
 import client from '../utils/redisClient';
 import userModel from '../models/user.model';
-import { RequestWithUser, Task } from '../types/types';
+import { Task } from '../types/types';
 
 // Endpoint to get a task by id
-export const getTask = async (req: RequestWithUser, res: express.Response) => {
+export const getTask = async (req: express.Request, res: express.Response) => {
 	try {
 		// Find the task with the id provided in params
 		const task: Task = await TaskModel.findById(req.params.id);
+
+		if (!req.user) {
+			return res.status(401).json({ message: 'User not authenticated' });
+		}
 
 		// If the task does not exist, return a 400 status
 		if (!task) {
@@ -38,7 +42,7 @@ export const getTask = async (req: RequestWithUser, res: express.Response) => {
 
 // Endpoint to get tasks of a specific user
 export const getUserTasks = async (
-	req: RequestWithUser,
+	req: express.Request,
 	res: express.Response
 ) => {
 	try {
@@ -87,7 +91,7 @@ export const getUserTasks = async (
 };
 
 // Endpoint to create a task
-export const setTasks = async (req: RequestWithUser, res: express.Response) => {
+export const setTasks = async (req: express.Request, res: express.Response) => {
 	try {
 		// Check if the request includes task title
 		if (!req.body.title) {
@@ -131,7 +135,7 @@ export const setTasks = async (req: RequestWithUser, res: express.Response) => {
 };
 
 // Endpoint to edit a task
-export const editTask = async (req: RequestWithUser, res: express.Response) => {
+export const editTask = async (req: express.Request, res: express.Response) => {
 	try {
 		// Data to be updated
 		const updates = req.body;
@@ -179,7 +183,10 @@ export const editTask = async (req: RequestWithUser, res: express.Response) => {
 	}
 };
 
-export const deleteTask = async (req: any, res: express.Response) => {
+export const deleteTask = async (
+	req: express.Request,
+	res: express.Response
+) => {
 	const task = await TaskModel.findByIdAndDelete(req.params.id);
 
 	if (!task) {

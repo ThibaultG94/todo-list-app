@@ -12,6 +12,7 @@ import {
 	validateUserID,
 	validatePageAndLimit,
 } from '../middlewares/validation.middlewares';
+import { app } from '../server';
 
 router.post('/', auth, setTasks);
 router.get('/:id', auth, getTask);
