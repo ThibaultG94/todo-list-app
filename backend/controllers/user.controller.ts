@@ -1,7 +1,7 @@
 import UserModel from '../models/user.model';
 import express from 'express';
 import bcrypt from 'bcryptjs';
-import { User } from '../types/types';
+import { User, UserBase, UserDocument } from '../types/types';
 
 // Enpoint to create a user
 export const registerUser = async (
@@ -97,10 +97,11 @@ export const updateUser = async (
 		const userRoleFromToken = await req.user.role;
 
 		const userIdFromParams = req.params.id;
+
+		// Fetch the user to be updated
 		const userToUpdate = await UserModel.findById(userIdFromParams);
 
-		// Previent qu'un non-superadmin modifie un admin
-
+		// Check if a non-superadmin is trying to edit an admin, prevent if so
 		if (
 			userToUpdate &&
 			userToUpdate.role !== 'user' &&
@@ -109,11 +110,11 @@ export const updateUser = async (
 		) {
 			return res.status(403).json({
 				message:
-					"Vous n'avez pas les droits suffisants pour effectuer cette action",
+					'You do not have the permissions necessary to perform this action',
 			});
 		}
 
-		// Autorise l'utilisateur à mettre à jour ses propres données ou, si l'utilisateur est un admin, à mettre à jour n'importe quelle donnée
+		// Allow user to update their own data or, if user is an admin, to update any data
 		if (
 			userIdFromToken !== userIdFromParams &&
 			userRoleFromToken !== 'admin' &&
@@ -125,23 +126,30 @@ export const updateUser = async (
 			});
 		}
 
-		// Les données à mettre à jour
+		// Data to be updated
 		const updates = req.body;
 
-		// Trouver l'utilisateur d'abord
-
-		const user: User = await UserModel.findById(userIdFromParams);
-		if (!user) {
+		// Check if the user exists
+		if (!userToUpdate) {
 			return res.status(404).json({ message: 'User not found' });
 		}
 
-		// Mettre à jour les champs de l'utilisateur
-		Object.keys(updates).forEach((update) => {
-			user[update] = updates[update];
-		});
+		// Update the user fields
+		if (updates.username !== undefined) {
+			userToUpdate.username = updates.username;
+		}
+		if (updates.email !== undefined) {
+			userToUpdate.email = updates.email;
+		}
+		if (updates.password !== undefined) {
+			userToUpdate.password = updates.password;
+		}
+		if (updates.role !== undefined) {
+			userToUpdate.role = updates.role;
+		}
 
-		// Sauvegarder l'utilisateur
-		const updatedUser = await user.save();
+		// Save the user
+		const updatedUser = await userToUpdate.save();
 
 		res.status(200).json({
 			message: 'User updated',
@@ -159,13 +167,15 @@ export const deleteUser = async (
 	res: express.Response
 ) => {
 	try {
+		// Extract the user ID and role from the token
 		const userIdFromToken = req.user._id;
 		const roleFromToken = req.user.role;
 		const userIdFromParams = req.params.id;
+
+		// Fetch the user to be deleted
 		const userToDelete = await UserModel.findById(userIdFromParams);
 
-		// Previens qu'un non-superadmin puisse supprimer un admin
-
+		// Prevent a non-superadmin from deleting an admin
 		if (
 			userToDelete &&
 			userToDelete.role !== 'user' &&
@@ -174,10 +184,11 @@ export const deleteUser = async (
 		) {
 			return res.status(403).json({
 				message:
-					"Vous n'avez pas les droits suffisants pour effectuer cette action",
+					'You do not have the permissions necessary to perform this action',
 			});
 		}
 
+		// Allow a user to delete their own account ir, if the user is an admin or a superadmin, to delete any user account
 		if (
 			userIdFromToken !== userIdFromParams &&
 			roleFromToken !== 'admin' &&
@@ -189,8 +200,10 @@ export const deleteUser = async (
 			});
 		}
 
+		// Delete the user
 		const deletedUser = await UserModel.findByIdAndDelete(userIdFromParams);
 
+		// Check if the user was actually deleted
 		if (!deletedUser) {
 			return res.status(404).json({ message: 'User not found' });
 		}
@@ -206,13 +219,15 @@ export const deleteUser = async (
 	}
 };
 
-export const getUser = async (req: any, res: express.Response) => {
+// Enpoint to get a user
+export const getUser = async (req: express.Request, res: express.Response) => {
 	try {
+		// Extract the user ID and role from the token
 		const userIdFromToken = req.user._id;
 		const userRoleFromToken = req.user.role;
 		const userIdFromParams = req.params.id;
 
-		// Si l'utilisateur ne demande pas ses propres données ou s'il n'est pas admin ou superadmin, nié la requête
+		// Deny the request if a user asks for data of another user and the requester is not an admin or a superadmin
 		if (
 			userIdFromToken !== userIdFromParams &&
 			userRoleFromToken !== 'admin' &&
@@ -220,18 +235,19 @@ export const getUser = async (req: any, res: express.Response) => {
 		) {
 			return res.status(403).json({
 				message:
-					"Vous n'avez pas les droits suffisants pour effectuer cette action",
+					'You do not have sufficient rights to perform this action',
 			});
 		}
 
-		const user: any = await UserModel.findById(userIdFromParams).select(
-			'-password'
-		);
+		// Fetch the user from the database, omitting the password field
+		const user: UserBase = await UserModel.findById(
+			userIdFromParams
+		).select('-password');
 		if (!user) {
 			res.status(400).json({ message: 'User not found' });
 		}
 
-		// Si l'utilisateur est admin mais qu'il ne demande pas ses propres données ou que l'utilisateur est superadmin, nié la requête
+		// Deny the request if an admin user asks for data of another admin or superadmin and the requester is not a superadmin
 		if (
 			user.role !== 'user' &&
 			userRoleFromToken !== 'superadmin' &&
@@ -243,6 +259,7 @@ export const getUser = async (req: any, res: express.Response) => {
 			});
 		}
 
+		// Send the user data back in the response
 		res.status(200).json({ user });
 	} catch (err) {
 		const result = (err as Error).message;
