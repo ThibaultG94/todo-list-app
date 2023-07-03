@@ -1,4 +1,5 @@
 import express from 'express';
+import { auth } from '../middlewares/auth.middlewares';
 import {
 	setTasks,
 	getTask,
@@ -6,16 +7,20 @@ import {
 	editTask,
 	deleteTask,
 } from '../controllers/task.controller';
-const router = express.Router();
-import { auth } from '../middlewares/auth.middlewares';
 import {
 	validateUserID,
 	validatePageAndLimit,
 } from '../middlewares/validation.middlewares';
-import { app } from '../server';
 
+const router = express.Router();
+
+// Route to create a new task
 router.post('/', auth, setTasks);
+
+// Route to get a task by its id
 router.get('/:id', auth, getTask);
+
+// Route to get all tasks for a specific user
 router.get(
 	'/user/:id',
 	validateUserID,
@@ -23,7 +28,11 @@ router.get(
 	auth,
 	getUserTasks
 );
+
+// Route to update a task by its id
 router.put('/:id', auth, editTask);
+
+// Route to delete a task by its id
 router.delete('/:id', auth, deleteTask);
 
 export default router;
