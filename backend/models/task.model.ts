@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
-import { registerUser } from '../controllers/user.controller';
-import * as yup from 'yup';
 
+// Defines the Task schema for MongoDB
 const taskSchema = new mongoose.Schema(
 	{
 		title: {
@@ -38,22 +37,11 @@ const taskSchema = new mongoose.Schema(
 			required: false,
 		},
 	},
+	// Add creation and update timestamps to each document
 	{ timestamps: true }
 );
 
-export const taskValidationSchema = yup.object().shape({
-	title: yup.string().required(),
-	userId: yup.string().required(),
-	date: yup.number().required(),
-	description: yup.string(),
-	status: yup
-		.string()
-		.oneOf(['Pending', 'In Progress', 'Completed', 'Archived']),
-	estimedTime: yup.number(),
-	comments: yup.string(),
-	priority: yup.string(),
-});
-
+// Indexing userId for  query efficiency
 taskSchema.index({ userId: 1 });
 
 export default mongoose.model('task', taskSchema);

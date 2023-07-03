@@ -31,8 +31,7 @@
 		"passport-local": "^1.0.0",
 		"redis": "^4.6.7",
 		"swagger-express-ts": "^1.1.0",
-		"typedoc": "^0.24.8",
-		"yup": "^1.2.0"
+		"typedoc": "^0.24.8"
 	},
 	"devDependencies": {
 		"@types/bcryptjs": "^2.4.2",
