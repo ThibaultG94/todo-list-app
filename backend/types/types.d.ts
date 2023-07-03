@@ -30,6 +30,11 @@ export interface UserDocument extends UserBase, mongoose.Document {
 	generateAuthToken(): string;
 }
 
+export interface UserPayload {
+	_id: string;
+	role: string;
+}
+
 declare module 'express-serve-static-core' {
 	interface Request {
 		user?: {
