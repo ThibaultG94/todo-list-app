@@ -2,9 +2,9 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-
 dotenv.config();
 
+// Define the schema for User model
 const userSchema = new mongoose.Schema({
 	username: {
 		type: String,
@@ -26,11 +26,15 @@ const userSchema = new mongoose.Schema({
 	},
 });
 
+// Before saving a user, hash the password
 userSchema.pre('save', async function (next) {
+	// Check if password field is modified
 	if (!this.isModified('password')) {
 		return next();
 	}
+
 	try {
+		// Generate a salt and hash the password
 		const salt = await bcrypt.genSalt(10);
 		this.password = await bcrypt.hash(this.password, salt);
 		next();
@@ -40,12 +44,14 @@ userSchema.pre('save', async function (next) {
 	}
 });
 
+// Add a method to compare passwords
 userSchema.methods.comparePasswords = async function (
 	candidatePassword: string
 ) {
 	return await bcrypt.compare(candidatePassword, this.password);
 };
 
+// Add a method to generate auth tokens
 userSchema.methods.generateAuthToken = function () {
 	const user = this;
 	const token = jwt.sign(
