@@ -1,4 +1,4 @@
-import express, { NextFunction, Response } from 'express';
+import express from 'express';
 import { connectDB } from './config/db';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -11,12 +11,11 @@ const port: number = 5000;
 
 dotenv.config();
 
-// connexion à la DB
 connectDB();
 
 export const app = express();
 
-// Authorisation CORS
+// CORS configuration
 app.use(
 	cors({
 		origin: 'http://localhost:3000',
@@ -25,7 +24,7 @@ app.use(
 	})
 );
 
-// Middleware qui permet de traiter les données de la Request
+// Middlewares for parsing request bodies
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 

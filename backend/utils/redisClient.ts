@@ -1,10 +1,12 @@
 import { createClient } from 'redis';
 import dotenv from 'dotenv';
 
+dotenv.config();
+
 const client = createClient({
 	password: process.env.REDIS_PASSWORD,
 	socket: {
-		host: 'redis-17149.c300.eu-central-1-1.ec2.cloud.redislabs.com',
+		host: process.env.REDIS_HOST,
 		port: 17149,
 	},
 	legacyMode: true,
