@@ -10,9 +10,10 @@ import {
 	superAdmin,
 	setupDataBase,
 } from './testUtils';
-import mongoose, { ConnectOptions } from 'mongoose';
 import * as chai2 from 'chai';
+
 const expect = chai2.expect;
+
 let userOneId: number = 0,
 	userTwoId: number = 0,
 	userThreeId: number = 0,
@@ -20,6 +21,7 @@ let userOneId: number = 0,
 	adminTwoId: number = 0,
 	adminThreeId: number = 0,
 	superAdminId: number = 0;
+
 let userOneToken: string = '',
 	userTwoToken: string = '',
 	userThreeToken: string = '',

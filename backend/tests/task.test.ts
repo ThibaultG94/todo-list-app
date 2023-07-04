@@ -1,8 +1,6 @@
 import request from 'supertest';
 import { app } from '../server';
-import mongoose, { ConnectOptions } from 'mongoose';
 import * as chai3 from 'chai';
-const expect = chai3.expect;
 import {
 	setupDataBase,
 	userFour,
@@ -11,11 +9,15 @@ import {
 	adminFive,
 	superAdminTwo,
 } from './testUtils';
+
+const expect = chai3.expect;
+
 let userFourId: number = 0,
 	userFiveId: number = 0,
 	adminFourId: number = 0,
 	adminFiveId: number = 0,
 	superAdminTwoId: number = 0;
+
 let userFourToken: string = '',
 	userFiveToken: string = '',
 	adminFourToken: string = '',

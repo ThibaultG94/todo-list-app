@@ -81,10 +81,11 @@ export const superAdminTwo = {
 	role: 'superadmin',
 };
 
+// Function for configuring the database in the test environment
 export const setupDataBase = async () => {
 	try {
-		await User.deleteMany(); // supprime tous les utilisateurs de la base de données
-		await Task.deleteMany(); // supprime toutes les tâches de la base de données
+		await User.deleteMany(); // Attempt to delete all User documents in the database
+		await Task.deleteMany(); // Attempt to delete all Task documents in the database
 	} catch (err) {
 		const result = (err as Error).message;
 		console.log(result);
