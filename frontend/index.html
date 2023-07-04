@@ -6,5 +6,41 @@
 		<title>ToDo</title>
 		<link rel="stylesheet" href="./css/index.css" />
 	</head>
-	<body></body>
+	<body>
+		<header>
+			<h1>Application de Gestion de Tâches</h1>
+			<p>
+				Planifiez, organisez et suivez vos tâches comme jamais
+				auparavant.
+			</p>
+		</header>
+		<main>
+			<div id="left-side">
+				<h2>Connexion</h2>
+				<form id="login-form">
+					<label for="email">Email</label>
+					<input type="email" id="email" name="email" required />
+					<label for="password">Mot de passe</label>
+					<input
+						type="password"
+						id="password"
+						name="password"
+						required />
+					<button type="submit">Se connecter</button>
+				</form>
+				<p>ou</p>
+				<button>Se connecter avec Google</button>
+				<p>Pas encore inscrit ? <a href="#">S'inscrire</a></p>
+			</div>
+			<div id="right-side">
+				<h2>Première fois ? Essayez avant de vous inscrire</h2>
+				<p>
+					Découvrez toute les fonctionnalités de l'application sans
+					avoir besoin de créer un compte. Commencez à organisez vos
+					tâches tout de suite en utilisant le mode visiteur.
+				</p>
+				<a href="#" class="button">Mode visiteur</a>
+			</div>
+		</main>
+	</body>
 </html>
