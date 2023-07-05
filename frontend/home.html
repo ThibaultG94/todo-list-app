@@ -5,7 +5,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>ToDo</title>
 		<link rel="stylesheet" href="./css/home.css" />
-		<link rel="stylesheet" href="./css//components/modal.css" />
+		<link rel="stylesheet" href="./css/components/modal.css" />
+		<link rel="stylesheet" href="./css/components/formchecker.css" />
 	</head>
 	<body>
 		<header>
@@ -19,14 +20,31 @@
 			<div id="left-side">
 				<h2>Connexion</h2>
 				<form id="login-form">
-					<label for="email">Email</label>
-					<input type="email" id="email" name="email" required />
-					<label for="password">Mot de passe</label>
-					<input
-						type="password"
-						id="password"
-						name="password"
-						required />
+					<div class="email-container">
+						<label for="email">Email</label>
+						<input
+							type="email"
+							id="email"
+							name="email"
+							maxlength="60"
+							autocomplete="off"
+							required />
+						<span>Email incorrect</span>
+					</div>
+
+					<div class="password-container">
+						<label for="password">Mot de passe</label>
+						<input
+							type="password"
+							id="password"
+							name="password"
+							maxlength="40"
+							autocomplete="off"
+							required />
+						<p id="progress-bar"></p>
+						<span></span>
+					</div>
+
 					<button type="submit">Se connecter</button>
 				</form>
 				<p>ou</p>
@@ -43,42 +61,64 @@
 						<h2>Inscription</h2>
 
 						<form id="signup-form">
-							<label for="username">Nom d'utilisateur</label>
-							<input
-								type="text"
-								id="username"
-								name="username"
-								required
-								maxlength="30"
-								placeholder="Entrez votre nom d'utilisateur" />
+							<div class="username-container">
+								<label for="username">Nom d'utilisateur</label>
+								<input
+									type="text"
+									id="username"
+									name="username"
+									required
+									minlength="4"
+									maxlength="30"
+									autocomplete="off"
+									placeholder="Entrez votre nom d'utilisateur" />
+								<span></span>
+							</div>
 
-							<label for="email">Email</label>
-							<input
-								type="email"
-								name="email"
-								id="email"
-								required
-								placeholder="prenom.nom@email.fr" />
+							<div class="email-container">
+								<label for="email">Email</label>
+								<input
+									type="email"
+									name="email"
+									id="emailRegister"
+									maxlength="60"
+									minlength="5"
+									required
+									autocomplete="off"
+									placeholder="prenom.nom@email.fr" />
+								<span>Email incorrect</span>
+							</div>
 
-							<label for="password">Mot de passe</label>
-							<input
-								type="password"
-								name="password"
-								id="password"
-								placeholder="Entrez votre mot de passe"
-								minlength="8"
-								required />
+							<div class="password-container">
+								<label for="password">Mot de passe</label>
+								<input
+									type="password"
+									name="password"
+									id="passwordRegister"
+									placeholder="Entrez votre mot de passe"
+									minlength="8"
+									maxlength="40"
+									autocomplete="off"
+									required />
+								<p id="progress-bar"></p>
+								<span></span>
+							</div>
 
-							<label for="confirm-password"
-								>Confirmez le mot de passe</label
-							>
-							<input
-								type="password"
-								name="confirm-password"
-								id="confirm-password"
-								placeholder="Confirmez votre mot de passe"
-								minlength="8"
-								required />
+							<div class="password-confirm-container">
+								<label for="passwordConfirm"
+									>Confirmez le mot de passe</label
+								>
+								<input
+									type="password"
+									name="passwordConfirm"
+									id="passwordConfirm"
+									placeholder="Confirmez votre mot de passe"
+									minlength="8"
+									maxlength="40"
+									autocomplete="off"
+									required />
+								<span></span>
+							</div>
 
 							<input type="submit" value="S'inscrire" />
 						</form>

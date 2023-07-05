@@ -31,3 +31,8 @@
 	text-decoration: none;
 	cursor: pointer;
 }
+
+#close-button {
+	visibility: visible;
+	opacity: 1;
+}
