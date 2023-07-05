@@ -20,7 +20,7 @@ Upon successful login, the user is provided with an authentication token. This t
 
 #### User Registration
 
--   **URL** : `/user/register`
+-   **URL** : `/users/register`
 -   **Method**: `POST`
 -   **Description**: Register a new user.
 -   **Request body**:
@@ -49,7 +49,7 @@ Upon successful login, the user is provided with an authentication token. This t
 
 #### User Login
 
--   **URL** : `/user/login`
+-   **URL** : `/users/login`
 -   **Method**: `POST`
 -   **Description**: Login a user.
 -   **Request body**:
@@ -81,7 +81,7 @@ Upon successful login, the user is provided with an authentication token. This t
 
 #### User Update
 
--   **URL** : `/user/:id/update`
+-   **URL** : `/users/:id/update`
 -   **Method**: `PUT`
 -   **Description**: Update a user.
 -   **Authorization**: `Bearer <JWT>`
@@ -129,7 +129,7 @@ Upon successful login, the user is provided with an authentication token. This t
 
 #### User Deletion
 
--   **URL** : `/user/:id/delete`
+-   **URL** : `/users/:id/delete`
 -   **Method**: `DELETE`
 -   **Description**: Delete a user.
 -   **Authorization**: `Bearer <JWT>`
@@ -168,7 +168,7 @@ Upon successful login, the user is provided with an authentication token. This t
 
 #### Get User Information
 
--   **URL** : `/user/:id/account`
+-   **URL** : `/users/:id/account`
 -   **Method**: `GET`
 -   **Description**: Retrieve information about a user.
 -   **Authorization**: `Bearer <JWT>`
