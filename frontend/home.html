@@ -4,7 +4,8 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>ToDo</title>
-		<link rel="stylesheet" href="./css/index.css" />
+		<link rel="stylesheet" href="./css/home.css" />
+		<link rel="stylesheet" href="./css//components/modal.css" />
 	</head>
 	<body>
 		<header>
@@ -30,7 +31,59 @@
 				</form>
 				<p>ou</p>
 				<button>Se connecter avec Google</button>
-				<p>Pas encore inscrit ? <a href="#">S'inscrire</a></p>
+				<p>
+					Pas encore inscrit ?
+					<a href="#" id="signup-link">S'inscrire</a>
+				</p>
+				<div class="modal" id="signup-modal">
+					<div class="modal-content">
+						<span class="close-button" id="close-button"
+							>&times;</span
+						>
+						<h2>Inscription</h2>
+
+						<form id="signup-form">
+							<label for="username">Nom d'utilisateur</label>
+							<input
+								type="text"
+								id="username"
+								name="username"
+								required
+								maxlength="30"
+								placeholder="Entrez votre nom d'utilisateur" />
+
+							<label for="email">Email</label>
+							<input
+								type="email"
+								name="email"
+								id="email"
+								required
+								placeholder="prenom.nom@email.fr" />
+
+							<label for="password">Mot de passe</label>
+							<input
+								type="password"
+								name="password"
+								id="password"
+								placeholder="Entrez votre mot de passe"
+								minlength="8"
+								required />
+
+							<label for="confirm-password"
+								>Confirmez le mot de passe</label
+							>
+							<input
+								type="password"
+								name="confirm-password"
+								id="confirm-password"
+								placeholder="Confirmez votre mot de passe"
+								minlength="8"
+								required />
+
+							<input type="submit" value="S'inscrire" />
+						</form>
+					</div>
+				</div>
 			</div>
 			<div id="right-side">
 				<h2>Première fois ? Essayez avant de vous inscrire</h2>
