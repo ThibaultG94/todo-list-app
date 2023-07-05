@@ -16,6 +16,7 @@ export default function login() {
 			.then((res) => {
 				const token = res.data.token;
 				localStorage.setItem('token', token);
+				window.location.href = '/frontend/pages/app.html';
 			})
 			.catch((err) => console.log(err));
 	});
