@@ -51,7 +51,7 @@ export default function formChecker(
 
 	const emailChecker = (value) => {
 		if (!value.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
-			errorDisplay('email', "Le mail n'est pas valide");
+			errorDisplay('email', 'Email incorrect');
 			email = null;
 		} else {
 			errorDisplay('email', '', true);
