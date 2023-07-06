@@ -2,6 +2,7 @@ export default function register() {
 	const form = document.getElementById('signup-form');
 	const inputs = document.querySelectorAll('#signup-form input');
 	const progressBar = document.getElementById('progress-bar');
+	const sucessRegister = document.querySelector('.success-container');
 
 	let pseudo, email, password, confirmPass;
 
@@ -95,17 +96,16 @@ export default function register() {
 				})
 				.then((res) => {
 					console.log(res);
+					pseudo = null;
+					email = null;
+					password = null;
+					confirmPass = null;
+					document.querySelector(
+						'.password-container > span'
+					).textContent = '';
+					sucessRegister.classList.add('success');
 				})
 				.catch((err) => console.log(err));
-
-			pseudo = null;
-			email = null;
-			password = null;
-			confirmPass = null;
-			document.querySelector('.password-container > span').textContent =
-				'';
-
-			alert('Inscription validée !');
 		} else {
 			alert('Veuillez remplir correctement les champs');
 		}
