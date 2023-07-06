@@ -1,5 +1,3 @@
-import formChecker from './formChecker.js';
-
 export default function register() {
 	const form = document.getElementById('signup-form');
 	const inputs = document.querySelectorAll('#signup-form input');
@@ -23,29 +21,31 @@ export default function register() {
 	};
 
 	const passwordChecker = (value) => {
-		progressBar.classList = '';
+		setTimeout(() => {
+			progressBar.classList = '';
 
-		if (
-			!value.match(
-				/^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}$/
-			)
-		) {
-			errorDisplay(
-				'password',
-				'Minimum de 8 caractères, une majuscule, un chiffre et un caractère spécial'
-			);
-			progressBar.classList.add('progressRed');
-			password = null;
-		} else if (value.length < 12) {
-			errorDisplay('password', 'Sécurité moyenne', true);
-			progressBar.classList.add('progressBlue');
-			password = value;
-		} else {
-			errorDisplay('password', 'Sécurité forte', true);
-			progressBar.classList.add('progressGreen');
-			password = value;
-		}
-		if (confirmPass) confirmChecker(confirmPass);
+			if (
+				!value.match(
+					/^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}$/
+				)
+			) {
+				errorDisplay(
+					'password',
+					'Minimum de 8 caractères, une majuscule, un chiffre et un caractère spécial'
+				);
+				progressBar.classList.add('progressRed');
+				password = null;
+			} else if (value.length < 12) {
+				errorDisplay('password', 'Sécurité moyenne', true);
+				progressBar.classList.add('progressBlue');
+				password = value;
+			} else {
+				errorDisplay('password', 'Sécurité forte', true);
+				progressBar.classList.add('progressGreen');
+				password = value;
+			}
+			if (confirmPass) confirmChecker(confirmPass);
+		}, 1000);
 	};
 
 	const confirmChecker = (value) => {
