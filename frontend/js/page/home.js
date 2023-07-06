@@ -1,6 +1,6 @@
-import login from '../components/login.js';
-import modalRegister from '../components/modal.js';
-import register from '../components/register.js';
+import login from '../components/form/login.js';
+import modalRegister from '../components/form/modal.js';
+import register from '../components/form/register.js';
 
 export default function home() {
 	login();

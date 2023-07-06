@@ -51,7 +51,7 @@ form p {
 	background: red;
 	width: 33%;
 	height: 6px;
-	margin: -2px 0 2px;
+	margin: 4px 0 2px;
 	border-radius: 50px;
 	visibility: hidden;
 	transition: 0.3s;

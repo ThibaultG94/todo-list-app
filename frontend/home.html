@@ -20,28 +20,28 @@
 			<div id="left-side">
 				<h2>Connexion</h2>
 				<form id="login-form">
-					<div class="email-container">
+					<div class="email-log-container">
 						<label for="email">Email</label>
 						<input
 							type="email"
-							id="email"
+							id="emailLog"
 							name="email"
 							maxlength="60"
 							autocomplete="off"
 							required />
-						<span>Email incorrect</span>
+						<!-- <span>Email incorrect</span> -->
 					</div>
 
-					<div class="password-container">
+					<div class="password-log-container">
 						<label for="password">Mot de passe</label>
 						<input
 							type="password"
-							id="password"
+							id="passwordLog"
 							name="password"
 							maxlength="40"
 							autocomplete="off"
 							required />
-						<p id="progress-bar"></p>
+						<!-- <p id="progress-bar"></p> -->
 						<span></span>
 					</div>
 
@@ -61,15 +61,15 @@
 						<h2>Inscription</h2>
 
 						<form id="signup-form">
-							<div class="username-container">
-								<label for="username">Nom d'utilisateur</label>
+							<div class="pseudo-container">
+								<label for="pseudo">Nom d'utilisateur</label>
 								<input
 									type="text"
-									id="username"
-									name="username"
+									id="pseudo"
+									name="pseudo"
 									required
-									minlength="4"
-									maxlength="30"
+									minlength="3"
+									maxlength="20"
 									autocomplete="off"
 									placeholder="Entrez votre nom d'utilisateur" />
 								<span></span>
@@ -80,7 +80,7 @@
 								<input
 									type="email"
 									name="email"
-									id="emailRegister"
+									id="email"
 									maxlength="60"
 									minlength="5"
 									required
@@ -94,7 +94,7 @@
 								<input
 									type="password"
 									name="password"
-									id="passwordRegister"
+									id="password"
 									placeholder="Entrez votre mot de passe"
 									minlength="8"
 									maxlength="40"
@@ -104,14 +104,14 @@
 								<span></span>
 							</div>
 
-							<div class="password-confirm-container">
+							<div class="confirm-container">
 								<label for="passwordConfirm"
 									>Confirmez le mot de passe</label
 								>
 								<input
 									type="password"
 									name="passwordConfirm"
-									id="passwordConfirm"
+									id="confirm"
 									placeholder="Confirmez votre mot de passe"
 									minlength="8"
 									maxlength="40"
