@@ -64,7 +64,6 @@ describe('User Registration', () => {
 			.post('/users/register')
 			.send(userOne)
 			.expect(400);
-		await console.log(response.body);
 	});
 });
 

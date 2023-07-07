@@ -11,6 +11,13 @@ export const registerUser = async (
 	// Extract username, email, password and role from the request body
 	const { username, email, password, role } = req.body;
 
+	if (
+		(typeof username && typeof email && typeof password && typeof role) !==
+		'string'
+	) {
+		return res.status(422).send('Invalid input');
+	}
+
 	try {
 		// Attempt to find an existing user with the provided email
 		const existingUser = await UserModel.findOne({ email });
@@ -45,6 +52,10 @@ export const loginUser = async (
 	try {
 		// Extract email and password from the request body
 		const { email, password } = req.body;
+
+		if ((typeof email && typeof password) !== 'string') {
+			return res.status(422).send('Invalid input');
+		}
 
 		// Attempt to find a user with the provided email
 		const user: User = await UserModel.findOne({ email });
