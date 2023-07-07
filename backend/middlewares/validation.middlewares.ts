@@ -1,4 +1,22 @@
 import { Request, Response, NextFunction } from 'express';
+import { Schema } from 'joi';
+
+export const validate = (schema: Schema, property: 'body' | 'params') => {
+	return (req: Request, res: Response, next: NextFunction) => {
+		const { error } = schema.validate(req[property]);
+		const valid = error == null;
+
+		if (valid) {
+			next();
+		} else {
+			const { details } = error;
+			const message = details.map((i) => i.message).join(',');
+
+			console.log('error', message);
+			res.status(422).json({ error: message });
+		}
+	};
+};
 
 // Middleware to validate user ID
 export const validateUserID = (

@@ -7,12 +7,16 @@ import {
 	deleteUser,
 	getUser,
 } from '../controllers/user.controller';
-import { validateUserID } from '../middlewares/validation.middlewares';
+import {
+	validate,
+	validateUserID,
+} from '../middlewares/validation.middlewares';
+import { registerSchema } from '../models/validation.model';
 
 const router = express.Router();
 
 // Route to register a new user
-router.post('/register', registerUser);
+router.post('/register', validate(registerSchema, 'body'), registerUser);
 
 // Route to log in a user
 router.post('/login', loginUser);

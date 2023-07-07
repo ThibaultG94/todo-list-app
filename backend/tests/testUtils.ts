@@ -6,78 +6,83 @@ export const userOne = {
 	username: 'testuser',
 	email: 'test@example.com',
 	password: 'Mypassword77',
+	role: 'user',
 };
 
 export const userTwo = {
 	username: 'testusertwo',
 	email: 'testtwo@example.com',
 	password: 'Mysecondpassword88',
+	role: 'user',
 };
 
 export const userThree = {
 	username: 'testuserthree',
 	email: 'testthree@example.com',
 	password: 'Mythirdpassword99',
+	role: 'user',
 };
 
 export const userFour = {
 	username: 'testuserfour',
 	email: 'testfour@example.com',
 	password: 'MyFourthpassword99',
+	role: 'user',
 };
 
 export const userFive = {
 	username: 'testuserfive',
 	email: 'testfive@example.com',
 	password: 'MyFifthpassword99',
+	role: 'user',
 };
 
 export const adminOne = {
 	username: 'testadmin',
 	email: 'testadmin@example.com',
-	password: 'azertyuiop',
+	password: 'azertyuiop666?',
 	role: 'admin',
 };
 
 export const adminTwo = {
 	username: 'testadmintwo',
 	email: 'testadmintwo@example.com',
-	password: 'wxcvbn',
+	password: 'wxcvbn9744µ£',
 	role: 'admin',
 };
 
 export const adminThree = {
 	username: 'testadminthree',
 	email: 'testadminthree@example.com',
-	password: 'qsdfghjklm',
+	password: 'qsdfghjklm644/*ds',
 	role: 'admin',
 };
 
 export const adminFour = {
 	username: 'testadminfour',
 	email: 'testadminfour@example.com',
-	password: 'qsdfghjklm',
+	password: 'qsdfghjklm4588*?oksd',
 	role: 'admin',
 };
 
 export const adminFive = {
 	username: 'testadminfive',
 	email: 'testadminfive@example.com',
-	password: 'qsdfghjklm',
+	password: 'qsdfghjklm123456MLJF???765',
 	role: 'admin',
 };
 
 export const superAdmin = {
 	username: 'superAdmin',
 	email: 'superadmin@example.com',
-	password: 'therealsuperadminpassword',
+	password: 'therealsuperadminpasswordu93!!!€€€$$$',
 	role: 'superadmin',
 };
 
 export const superAdminTwo = {
 	username: 'superAdminTwo',
 	email: 'superadmintwo@example.com',
-	password: 'therealsuperadminpassword',
+	password: 'therealsuperadminpasswordu77$$$$',
 	role: 'superadmin',
 };
 
