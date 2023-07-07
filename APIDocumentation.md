@@ -206,6 +206,33 @@ Upon successful login, the user is provided with an authentication token. This t
     3. A `superadmin` can request data from any user.
     4. The `Authorization` header should contain a valid JWT token in the format `Bearer <JWT>`.
 
+#### User forgot his password
+
+-   **URL** : `/users/forgot-password`
+-   **Method**: `POST`
+-   **Description**: Reset password with email adress
+
+-   **Request body**:
+
+    | Field   | Type   | Description           |
+    | ------- | ------ | --------------------- |
+    | `email` | string | User's email address. |
+
+-   **Success Response**:
+
+    -   **Code**: `200 OK`
+    -   **Content**: `{ "message": "Email sent" }`
+
+-   **Error Responses**:
+
+    -   **Code**: `404 Not Found`
+    -   **Content**: `{ "message": "No account with that email address exists" }`
+
+    or
+
+    -   **Code**: `500 Internal Server Error`
+    -   **Content**: `{ "message": "Internal server error", "result": "<Error Details>" }`
+
 ### Task Endpoints
 
 #### Get Task Information
