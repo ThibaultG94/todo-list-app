@@ -281,3 +281,29 @@ export const getUser = async (req: express.Request, res: express.Response) => {
 		res.status(500).json({ message: 'Internal server error' });
 	}
 };
+
+export const forgotPassword = async (
+	req: express.Request,
+	res: express.Response
+) => {
+	try {
+		// Retrieve email address from request body
+		const { email } = req.body;
+
+		// Check if a user with this email address exists
+		const user = await UserModel.findOne({ email });
+
+		if (!user) {
+			return res
+				.status(404)
+				.json({ message: 'No account with that email address exists' });
+		}
+
+		res.status(200).json({ message: 'Email sent' });
+	} catch (err) {
+		const result = (err as Error).message;
+		console.log(result);
+
+		res.status(500).json({ message: 'Internal server error' });
+	}
+};

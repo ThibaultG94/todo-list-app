@@ -6,6 +6,7 @@ import {
 	updateUser,
 	deleteUser,
 	getUser,
+	forgotPassword,
 } from '../controllers/user.controller';
 import {
 	validate,
@@ -40,5 +41,8 @@ router.put('/:id/update', validateUserID, auth, updateUser);
 
 // Route to delete a user's account by their id
 router.delete('/:id/delete', validateUserID, auth, deleteUser);
+
+// Route to reset password with email adress
+router.post('/forgot-password', forgotPassword);
 
 export default router;
