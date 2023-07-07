@@ -33,22 +33,29 @@
 					</div>
 
 					<div class="password-log-container">
-						<label for="password">Mot de passe</label>
-						<input
-							type="password"
-							id="passwordLog"
-							name="password"
-							minlength="8"
-							maxlength="128"
-							autocomplete="off"
-							required />
+						<div class="input-password-container">
+							<div class="input-password">
+								<label for="password">Mot de passe</label>
+								<input
+									type="password"
+									id="passwordLog"
+									name="password"
+									minlength="8"
+									maxlength="128"
+									autocomplete="off"
+									required />
+							</div>
+							<div class="forgot-password">
+								<a href="./auth/forgetPassword.html"
+									>Mot de passe oublié</a
+								>
+							</div>
+						</div>
 						<span></span>
 					</div>
 
 					<button type="submit">Se connecter</button>
 				</form>
-				<p>ou</p>
-				<button>Se connecter avec Google</button>
 				<p>
 					Pas encore inscrit ?
 					<a href="#" id="signup-link">S'inscrire</a>
