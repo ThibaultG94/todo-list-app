@@ -347,7 +347,11 @@ export const forgotPassword = async (
 			});
 		});
 
-		res.status(200).json({ message: 'Email sent' });
+		res.status(200).json({
+			message:
+				'An email has been sent to your account with further instructions.',
+			username: user.username,
+		});
 	} catch (err) {
 		const result = (err as Error).message;
 		console.log(result);

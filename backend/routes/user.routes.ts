@@ -43,6 +43,6 @@ router.put('/:id/update', validateUserID, auth, updateUser);
 router.delete('/:id/delete', validateUserID, auth, deleteUser);
 
 // Route to reset password with email adress
-router.post('/forgot-password', forgotPassword);
+router.post('/auth/forgot-password', forgotPassword);
 
 export default router;

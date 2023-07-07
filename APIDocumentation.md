@@ -208,7 +208,7 @@ Upon successful login, the user is provided with an authentication token. This t
 
 #### User forgot his password
 
--   **URL** : `/users/forgot-password`
+-   **URL** : `/users/auth/forgot-password`
 -   **Method**: `POST`
 -   **Description**: Reset password with email adress
 
