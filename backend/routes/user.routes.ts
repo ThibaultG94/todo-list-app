@@ -12,14 +12,25 @@ import {
 	validateUserID,
 } from '../middlewares/validation.middlewares';
 import { loginSchema, registerSchema } from '../models/validation.model';
+import { apiRegisterAndLoginLimiter } from '../middlewares/rateLimiter.middlewares';
 
 const router = express.Router();
 
 // Route to register a new user
-router.post('/register', validate(registerSchema, 'body'), registerUser);
+router.post(
+	'/register',
+	apiRegisterAndLoginLimiter,
+	validate(registerSchema, 'body'),
+	registerUser
+);
 
 // Route to log in a user
-router.post('/login', validate(loginSchema, 'body'), loginUser);
+router.post(
+	'/login',
+	apiRegisterAndLoginLimiter,
+	validate(loginSchema, 'body'),
+	loginUser
+);
 
 // Route to get a user's account information by their id
 router.get('/:id/account', validateUserID, auth, getUser);

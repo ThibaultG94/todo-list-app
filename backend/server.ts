@@ -6,6 +6,7 @@ import './utils/redisClient';
 import * as Sentry from '@sentry/node';
 import taskRoutes from './routes/task.routes';
 import userRoutes from './routes/user.routes';
+import { apiLimiter } from './middlewares/rateLimiter.middlewares';
 
 const port: number = 5000;
 
@@ -30,6 +31,8 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use('/task', taskRoutes);
 app.use('/users', userRoutes);
+
+app.use(apiLimiter);
 
 Sentry.init({
 	dsn: process.env.SENTRY_DSN,
