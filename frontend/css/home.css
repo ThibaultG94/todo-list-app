@@ -1,0 +1,88 @@
+body {
+	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
+		'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+	margin: 0;
+	padding: 0;
+	background-color: #fcfcfa;
+}
+
+header {
+	background-color: #ffffff;
+	padding: 20px;
+	text-align: center;
+}
+
+header h1 {
+	color: #333333;
+}
+
+header p {
+	color: #666666;
+}
+
+main {
+	display: flex;
+	justify-content: space-between;
+	padding: 20px;
+}
+
+#left-side,
+#right-side {
+	width: 45%;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+form input {
+	width: 100%;
+}
+
+form input,
+form button {
+	margin-bottom: 20px;
+}
+
+form button {
+	background-color: #80ccff;
+	color: #ffffff;
+	border: none;
+	padding: 10px 20px;
+	cursor: pointer;
+	font-size: 1.2rem;
+}
+
+form button:hover {
+	background-color: #66b3ff;
+}
+
+a {
+	color: #3399ff;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+.forgot-password {
+	float: right;
+	margin-top: -20px;
+}
+
+.button {
+	display: inline-block;
+	background-color: #80ccff;
+	color: #ffffff;
+	padding: 10px 20px;
+	font-size: 1.2rem;
+	border-radius: 5px;
+}
+
+.button:hover {
+	background-color: #66b3ff;
+	text-decoration: none;
+}
