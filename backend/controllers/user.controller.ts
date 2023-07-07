@@ -1,7 +1,7 @@
 import UserModel from '../models/user.model';
 import express from 'express';
 import bcrypt from 'bcryptjs';
-import { User, UserBase, UserDocument } from '../types/types';
+import { User, UserBase } from '../types/types';
 
 // Enpoint to create a user
 export const registerUser = async (
@@ -37,9 +37,9 @@ export const registerUser = async (
 		res.status(201).json({ message: 'Account created', user: newUser });
 	} catch (err) {
 		const result = (err as Error).message;
+		console.log(result);
 		res.status(500).json({
 			message: "Erreur dans l'enregistrement du compte",
-			result,
 		});
 	}
 };
@@ -93,7 +93,8 @@ export const loginUser = async (
 		}
 	} catch (err) {
 		const result = (err as Error).message;
-		res.status(500).json({ message: 'Internal server error', result });
+		console.log(result);
+		res.status(500).json({ message: 'Internal server error' });
 	}
 };
 
@@ -168,7 +169,8 @@ export const updateUser = async (
 		});
 	} catch (err) {
 		const result = (err as Error).message;
-		res.status(500).json({ message: 'Internal server error', result });
+		console.log(result);
+		res.status(500).json({ message: 'Internal server error' });
 	}
 };
 
@@ -226,7 +228,7 @@ export const deleteUser = async (
 	} catch (err) {
 		const result = (err as Error).message;
 		console.log(result);
-		res.status(500).json({ message: 'Internal server error', result });
+		res.status(500).json({ message: 'Internal server error' });
 	}
 };
 
@@ -274,6 +276,8 @@ export const getUser = async (req: express.Request, res: express.Response) => {
 		res.status(200).json({ user });
 	} catch (err) {
 		const result = (err as Error).message;
-		res.status(500).json({ message: 'Internal server error', result });
+		console.log(result);
+
+		res.status(500).json({ message: 'Internal server error' });
 	}
 };

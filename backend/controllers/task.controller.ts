@@ -36,7 +36,9 @@ export const getTask = async (req: express.Request, res: express.Response) => {
 	} catch (error) {
 		// In case of error, return a 500 status with the error message
 		const result = (error as Error).message;
-		res.status(500).json({ message: 'Internal server error', result });
+		console.log(result);
+
+		res.status(500).json({ message: 'Internal server error' });
 	}
 };
 
@@ -86,7 +88,9 @@ export const getUserTasks = async (
 		res.status(200).json(tasks);
 	} catch (err) {
 		const result = (err as Error).message;
-		res.status(500).json({ message: 'Internal server error', result });
+		console.log(result);
+
+		res.status(500).json({ message: 'Internal server error' });
 	}
 };
 
@@ -128,9 +132,8 @@ export const setTasks = async (req: express.Request, res: express.Response) => {
 		// If something goes wrong, log the error and send a server error response
 		const result = (error as Error).message;
 		console.log(result);
-		return res
-			.status(500)
-			.json({ message: 'Internal server error', result });
+
+		return res.status(500).json({ message: 'Internal server error' });
 	}
 };
 
@@ -146,6 +149,7 @@ export const editTask = async (req: express.Request, res: express.Response) => {
 		// Check if the task exists
 		if (!task) {
 			console.log(res);
+
 			return res
 				.status(400)
 				.json({ message: 'This task does not exist' });
@@ -198,9 +202,9 @@ export const editTask = async (req: express.Request, res: express.Response) => {
 	} catch (error) {
 		// If something goes wrong, log the error and a server error response
 		const result = (error as Error).message;
-		return res
-			.status(500)
-			.json({ message: 'Internal server error', result });
+		console.log(result);
+
+		return res.status(500).json({ message: 'Internal server error' });
 	}
 };
 
