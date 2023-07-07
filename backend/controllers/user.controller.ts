@@ -3,6 +3,7 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import { User, UserBase } from '../types/types';
 import crypto from 'crypto';
+import nodemailer from 'nodemailer';
 
 // Enpoint to create a user
 export const registerUser = async (
@@ -288,6 +289,16 @@ export const forgotPassword = async (
 	res: express.Response
 ) => {
 	try {
+		// configure nodemailer SMTP transport
+		let transporter = nodemailer.createTransport({
+			host: 'smtp-relay.gmail.com',
+			port: 587,
+			secure: false, // true for 465, false for other ports
+			auth: {
+				user: 'username@example.com',
+				pass: 'yourpassword',
+			},
+		});
 		// Retrieve email address from request body
 		const { email } = req.body;
 
@@ -312,6 +323,29 @@ export const forgotPassword = async (
 		user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
 
 		await user.save();
+
+		// Send an email to the user with the token
+		let mailOptions = {
+			to: user.email,
+			from: 'passwordreset@example.com',
+			subject: 'Node.js Password Reset',
+			text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.
+						Please click on the following link, or paste this into your browser to complete the process:
+						http://${req.headers.host}/reset/${token}
+						If you did not request this, please ignore this email and your password will remain unchanged.`,
+		};
+
+		transporter.sendMail(mailOptions, function (err) {
+			if (err) {
+				return res.status(500).json({ message: 'Error sending email' });
+			}
+			res.status(200).json({
+				message:
+					'An e-mail has been sent to ' +
+					user.email +
+					' with further instructions.',
+			});
+		});
 
 		res.status(200).json({ message: 'Email sent' });
 	} catch (err) {
