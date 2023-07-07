@@ -11,7 +11,7 @@ import {
 	validate,
 	validateUserID,
 } from '../middlewares/validation.middlewares';
-import { registerSchema } from '../models/validation.model';
+import { loginSchema, registerSchema } from '../models/validation.model';
 
 const router = express.Router();
 
@@ -19,7 +19,7 @@ const router = express.Router();
 router.post('/register', validate(registerSchema, 'body'), registerUser);
 
 // Route to log in a user
-router.post('/login', loginUser);
+router.post('/login', validate(loginSchema, 'body'), loginUser);
 
 // Route to get a user's account information by their id
 router.get('/:id/account', validateUserID, auth, getUser);
