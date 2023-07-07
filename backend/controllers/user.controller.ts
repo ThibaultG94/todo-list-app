@@ -2,6 +2,7 @@ import UserModel from '../models/user.model';
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import { User, UserBase } from '../types/types';
+import crypto from 'crypto';
 
 // Enpoint to create a user
 export const registerUser = async (
@@ -293,11 +294,24 @@ export const forgotPassword = async (
 		// Check if a user with this email address exists
 		const user = await UserModel.findOne({ email });
 
+		const getRandomString = (length: number) => {
+			return crypto.randomBytes(length).toString('hex');
+		};
+
 		if (!user) {
 			return res
 				.status(404)
 				.json({ message: 'No account with that email address exists' });
 		}
+
+		// Generate a reset token
+		const token = getRandomString(10);
+
+		// Define token and expiration
+		user.resetPasswordToken = token;
+		user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+
+		await user.save();
 
 		res.status(200).json({ message: 'Email sent' });
 	} catch (err) {
