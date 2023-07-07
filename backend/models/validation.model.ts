@@ -11,3 +11,7 @@ export const loginSchema = Joi.object({
 	email: Joi.string().min(6).required().email().max(254),
 	password: Joi.string().min(8).required().max(128),
 });
+
+export const forgetSchema = Joi.object({
+	email: Joi.string().min(6).required().email().max(254),
+});

@@ -12,7 +12,11 @@ import {
 	validate,
 	validateUserID,
 } from '../middlewares/validation.middlewares';
-import { loginSchema, registerSchema } from '../models/validation.model';
+import {
+	loginSchema,
+	registerSchema,
+	forgetSchema,
+} from '../models/validation.model';
 import { apiRegisterAndLoginLimiter } from '../middlewares/rateLimiter.middlewares';
 
 const router = express.Router();
@@ -43,6 +47,10 @@ router.put('/:id/update', validateUserID, auth, updateUser);
 router.delete('/:id/delete', validateUserID, auth, deleteUser);
 
 // Route to reset password with email adress
-router.post('/auth/forgot-password', forgotPassword);
+router.post(
+	'/auth/forgot-password',
+	validate(forgetSchema, 'body'),
+	forgotPassword
+);
 
 export default router;
