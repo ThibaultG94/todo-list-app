@@ -31,8 +31,12 @@ export const auth = (
 		// Proceed to the next middleware or route handler
 		next();
 	} catch (err) {
-		// If the token is invalid, return an error
-		const result = (err as Error).message;
-		res.status(400).json({ message: 'Token invalide.', result });
+		// If the token is invalid or expired, return an error
+		if (err instanceof jwt.TokenExpiredError) {
+			return res.status(401).json({ message: 'Token expired.' });
+		} else {
+			const result = (err as Error).message;
+			res.status(400).json({ message: 'Invalid token.', result });
+		}
 	}
 };
