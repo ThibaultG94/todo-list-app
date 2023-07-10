@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { UserToken } from '../types/types';
 dotenv.config();
 
 // Define the schema for User model
@@ -75,6 +76,18 @@ userSchema.methods.generateAuthToken = function () {
 		}
 	);
 	return token;
+};
+
+userSchema.methods.generateRefreshToken = () => {
+	const user: UserToken = this;
+	const refreshToken = jwt.sign(
+		{ _id: user._id, email: user.email },
+		process.env.REFRESH_TOKEN_SECRET,
+		{
+			expiresIn: '7d',
+		}
+	);
+	return refreshToken;
 };
 
 export default mongoose.model('user', userSchema);

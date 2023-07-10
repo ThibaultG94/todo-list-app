@@ -1,9 +1,10 @@
 import UserModel from '../models/user.model';
 import express from 'express';
 import bcrypt from 'bcryptjs';
-import { User, UserBase } from '../types/types';
+import { User, UserBase, UserToken } from '../types/types';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
+import jwt, { Jwt, Secret, JwtPayload } from 'jsonwebtoken';
 
 // Enpoint to create a user
 export const registerUser = async (
@@ -79,10 +80,12 @@ export const loginUser = async (
 		// generate an authentication token for the user
 		if (user && isPasswordValid) {
 			const token = user.generateAuthToken();
+			const refreshToken = user.generateRefreshToken();
 
 			res.status(200).json({
 				message: 'Authentication successful',
 				token,
+				refreshToken,
 				user: {
 					id: user._id,
 					username: user.username,
@@ -358,4 +361,37 @@ export const forgotPassword = async (
 
 		res.status(500).json({ message: 'Internal server error' });
 	}
+};
+
+export const getRefreshToken = (
+	req: express.Request,
+	res: express.Response
+) => {
+	const refreshToken = req.body.token;
+
+	if (!refreshToken) {
+		return res.sendStatus(401);
+	}
+
+	jwt.verify(
+		refreshToken,
+		process.env.REFRESH_TOKEN_SECRET as Secret,
+		(err: Error | null, decoded: string | JwtPayload | Jwt | undefined) => {
+			if (err) {
+				return res.sendStatus(403);
+			}
+
+			const user = decoded as UserToken;
+
+			const accessToken = jwt.sign(
+				{ id: user._id, email: user.email },
+				process.env.JWT_SECRET,
+				{ expiresIn: process.env.JWT_EXPIRES_IN }
+			);
+
+			res.json({
+				accessToken,
+			});
+		}
+	);
 };

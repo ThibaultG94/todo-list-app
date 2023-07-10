@@ -7,6 +7,7 @@ import {
 	deleteUser,
 	getUser,
 	forgotPassword,
+	getRefreshToken,
 } from '../controllers/user.controller';
 import {
 	validate,
@@ -52,5 +53,8 @@ router.post(
 	validate(forgetSchema, 'body'),
 	forgotPassword
 );
+
+// Route to refresh token
+router.post('/token', getRefreshToken);
 
 export default router;

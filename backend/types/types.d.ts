@@ -41,6 +41,11 @@ export interface UserPayload {
 	role: string;
 }
 
+export interface UserToken {
+	email: string;
+	_id: string;
+}
+
 // Extend the Request object from an express module
 declare module 'express-serve-static-core' {
 	interface Request {
