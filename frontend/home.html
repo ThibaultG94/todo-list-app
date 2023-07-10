@@ -9,139 +9,149 @@
 		<link rel="stylesheet" href="./css/components/formchecker.css" />
 	</head>
 	<body>
-		<header>
-			<h1>Application de Gestion de Tâches</h1>
-			<p>
-				Planifiez, organisez et suivez vos tâches comme jamais
-				auparavant.
-			</p>
-		</header>
-		<main>
-			<div id="left-side">
-				<h2>Connexion</h2>
-				<form id="login-form">
-					<div class="email-log-container">
-						<label for="email">Email</label>
-						<input
-							type="email"
-							id="emailLog"
-							name="email"
-							minlength="6"
-							maxlength="254"
-							autocomplete="off"
-							required />
-					</div>
-
-					<div class="password-log-container">
-						<div class="input-password-container">
-							<label for="password">Mot de passe</label>
-							<a href="./auth/forgetPassword.html"
-								>Mot de passe oublié</a
-							>
+		<div class="app-container">
+			<main>
+				<div id="left-side">
+					<h2>Connexion</h2>
+					<form id="login-form">
+						<div class="email-log-container">
+							<label for="email">Email</label>
 							<input
-								type="password"
-								id="passwordLog"
-								name="password"
-								minlength="8"
-								maxlength="128"
+								type="email"
+								id="emailLog"
+								name="email"
+								minlength="6"
+								maxlength="254"
 								autocomplete="off"
 								required />
 						</div>
-						<span></span>
-					</div>
 
-					<button type="submit">Se connecter</button>
-				</form>
-				<p>
-					Pas encore inscrit ?
-					<a href="#" id="signup-link">S'inscrire</a>
-				</p>
-				<div class="modal" id="signup-modal">
-					<div class="modal-content">
-						<span class="close-button" id="close-button"
-							>&times;</span
-						>
-						<h2>Inscription</h2>
-
-						<form id="signup-form">
-							<div class="pseudo-container">
-								<label for="pseudo">Nom d'utilisateur</label>
-								<input
-									type="text"
-									id="pseudo"
-									name="pseudo"
-									required
-									minlength="3"
-									maxlength="30"
-									autocomplete="off"
-									placeholder="Entrez votre nom d'utilisateur" />
-							</div>
-
-							<div class="email-container">
-								<label for="email">Email</label>
-								<input
-									type="email"
-									name="email"
-									id="email"
-									maxlength="254"
-									minlength="6"
-									required
-									autocomplete="off"
-									placeholder="prenom.nom@email.fr" />
-							</div>
-
-							<div class="password-container">
-								<label for="password">Mot de passe</label>
+						<div class="password-log-container">
+							<div class="input-password-container">
+								<div class="label-password-container">
+									<label for="password">Mot de passe</label>
+									<a href="./auth/forgetPassword.html"
+										>Mot de passe oublié</a
+									>
+								</div>
 								<input
 									type="password"
+									id="passwordLog"
 									name="password"
-									id="password"
-									placeholder="Entrez votre mot de passe"
 									minlength="8"
 									maxlength="128"
 									autocomplete="off"
 									required />
-								<p id="progress-bar"></p>
-								<span></span>
 							</div>
+							<span></span>
+						</div>
 
-							<div class="confirm-container">
-								<label for="passwordConfirm"
-									>Confirmez le mot de passe</label
-								>
-								<input
-									type="password"
-									name="passwordConfirm"
-									id="confirm"
-									placeholder="Confirmez votre mot de passe"
-									minlength="8"
-									maxlength="128"
-									autocomplete="off"
-									required />
-								<span></span>
-							</div>
+						<button class="button" type="submit">
+							Se connecter
+						</button>
+					</form>
+					<p>
+						Pas encore inscrit ?
+						<a href="#" id="signup-link">S'inscrire</a>
+					</p>
+					<div class="modal" id="signup-modal">
+						<div class="modal-content">
+							<span class="close-button" id="close-button"
+								>&times;</span
+							>
+							<h2>Inscription</h2>
 
-							<button type="submit">S'inscrire</button>
-							<div class="success-container">
-								<span id="success-register"
-									>Inscription validée !</span
-								>
-							</div>
-						</form>
+							<form id="signup-form">
+								<div class="pseudo-container">
+									<label for="pseudo"
+										>Nom d'utilisateur</label
+									>
+									<input
+										type="text"
+										id="pseudo"
+										name="pseudo"
+										required
+										minlength="3"
+										maxlength="30"
+										autocomplete="off"
+										placeholder="Entrez votre nom d'utilisateur" />
+								</div>
+
+								<div class="email-container">
+									<label for="email">Email</label>
+									<input
+										type="email"
+										name="email"
+										id="email"
+										maxlength="254"
+										minlength="6"
+										required
+										autocomplete="off"
+										placeholder="prenom.nom@email.fr" />
+								</div>
+
+								<div class="password-container">
+									<label for="password">Mot de passe</label>
+									<input
+										type="password"
+										name="password"
+										id="password"
+										placeholder="Entrez votre mot de passe"
+										minlength="8"
+										maxlength="128"
+										autocomplete="off"
+										required />
+									<p id="progress-bar"></p>
+									<span></span>
+								</div>
+
+								<div class="confirm-container">
+									<label for="passwordConfirm"
+										>Confirmez le mot de passe</label
+									>
+									<input
+										type="password"
+										name="passwordConfirm"
+										id="confirm"
+										placeholder="Confirmez votre mot de passe"
+										minlength="8"
+										maxlength="128"
+										autocomplete="off"
+										required />
+									<span></span>
+								</div>
+
+								<button type="submit">S'inscrire</button>
+								<div class="success-container">
+									<span id="success-register"
+										>Inscription validée !</span
+									>
+								</div>
+							</form>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div id="right-side">
-				<h2>Première fois ? Essayez avant de vous inscrire</h2>
-				<p>
-					Découvrez toute les fonctionnalités de l'application sans
-					avoir besoin de créer un compte. Commencez à organisez vos
-					tâches tout de suite en utilisant le mode visiteur.
-				</p>
-				<a href="#" class="button">Mode visiteur</a>
-			</div>
-		</main>
-
+				<div id="right-side">
+					<div class="header">
+						<h1>Application de Gestion de Tâches</h1>
+						<p>
+							Planifiez, organisez et suivez vos tâches comme
+							jamais auparavant.
+						</p>
+					</div>
+					<div class="visitor">
+						<h2>Première fois ? Essayez avant de vous inscrire</h2>
+						<p>
+							Découvrez toute les fonctionnalités de l'application
+							sans avoir besoin de créer un compte. Commencez à
+							organisez vos tâches tout de suite en utilisant le
+							mode visiteur.
+						</p>
+						<a href="#" class="button">Mode visiteur</a>
+					</div>
+				</div>
+			</main>
+		</div>
 		<script src="./node_modules/axios/dist/axios.min.js"></script>
 		<script type="module" src="./js/app.js"></script>
 	</body>

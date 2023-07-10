@@ -3,42 +3,55 @@ body {
 		'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 	margin: 0;
 	padding: 0;
-	background-color: #fcfcfa;
+	box-sizing: border-box;
+	outline: none;
+	background: rgb(235, 244, 242);
 }
 
-header {
-	background-color: #ffffff;
-	padding: 20px;
-	text-align: center;
-}
-
-header h1 {
-	color: #333333;
-}
-
-header p {
-	color: #666666;
+.app-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 main {
-	display: flex;
-	justify-content: space-between;
-	padding: 20px;
+	min-width: 100vw;
+	min-height: 100vh;
+	display: grid;
+	grid-template-columns: 45% 55%;
 }
 
-#left-side,
-#right-side {
-	width: 45%;
+a {
+	color: #3399ff;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+/* LEFT PART */
+
+#left-side {
+	padding: 0 20%;
+}
+
+#left-side h2 {
+	font-size: 1.7rem;
+	margin-bottom: 40px;
 }
 
 form {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
+	margin-bottom: 100px;
 }
 
 form input {
-	width: 100%;
+	height: 20px;
+	width: 350px;
+	margin: 10px 0;
 }
 
 form input,
@@ -53,19 +66,15 @@ form button {
 	padding: 10px 20px;
 	cursor: pointer;
 	font-size: 1.2rem;
+	box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
 }
 
 form button:hover {
 	background-color: #66b3ff;
 }
 
-a {
-	color: #3399ff;
-	text-decoration: none;
-}
-
-a:hover {
-	text-decoration: underline;
+label {
+	letter-spacing: 1px;
 }
 
 .forgot-password {
@@ -73,16 +82,78 @@ a:hover {
 	margin-top: -20px;
 }
 
+input[type='email'],
+input[type='password'] {
+	margin: 12px 0 25px;
+	border: 1px solid transparent;
+	background: white;
+	height: 36px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+	border-radius: 9px;
+	font-size: 1.1rem;
+	padding-left: 10px;
+	transition: 0.2s;
+}
+
+input[type='text']:focus,
+input[type='password']:focus {
+	border: 1px solid #5ef9a4;
+}
+
+.email-log-container {
+	display: flex;
+	flex-direction: column;
+}
+
+#left-side p {
+	text-align: center;
+}
+
+.label-password-container {
+	display: flex;
+	justify-content: space-between;
+}
+
+/* RIGHT PART */
+
 .button {
 	display: inline-block;
 	background-color: #80ccff;
 	color: #ffffff;
 	padding: 10px 20px;
 	font-size: 1.2rem;
-	border-radius: 5px;
+	border-radius: 10px;
 }
 
 .button:hover {
 	background-color: #66b3ff;
 	text-decoration: none;
+}
+
+/* HEADER */
+
+#right-side {
+	margin: 0 auto;
+	background: white;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.header {
+	margin-bottom: 80px;
+}
+
+.header h1 {
+	color: #333333;
+}
+
+.header p {
+	color: #666666;
+}
+
+.visitor {
+	max-width: 400px;
 }
