@@ -1,6 +1,6 @@
 body {
-	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
-		'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+		Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
@@ -41,7 +41,7 @@ a:hover {
 	margin-bottom: 40px;
 }
 
-form {
+#login-form {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
@@ -73,17 +73,14 @@ form button:hover {
 	background-color: #66b3ff;
 }
 
-label {
-	letter-spacing: 1px;
-}
-
 .forgot-password {
 	float: right;
 	margin-top: -20px;
 }
 
 input[type='email'],
-input[type='password'] {
+input[type='password'],
+input[type='text'] {
 	margin: 12px 0 25px;
 	border: 1px solid transparent;
 	background: white;

@@ -12,10 +12,14 @@
 
 .modal-content {
 	background-color: #fefefe;
-	margin: 15% auto;
-	padding: 20px;
+	margin: 2% auto;
+	padding: 20px 20px 0;
 	border: 1px solid #888;
-	width: 80%;
+	width: 50%;
+	height: 86%;
+	display: flex;
+	flex-direction: column;
+	text-align: right;
 }
 
 .close-button {
@@ -23,6 +27,7 @@
 	float: right;
 	font-size: 28px;
 	font-weight: bold;
+	text-align: right;
 }
 
 .close-button:hover,
@@ -35,6 +40,18 @@
 #close-button {
 	visibility: visible;
 	opacity: 1;
+}
+
+.modal-content h2 {
+	margin: 0 auto;
+}
+
+#signup-form {
+	margin: 0 auto;
+}
+
+#password {
+	margin: 12px 0 -3px;
 }
 
 #success-register {
