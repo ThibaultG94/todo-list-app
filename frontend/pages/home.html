@@ -54,31 +54,11 @@
 				</header>
 				<main>
 					<h1>Bienvenue sur l'application pour gérer ses tâches !</h1>
-
-					<h2>Vos tâches</h2>
-					<div id="taskList"></div>
-
-					<h2>Ajouter une nouvelle tâche</h2>
-					<form id="newTaskForm">
-						<label for="taskName">Nom de la taĉhe :</label>
-						<input
-							type="text"
-							id="taskName"
-							name="taskName"
-							required />
-
-						<label for="taskDescription"
-							>Description de la tâche :</label
-						>
-						<input
-							type="text"
-							id="taskDescription"
-							name="taskDescription" />
-
-						<input type="submit" value="Ajouter la tâche" />
-					</form>
 				</main>
 			</div>
 		</div>
+
+		<script src="./node_modules/axios/dist/axios.min.js"></script>
+		<script type="module" src="../js/page/home.js"></script>
 	</body>
 </html>

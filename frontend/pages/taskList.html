@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Task Manager</title>
+		<link rel="stylesheet" href="../css/pages/taskList.css" />
+		<link rel="stylesheet" href="../css/components/appPage.css" />
+	</head>
+	<body>
+		<div class="container">
+			<section class="left-panel-section">
+				<div id="left-panel">
+					<div class="logo">
+						<h2>Task Manager</h2>
+						<div id="leftPanelArrow"><<</div>
+					</div>
+					<ul class="panelItems">
+						<li>Accueil</li>
+						<li>Mes Tâches</li>
+						<li>Goals</li>
+						<li>Membres</li>
+					</ul>
+					<div class="workspaces">
+						<div class="addWorkspace">
+							<h3>Workspace</h3>
+							<button id="addWorkspaceButton">+</button>
+						</div>
+						<ul class="workspaces-list"></ul>
+					</div>
+					<div class="app-theme">
+						<div class="darkmode">Dark</div>
+						<div class="lighmode">Light</div>
+					</div>
+				</div>
+			</section>
+			<div class="app-container">
+				<header>
+					<ul class="header-menu">
+						<li>Liste</li>
+						<li>Tableau</li>
+						<li>Calendrier</li>
+					</ul>
+					<div class="header-options">
+						<div class="search">
+							<input type="search" name="search" id="search" />
+						</div>
+						<ul class="notifs-perso">
+							<li>Messages</li>
+							<li>Notifications</li>
+							<li>Paramètres</li>
+						</ul>
+					</div>
+				</header>
+				<main>
+					<h1>Task List</h1>
+				</main>
+			</div>
+		</div>
+
+		<script src="./node_modules/axios/dist/axios.min.js"></script>
+		<script type="module" src="../js/page/taskList.js"></script>
+	</body>
+</html>
