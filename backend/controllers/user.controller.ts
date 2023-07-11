@@ -82,6 +82,18 @@ export const loginUser = async (
 			const token = user.generateAuthToken();
 			const refreshToken = user.generateRefreshToken();
 
+			res.cookie('refreshToken', refreshToken, {
+				httpOnly: true,
+				// Use "secure: true" if you use https
+				secure: process.env.NODE_ENV !== 'development',
+				// sameSite option can be 'strict', 'lax', 'none', or undefined.
+				// 'strict' will prevent the cookie from being sent by the browser to the target
+				// site in all cross-site browsing context, even when following a regular link.
+				sameSite: 'strict',
+				// path: specifies the URL path that must exist in the requested URL in order to send the Cookie header
+				path: '/users/token',
+			});
+
 			res.status(200).json({
 				message: 'Authentication successful',
 				token,
@@ -367,7 +379,7 @@ export const getRefreshToken = (
 	req: express.Request,
 	res: express.Response
 ) => {
-	const refreshToken = req.body.token;
+	const { refreshToken } = req.cookies;
 
 	if (!refreshToken) {
 		return res.sendStatus(401);

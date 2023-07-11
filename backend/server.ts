@@ -7,6 +7,7 @@ import * as Sentry from '@sentry/node';
 import taskRoutes from './routes/task.routes';
 import userRoutes from './routes/user.routes';
 import { apiLimiter } from './middlewares/rateLimiter.middlewares';
+import cookieParser from 'cookie-parser';
 
 const port: number = 5000;
 
@@ -33,6 +34,7 @@ app.use('/task', taskRoutes);
 app.use('/users', userRoutes);
 
 app.use(apiLimiter);
+app.use(cookieParser());
 
 Sentry.init({
 	dsn: process.env.SENTRY_DSN,
