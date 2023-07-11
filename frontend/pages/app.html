@@ -19,7 +19,6 @@
 						<li>Mes Tâches</li>
 						<li>Goals</li>
 						<li>Membres</li>
-						<li>Paramètres</li>
 					</ul>
 					<div class="workspaces">
 						<div class="addWorkspace">
@@ -35,9 +34,25 @@
 				</div>
 			</section>
 			<div class="app-container">
+				<header>
+					<ul class="header-menu">
+						<li>Liste</li>
+						<li>Tableau</li>
+						<li>Calendrier</li>
+					</ul>
+					<div class="header-options">
+						<div class="search">
+							<input type="search" name="search" id="search" />
+						</div>
+						<ul class="notifs-perso">
+							<li>Messages</li>
+							<li>Notifications</li>
+							<li>Paramètres</li>
+						</ul>
+					</div>
+				</header>
 				<main>
 					<h1>Bienvenue sur l'application pour gérer ses tâches !</h1>
-					<button id="logoutButton">Se déconnecter</button>
 
 					<h2>Vos tâches</h2>
 					<div id="taskList"></div>
