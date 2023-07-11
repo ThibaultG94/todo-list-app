@@ -8,6 +8,7 @@ import {
 	getUser,
 	forgotPassword,
 	getRefreshToken,
+	logoutUser,
 } from '../controllers/user.controller';
 import {
 	validate,
@@ -56,5 +57,8 @@ router.post(
 
 // Route to refresh token
 router.post('/token', getRefreshToken);
+
+// Route to log out a user
+router.post('/logout', logoutUser);
 
 export default router;

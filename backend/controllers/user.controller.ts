@@ -5,6 +5,7 @@ import { User, UserBase, UserToken } from '../types/types';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 import jwt, { Jwt, Secret, JwtPayload } from 'jsonwebtoken';
+import refreshTokenModel from '../models/refreshToken.model';
 
 // Enpoint to create a user
 export const registerUser = async (
@@ -81,6 +82,13 @@ export const loginUser = async (
 		if (user && isPasswordValid) {
 			const token = user.generateAuthToken();
 			const refreshToken = user.generateRefreshToken();
+
+			// Store the refresh token in the database
+			const newRefreshToken = new refreshTokenModel({
+				token: refreshToken,
+				userId: user._id,
+			});
+			await newRefreshToken.save();
 
 			res.cookie('refreshToken', refreshToken, {
 				httpOnly: true,
@@ -406,4 +414,17 @@ export const getRefreshToken = (
 			});
 		}
 	);
+};
+
+export const logoutUser = async (
+	req: express.Request,
+	res: express.Response
+) => {
+	res.clearCookie('refreshToken');
+
+	const { refreshToken } = req.cookies;
+
+	// await RefreshTokenModel.deleteOne({ token: refreshToken });
+
+	res.status(200).json({ message: 'User logged out successfully' });
 };
