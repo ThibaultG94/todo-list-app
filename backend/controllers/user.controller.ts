@@ -387,44 +387,55 @@ export const getRefreshToken = (
 	req: express.Request,
 	res: express.Response
 ) => {
-	const { refreshToken } = req.cookies;
+	try {
+		const { refreshToken } = req.cookies;
 
-	if (!refreshToken) {
-		return res.sendStatus(401);
-	}
-
-	jwt.verify(
-		refreshToken,
-		process.env.REFRESH_TOKEN_SECRET as Secret,
-		(err: Error | null, decoded: string | JwtPayload | Jwt | undefined) => {
-			if (err) {
-				return res.sendStatus(403);
-			}
-
-			const user = decoded as UserToken;
-
-			const accessToken = jwt.sign(
-				{ id: user._id, email: user.email },
-				process.env.JWT_SECRET,
-				{ expiresIn: process.env.JWT_EXPIRES_IN }
-			);
-
-			res.json({
-				accessToken,
-			});
+		if (!refreshToken) {
+			return res.sendStatus(401);
 		}
-	);
+
+		jwt.verify(
+			refreshToken,
+			process.env.REFRESH_TOKEN_SECRET as Secret,
+			(
+				err: Error | null,
+				decoded: string | JwtPayload | Jwt | undefined
+			) => {
+				if (err) {
+					return res.sendStatus(403);
+				}
+
+				const user = decoded as UserToken;
+
+				const accessToken = jwt.sign(
+					{ id: user._id, email: user.email },
+					process.env.JWT_SECRET,
+					{ expiresIn: process.env.JWT_EXPIRES_IN }
+				);
+
+				res.json({
+					accessToken,
+				});
+			}
+		);
+	} catch (err) {
+		res.status(500).json({ message: 'Internal server error' });
+	}
 };
 
 export const logoutUser = async (
 	req: express.Request,
 	res: express.Response
 ) => {
-	res.clearCookie('refreshToken');
+	try {
+		res.clearCookie('refreshToken');
 
-	const { refreshToken } = req.cookies;
+		const { refreshToken } = req.cookies;
 
-	// await RefreshTokenModel.deleteOne({ token: refreshToken });
+		await refreshTokenModel.deleteOne({ token: refreshToken });
 
-	res.status(200).json({ message: 'User logged out successfully' });
+		res.status(200).json({ message: 'User logged out successfully' });
+	} catch (err) {
+		res.status(500).json({ message: 'Internal server error' });
+	}
 };

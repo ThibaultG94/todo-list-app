@@ -233,6 +233,60 @@ Upon successful login, the user is provided with an authentication token. This t
     -   **Code**: `500 Internal Server Error`
     -   **Content**: `{ "message": "Internal server error", "result": "<Error Details>" }`
 
+#### User refresh his token
+
+-   **URL** : `/users/token`
+-   **Method**: `POST`
+-   **Description**: Refreshes the access token using the refresh token sent in cookies.
+
+-   **Request cookies**:
+
+    | Field          | Type   | Description           |
+    | -------------- | ------ | --------------------- |
+    | `refreshToken` | string | User's refresh token. |
+
+-   **Success Response**:
+
+    -   **Code**: `200 OK`
+    -   **Content**: `{ "accessToken": "<New Access Token>" }`
+
+-   **Error Responses**:
+
+    -   **Code**: `401 Unauthorized`
+    -   **Content**: `Unauthorized`
+
+    or
+
+    -   **Code**: `403 Forbidden`
+    -   **Content**: `Forbidden`
+
+    or
+
+    -   **Code**: `500 Internal Server Error`
+    -   **Content**: `{ "message": "Internal server error", "result": "<Error Details>" }`
+
+#### User Logout
+
+-   **URL** : `/users/logout`
+-   **Method**: `POST`
+-   **Description**: Logs out a user, clearing the refresh token from cookies and the database.
+
+-   **Request cookies**:
+
+    | Field          | Type   | Description           |
+    | -------------- | ------ | --------------------- |
+    | `refreshToken` | string | User's refresh token. |
+
+-   **Success Response**:
+
+    -   **Code**: `200 OK`
+    -   **Content**: `{ "message": "User logged out successfully" }`
+
+-   **Error Responses**:
+
+    -   **Code**: `500 Internal Server Error`
+    -   **Content**: `{ "message": "Internal server error", "result": "<Error Details>" }`
+
 ### Task Endpoints
 
 #### Get Task Information
