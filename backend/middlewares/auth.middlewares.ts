@@ -36,7 +36,7 @@ export const auth = (
 			return res.status(401).json({ message: 'Token expired.' });
 		} else {
 			const result = (err as Error).message;
-			res.status(400).json({ message: 'Invalid token.', result });
+			res.status(401).json({ message: 'Invalid token.' });
 		}
 	}
 };
