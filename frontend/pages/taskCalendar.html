@@ -16,10 +16,10 @@
 						<div id="leftPanelArrow"><<</div>
 					</div>
 					<ul class="panelItems">
-						<li>Accueil</li>
-						<li>Mes Tâches</li>
-						<li>Goals</li>
-						<li>Membres</li>
+						<li id="home">Accueil</li>
+						<li id="tasks" class="active">Mes Tâches</li>
+						<li id="goals">Goals</li>
+						<li id="members">Membres</li>
 					</ul>
 					<div class="workspaces">
 						<div class="addWorkspace">
@@ -37,9 +37,9 @@
 			<div class="app-container">
 				<header>
 					<ul class="header-menu">
-						<li>Liste</li>
-						<li>Tableau</li>
-						<li>Calendrier</li>
+						<li id="list">Liste</li>
+						<li id="board">Tableau</li>
+						<li id="calendar" class="active">Calendrier</li>
 					</ul>
 					<div class="header-options">
 						<div class="search">
@@ -58,7 +58,7 @@
 			</div>
 		</div>
 
-		<script src="./node_modules/axios/dist/axios.min.js"></script>
+		<script src="../node_modules/axios/dist/axios.min.js"></script>
 		<script type="module" src="../js/page/taskCalendar.js"></script>
 	</body>
 </html>

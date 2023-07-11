@@ -46,6 +46,10 @@ body {
 	cursor: pointer;
 }
 
+.active {
+	font-weight: bold;
+}
+
 .addWorkspace {
 	display: flex;
 	align-items: center;
