@@ -168,7 +168,7 @@ export const deleteWorkspace = async (
 		// If the workspace is found and the user has sufficients rights, handle the tasks
 		if (workspace) {
 			// First, find the default workspace of the user
-			const defaultWorkspace = await workspaceModel.findOne({
+			let defaultWorkspace = await workspaceModel.findOne({
 				userId: req.user._id,
 				isDefault: true,
 			});
@@ -177,6 +177,15 @@ export const deleteWorkspace = async (
 				return res
 					.status(500)
 					.json({ message: 'No default workspace found' });
+			}
+
+			// If the workspace being deleted is the default workspace, create a new default workspace
+			if (workspace._id.toString() === defaultWorkspace._id.toString()) {
+				defaultWorkspace = new workspaceModel({
+					title: 'Default Workspace',
+					userId: req.user._id,
+					isDefault: true,
+				});
 			}
 
 			// Update the workspaceId of all tasks created by the user in the workspace being deleted
