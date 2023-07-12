@@ -3,6 +3,7 @@ import express from 'express';
 import client from '../utils/redisClient';
 import userModel from '../models/user.model';
 import { Task } from '../types/types';
+import workspaceModel from '../models/workspace.model';
 
 // Endpoint to get a task by id
 export const getTask = async (req: express.Request, res: express.Response) => {
@@ -42,8 +43,8 @@ export const getTask = async (req: express.Request, res: express.Response) => {
 	}
 };
 
-// Endpoint to get tasks of a specific user
-export const getUserTasks = async (
+// Endpoint to get tasks of a specific workspace
+export const getWorkspaceTasks = async (
 	req: express.Request,
 	res: express.Response
 ) => {
@@ -55,19 +56,23 @@ export const getUserTasks = async (
 		// Calculate the number of tasks to skip based on the page and limit.
 		const skip = (page - 1) * limit;
 
-		const userId = req.params.id;
+		const workspaceId = req.params.id;
 
-		// Generate a unique key for caching purposes using the user ID, page, and limit.
-		const key = `task:${userId}:${page}:${limit}`;
+		// Verify if the workspace exists and if the user is a member of it
+		const workspace = await workspaceModel.findById(workspaceId);
+		if (!workspace) {
+			return res.status(404).json({ message: 'Workspace not found' });
+		}
 
-		// Check if the user making the request is the one who created the task
-		console.log(req.user._id, userId);
-		if (req.user._id !== userId) {
+		if (!workspace.members.includes(req.user._id)) {
 			return res.status(403).json({
 				message:
 					'You do not have sufficient rights to perform this action',
 			});
 		}
+
+		// Generate a unique key for caching purposes using the worspace ID, page, and limit.
+		const key = `task:${workspaceId}:${page}:${limit}`;
 
 		// First, check if the tasks are already cached
 		const cachedTasks = await client.get(key);
@@ -78,7 +83,9 @@ export const getUserTasks = async (
 			tasks = JSON.parse(cachedTasks);
 		} else {
 			// If the tasks are not cached, fetch the tasks from the database
-			tasks = await TaskModel.find({ userId }).skip(skip).limit(limit);
+			tasks = await TaskModel.find({ workspaceId })
+				.skip(skip)
+				.limit(limit);
 
 			// Then, cache the fetched tasks for future requests
 			await client.setEx(key, 3600, JSON.stringify(tasks));

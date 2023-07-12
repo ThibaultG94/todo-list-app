@@ -36,8 +36,8 @@ const taskSchema = new mongoose.Schema(
 			type: 'String',
 			required: false,
 		},
-		workspace: {
-			type: mongoose.Schema.Types.ObjectId,
+		workspaceId: {
+			type: String,
 			ref: 'Workspace',
 			required: true,
 		},

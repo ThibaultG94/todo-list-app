@@ -12,6 +12,7 @@ export interface Task extends Document {
 	estimatedTime?: number;
 	comments?: string;
 	priority?: string;
+	workspaceId: string;
 }
 
 export interface Workspace extends Document {

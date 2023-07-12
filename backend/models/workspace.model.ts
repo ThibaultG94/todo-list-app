@@ -12,7 +12,7 @@ const workspaceSchema = new mongoose.Schema(
 		},
 		members: [
 			{
-				type: mongoose.Schema.Types.ObjectId,
+				type: String,
 				ref: 'User',
 			},
 		],

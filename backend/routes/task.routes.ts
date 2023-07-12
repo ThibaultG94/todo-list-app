@@ -3,7 +3,7 @@ import { auth } from '../middlewares/auth.middlewares';
 import {
 	setTasks,
 	getTask,
-	getUserTasks,
+	getWorkspaceTasks,
 	editTask,
 	deleteTask,
 } from '../controllers/task.controller';
@@ -26,7 +26,7 @@ router.get(
 	validateUserID,
 	validatePageAndLimit,
 	auth,
-	getUserTasks
+	getWorkspaceTasks
 );
 
 // Route to update a task by its id
