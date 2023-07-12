@@ -74,6 +74,10 @@ body {
 	min-width: 80vw;
 }
 
+main {
+	padding: 10px;
+}
+
 /* HEADER */
 header {
 	display: flex;
