@@ -141,3 +141,36 @@ export const editWorkspace = async (
 		return res.status(500).json({ message: 'Internal server error' });
 	}
 };
+
+// Endpoint to delete a workspace
+export const deleteWorkspace = async (
+	req: express.Request,
+	res: express.Response
+) => {
+	try {
+		// Attempt to find and delete the workspace by the provided id
+		const workspace = await workspaceModel.findByIdAndDelete(req.params.id);
+
+		// If no workspace is found, return a 400 status
+		if (!workspace) {
+			return res
+				.status(400)
+				.json({ message: 'This workspace does not exist' });
+		}
+
+		// If a workspace is found, check if the user making the request is the same as the one who created the workspace
+		if (workspace && req.user._id !== workspace.userId) {
+			return res.status(403).json({
+				message: 'You do not have the right to modify this workspace',
+			});
+		}
+
+		// If the workspace is found and the user has sufficients rights, delete the workspace
+		if (workspace) {
+			await workspace.deleteOne();
+			res.status(200).json('Workspace deleted ' + req.params.id);
+		}
+	} catch (error) {
+		return res.status(500).json({ message: 'Internal server error' });
+	}
+};

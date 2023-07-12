@@ -2,6 +2,7 @@ import express from 'express';
 import { auth } from '../middlewares/auth.middlewares';
 import {
 	createWorkspace,
+	deleteWorkspace,
 	editWorkspace,
 	getUserWorkspaces,
 	getWorkspace,
@@ -22,6 +23,6 @@ router.get('/user/:id', auth, getUserWorkspaces);
 router.put('/:id', auth, editWorkspace);
 
 // Route to delete a workspace by its id
-router.delete('/:id', auth);
+router.delete('/:id', auth, deleteWorkspace);
 
 export default router;
