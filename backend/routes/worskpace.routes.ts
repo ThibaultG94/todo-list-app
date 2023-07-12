@@ -1,6 +1,7 @@
 import express from 'express';
 import { auth } from '../middlewares/auth.middlewares';
 import {
+	createWorkspace,
 	getUserWorkspaces,
 	getWorkspace,
 } from '../controllers/workspace.controller';
@@ -8,7 +9,7 @@ import {
 const router = express.Router();
 
 // Route to create a new workspace
-router.post('/', auth);
+router.post('/', auth, createWorkspace);
 
 // Route to get a workspace by its id
 router.get('/:id', auth, getWorkspace);

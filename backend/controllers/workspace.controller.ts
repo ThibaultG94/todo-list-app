@@ -59,3 +59,36 @@ export const getUserWorkspaces = async (
 		res.status(500).json({ message: 'Internal server error' });
 	}
 };
+
+// Endpoint to create a new Workpace
+export const createWorkspace = async (
+	req: express.Request,
+	res: express.Response
+) => {
+	try {
+		if (!req.body.title) {
+			return res.status(400).json({ message: 'Please add a title' });
+		}
+
+		const userId = req.user._id;
+
+		const userExists = await userModel.exists({ _id: userId });
+
+		if (!userExists) {
+			return res
+				.status(404)
+				.json({ message: 'The specified user does not exist' });
+		}
+
+		const workspace = await workspaceModel.create({
+			title: req.body.title,
+			userId: req.body.userId,
+			description: req.body.description,
+			members: req.body.members,
+		});
+
+		res.status(200).json(workspace);
+	} catch (error) {
+		return res.status(500).json({ message: 'Internal server error' });
+	}
+};
