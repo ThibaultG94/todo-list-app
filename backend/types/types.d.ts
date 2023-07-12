@@ -23,7 +23,7 @@ export interface Workspace extends Document {
 	isDefault: string;
 }
 
-export interface Invitation extends Document {
+export interface WorkspaceInvitation extends Document {
 	inviterId: string;
 	inviteeId: string;
 	workspaceId: string;

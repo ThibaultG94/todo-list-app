@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const InvitationSchema = new mongoose.Schema(
+const workspaceInvitationSchema = new mongoose.Schema(
 	{
 		inviterId: { type: String, ref: 'User', required: true },
 		inviteeId: { type: String, ref: 'User', required: true },
@@ -14,4 +14,4 @@ const InvitationSchema = new mongoose.Schema(
 	{ timestamps: true }
 );
 
-export default mongoose.model('invitation', InvitationSchema);
+export default mongoose.model('workspaceInvitation', workspaceInvitationSchema);
