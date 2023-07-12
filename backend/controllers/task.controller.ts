@@ -118,6 +118,7 @@ export const setTasks = async (req: express.Request, res: express.Response) => {
 			userId: req.body.userId,
 			date: req.body.date,
 			description: req.body.description,
+			workspace: req.body.workspace,
 		});
 
 		// Invalide all cache keys for this user

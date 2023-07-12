@@ -36,6 +36,11 @@ const taskSchema = new mongoose.Schema(
 			type: 'String',
 			required: false,
 		},
+		workspace: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Workspace',
+			required: true,
+		},
 	},
 	// Add creation and update timestamps to each document
 	{ timestamps: true }
