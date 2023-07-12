@@ -1,6 +1,9 @@
 import express from 'express';
 import { auth } from '../middlewares/auth.middlewares';
-import { getWorkspace } from '../controllers/workspace.controller';
+import {
+	getUserWorkspaces,
+	getWorkspace,
+} from '../controllers/workspace.controller';
 
 const router = express.Router();
 
@@ -11,7 +14,7 @@ router.post('/', auth);
 router.get('/:id', auth, getWorkspace);
 
 // Route to get all workspaces for a specific user
-router.get('/user/:id', auth);
+router.get('/user/:id', auth, getUserWorkspaces);
 
 // Route to update a workspace by its id
 router.put('/:id', auth);

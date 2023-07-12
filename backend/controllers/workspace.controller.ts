@@ -36,3 +36,26 @@ export const getWorkspace = async (
 		res.status(500).json({ message: 'Internal server error' });
 	}
 };
+
+// Endpoint to get workspaces of a specific user
+export const getUserWorkspaces = async (
+	req: express.Request,
+	res: express.Response
+) => {
+	try {
+		const userId = req.params.id;
+
+		if (req.user._id !== userId) {
+			return res.status(403).json({
+				message:
+					'You do not have sufficient rights to perform this action',
+			});
+		}
+
+		const workspaces = await workspaceModel.find({ userId });
+
+		res.status(200).json(workspaces);
+	} catch (error) {
+		res.status(500).json({ message: 'Internal server error' });
+	}
+};
