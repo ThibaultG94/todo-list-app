@@ -22,25 +22,30 @@ Upon successful login, the user is provided with an authentication token. This t
 
 -   **URL** : `/users/register`
 -   **Method**: `POST`
--   **Description**: Register a new user.
+-   **Description**: Register a new user. A default workspace is created for each new user.
 -   **Request body**:
 
     | Field      | Type   | Description                                  |
     | ---------- | ------ | -------------------------------------------- |
     | `email`    | string | User's email address.                        |
     | `password` | string | User's password.                             |
-    | `username` | string | User's usersame.                             |
+    | `username` | string | User's username.                             |
     | `role`     | string | User's role (e.g., user, admin, superadmin). |
 
 -   **Success Response**:
 
     -   **Code**: `201 Created`
-    -   **Content**: `{ "message": "Account created", "user": <User Object> }`
+    -   **Content**: `{ "message": "User successfully registered and default workspace created" }`
 
 -   **Error Responses**:
 
     -   **Code**: `400 Bad Request`
     -   **Content**: `{ "message": "Email already in use. Please change email address or login." }`
+
+    or
+
+    -   **Code**: `422 Unprocessable Entity`
+    -   **Content**: `{ "message": "Invalid input" }`
 
     or
 
