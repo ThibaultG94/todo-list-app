@@ -6,6 +6,7 @@ import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 import jwt, { Jwt, Secret, JwtPayload } from 'jsonwebtoken';
 import refreshTokenModel from '../models/refreshToken.model';
+import workspaceModel from '../models/workspace.model';
 
 // Enpoint to create a user
 export const registerUser = async (
@@ -38,7 +39,20 @@ export const registerUser = async (
 		const newUser = new UserModel({ username, email, password, role });
 		await newUser.save();
 
-		res.status(201).json({ message: 'Account created', user: newUser });
+		// After the user is saved, create a new workspace for them
+		const workspace = new workspaceModel({
+			title: 'Default Workspace',
+			userId: newUser._id,
+			description: 'This is your default workspace',
+			members: [newUser._id],
+		});
+
+		await workspace.save();
+
+		res.status(201).json({
+			message:
+				'User successfully registered and default workspace created',
+		});
 	} catch (err) {
 		const result = (err as Error).message;
 		console.log(result);
