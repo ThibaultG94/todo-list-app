@@ -23,6 +23,13 @@ export interface Workspace extends Document {
 	isDefault: string;
 }
 
+export interface Invitation extends Document {
+	inviterId: string;
+	inviteeId: string;
+	workspaceId: string;
+	status: string[];
+}
+
 // Define the base structure of a User object
 interface UserBase {
 	[key: string]: any;
