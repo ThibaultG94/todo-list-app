@@ -14,6 +14,13 @@ export interface Task extends Document {
 	priority?: string;
 }
 
+export interface Workspace extends Document {
+	title: string;
+	userId: string;
+	description: string;
+	members: string[];
+}
+
 // Define the base structure of a User object
 interface UserBase {
 	[key: string]: any;
