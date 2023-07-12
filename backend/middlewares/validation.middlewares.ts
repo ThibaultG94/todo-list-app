@@ -56,3 +56,20 @@ export const validatePageAndLimit = (
 
 	next();
 };
+
+// Middleware to validate invitation ID
+export const validateInvitationId = (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	// Get invitation ID from request params
+	const invitationId = req.params.invitationId;
+
+	// Check if invitation ID is a valid Mongo ObjectID
+	if (!/^[0-9a-fA-F]{24}$/.test(invitationId)) {
+		return res.status(400).send({ error: 'Invalid invitation ID' });
+	} else {
+		next();
+	}
+};
