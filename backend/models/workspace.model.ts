@@ -16,6 +16,10 @@ const workspaceSchema = new mongoose.Schema(
 				ref: 'User',
 			},
 		],
+		isDefault: {
+			type: String,
+			default: false,
+		},
 	},
 	{ timestamps: true }
 );

@@ -20,6 +20,7 @@ export interface Workspace extends Document {
 	userId: string;
 	description: string;
 	members: string[];
+	isDefault: string;
 }
 
 // Define the base structure of a User object

@@ -45,6 +45,7 @@ export const registerUser = async (
 			userId: newUser._id,
 			description: 'This is your default workspace',
 			members: [newUser._id],
+			isDefault: true,
 		});
 
 		await workspace.save();

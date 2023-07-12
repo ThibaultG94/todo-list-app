@@ -170,8 +170,7 @@ export const deleteWorkspace = async (
 			// First, find the default workspace of the user
 			const defaultWorkspace = await workspaceModel.findOne({
 				userId: req.user._id,
-				title: 'Default Workspace',
-				// isDefault: true,
+				isDefault: true,
 			});
 
 			if (!defaultWorkspace) {
