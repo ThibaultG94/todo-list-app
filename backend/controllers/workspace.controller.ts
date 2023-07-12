@@ -24,7 +24,10 @@ export const getWorkspace = async (
 				.json({ message: 'This workspace does not exist' });
 		}
 
-		if (workspace !== null && req.user._id !== workspace.userId) {
+		if (
+			req.user._id !== workspace.userId &&
+			!workspace.members.includes(req.user._id)
+		) {
 			return res.status(403).json({
 				message:
 					'You do not have sufficient rights to perform this action',
@@ -110,7 +113,10 @@ export const editWorkspace = async (
 		}
 
 		// Check if the user making the request is the owner of the workspace
-		if (workspace && req.user._id !== workspace.userId) {
+		if (
+			req.user._id !== workspace.userId &&
+			!workspace.members.includes(req.user._id)
+		) {
 			return res.status(403).json({
 				message:
 					'You do not have sufficients rights to perform this action',
