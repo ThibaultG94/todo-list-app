@@ -92,3 +92,52 @@ export const createWorkspace = async (
 		return res.status(500).json({ message: 'Internal server error' });
 	}
 };
+
+// Endpoint to edit a workspace
+export const editWorkspace = async (
+	req: express.Request,
+	res: express.Response
+) => {
+	try {
+		const updates = req.body;
+		const workspace = await workspaceModel.findById(req.params.id);
+
+		// Check if the workspace exists
+		if (!workspace) {
+			return res
+				.status(400)
+				.json({ message: 'This workspace does not exist' });
+		}
+
+		// Check if the user making the request is the owner of the workspace
+		if (workspace && req.user._id !== workspace.userId) {
+			return res.status(403).json({
+				message:
+					'You do not have sufficients rights to perform this action',
+			});
+		}
+
+		// Updates the fields of the workspace
+		if (updates.title !== undefined) {
+			workspace.title = updates.title;
+		}
+		if (updates.userId !== undefined) {
+			workspace.userId = updates.userId;
+		}
+		if (updates.description !== undefined) {
+			workspace.description = updates.description;
+		}
+		if (updates.members !== undefined) {
+			workspace.members = updates.members;
+		}
+
+		const updatedWorkspace = await workspace.save();
+
+		res.status(200).json({
+			message: 'Workspace updated',
+			workspace: updatedWorkspace,
+		});
+	} catch (error) {
+		return res.status(500).json({ message: 'Internal server error' });
+	}
+};

@@ -2,6 +2,7 @@ import express from 'express';
 import { auth } from '../middlewares/auth.middlewares';
 import {
 	createWorkspace,
+	editWorkspace,
 	getUserWorkspaces,
 	getWorkspace,
 } from '../controllers/workspace.controller';
@@ -18,7 +19,7 @@ router.get('/:id', auth, getWorkspace);
 router.get('/user/:id', auth, getUserWorkspaces);
 
 // Route to update a workspace by its id
-router.put('/:id', auth);
+router.put('/:id', auth, editWorkspace);
 
 // Route to delete a workspace by its id
 router.delete('/:id', auth);
