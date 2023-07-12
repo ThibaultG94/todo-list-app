@@ -2,6 +2,7 @@ import workspaceModel from '../models/workspace.model';
 import express from 'express';
 import userModel from '../models/user.model';
 import { Workspace } from '../types/types';
+import taskModel from '../models/task.model';
 
 // Endpoint to get a workspace by id
 export const getWorkspace = async (
@@ -147,8 +148,8 @@ export const deleteWorkspace = async (
 	res: express.Response
 ) => {
 	try {
-		// Attempt to find and delete the workspace by the provided id
-		const workspace = await workspaceModel.findByIdAndDelete(req.params.id);
+		// Attempt to find the workspace by the provided id
+		const workspace = await workspaceModel.findById(req.params.id);
 
 		// If no workspace is found, return a 400 status
 		if (!workspace) {
@@ -157,15 +158,52 @@ export const deleteWorkspace = async (
 				.json({ message: 'This workspace does not exist' });
 		}
 
-		// If a workspace is found, check if the user making the request is the same as the one who created the workspace
-		if (workspace && req.user._id !== workspace.userId) {
+		// If a workspace is found, check if the user making the request is a member of the workspace
+		if (workspace && !workspace.members.includes(req.user._id)) {
 			return res.status(403).json({
 				message: 'You do not have the right to modify this workspace',
 			});
 		}
 
-		// If the workspace is found and the user has sufficients rights, delete the workspace
+		// If the workspace is found and the user has sufficients rights, handle the tasks
 		if (workspace) {
+			// First, find the default workspace of the user
+			const defaultWorkspace = await workspaceModel.findOne({
+				userId: req.user._id,
+				title: 'Default Workspace',
+				// isDefault: true,
+			});
+
+			if (!defaultWorkspace) {
+				return res
+					.status(500)
+					.json({ message: 'No default workspace found' });
+			}
+
+			// Update the workspaceId of all tasks created by the user in the workspace being deleted
+			await taskModel.updateMany(
+				{
+					workspaceId: req.params.id,
+					userId: req.user._id,
+				},
+				{ workspaceId: defaultWorkspace._id }
+			);
+
+			// If the user is the one who created the workspace, delete the workspace
+			if (req.user._id === workspace.userId) {
+				await workspace.deleteOne();
+				res.status(200).json('Workspace deleted ' + req.params.id);
+			} else {
+				// If the user is a member but not the creator, just remove the user from the workspace
+				workspace.members = workspace.members.filter(
+					(memberId) => memberId !== req.user._id
+				);
+				await workspace.save();
+				res.status(200).json(
+					'User removed from workspace ' + req.params.id
+				);
+			}
+
 			await workspace.deleteOne();
 			res.status(200).json('Workspace deleted ' + req.params.id);
 		}

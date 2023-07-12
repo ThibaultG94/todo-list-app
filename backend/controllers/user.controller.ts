@@ -57,7 +57,7 @@ export const registerUser = async (
 		const result = (err as Error).message;
 		console.log(result);
 		res.status(500).json({
-			message: "Erreur dans l'enregistrement du compte",
+			message: 'Internal server error',
 		});
 	}
 };
