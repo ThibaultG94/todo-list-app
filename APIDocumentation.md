@@ -352,18 +352,18 @@ Upon successful login, the user is provided with an authentication token. This t
     1. A user can only retrieve tasks that they have created.
     2. The `Authorization` header should contain a valid JWT token in the format `Bearer <JWT>`.
 
-    #### Get User's Tasks
+#### Get Workspace's Tasks
 
--   **URL** : `/tasks/user/:id`
+-   **URL** : `/tasks/workspace/:id`
 -   **Method**: `GET`
--   **Description**: Retrieve all tasks associated with a specific user.
+-   **Description**: Retrieve all tasks associated with a specific workspace.
 -   **Authorization**: `Bearer <JWT>`
 
 -   **URL Parameters**:
 
-    | Parameter | Type       | Description                          |
-    | --------- | ---------- | ------------------------------------ |
-    | `id`      | `ObjectId` | ID of the user to retrieve tasks for |
+    | Parameter | Type       | Description                               |
+    | --------- | ---------- | ----------------------------------------- |
+    | `id`      | `ObjectId` | ID of the workspace to retrieve tasks for |
 
 -   **Query Parameters**:
 
@@ -385,7 +385,7 @@ Upon successful login, the user is provided with an authentication token. This t
     or
 
     -   **Code**: `404 Not Found`
-    -   **Content**: `{ "message": "This task does not exist" }`
+    -   **Content**: `{ "message": "Workspace not found" }`
 
     or
 
@@ -394,11 +394,11 @@ Upon successful login, the user is provided with an authentication token. This t
 
     **Notes**:
 
-    1. A user can only retrieve their own tasks.
+    1. A user can only retrieve tasks from a workspace they are a member of.
     2. The `Authorization` header should contain a valid JWT token in the format `Bearer <JWT>`.
-    3. This endpoint uses caching. If the tasks are in cache, they will be retrieved from ther, oserwise, they will be retrieved from the database and then cached for future requests.
+    3. This endpoint uses caching. If the tasks are in cache, they will be retrieved from there. Otherwise, they will be retrieved from the database and then cached for future requests.
 
-    #### Set Task
+#### Set Task
 
 -   **URL** : `/tasks`
 -   **Method**: `POST`
@@ -407,12 +407,12 @@ Upon successful login, the user is provided with an authentication token. This t
 
 -   **Request body**:
 
-    | Field         | Type   | Description                     |
-    | ------------- | ------ | ------------------------------- |
-    | `title`       | string | Title of the task.              |
-    | `userId`      | string | User's ID who created the task. |
-    | `date`        | number | Due date of the task.           |
-    | `description` | string | Description of the task.        |
+    | Field         | Type   | Description                       |
+    | ------------- | ------ | --------------------------------- |
+    | `title`       | string | Title of the task.                |
+    | `date`        | number | Due date of the task.             |
+    | `description` | string | Description of the task.          |
+    | `workspace`   | string | ID of the workspace for the task. |
 
 -   **Success Response**:
 
@@ -439,6 +439,7 @@ Upon successful login, the user is provided with an authentication token. This t
     1. A task can be only created by a logged-in user, who is then associated with the task.
     2. The `Authorization` header should contain a valid JWT token in the format `Bearer <JWT>`.
     3. When a new task is created, all cached task keys for this user are invalidated.
+    4. The user ID is retrieved from the JWT token, not the request body.
 
     #### Edit Task
 

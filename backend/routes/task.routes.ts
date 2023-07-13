@@ -20,9 +20,9 @@ router.post('/', auth, setTasks);
 // Route to get a task by its id
 router.get('/:id', auth, getTask);
 
-// Route to get all tasks for a specific user
+// Route to get all tasks for a specific workspace
 router.get(
-	'/user/:id',
+	'/workspace/:id',
 	validateUserID,
 	validatePageAndLimit,
 	auth,
