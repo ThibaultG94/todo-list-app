@@ -144,6 +144,13 @@ export const updateUser = async (
 	res: express.Response
 ) => {
 	try {
+		// Check if the request body is empty
+		if (Object.keys(req.body).length === 0) {
+			return res
+				.status(422)
+				.json({ message: 'No fields for update were provided' });
+		}
+
 		// Extract ID and Role from Token
 		const userIdFromToken = await req.user._id;
 		const userRoleFromToken = await req.user.role;
@@ -297,7 +304,7 @@ export const getUser = async (req: express.Request, res: express.Response) => {
 			userIdFromParams
 		).select('-password');
 		if (!user) {
-			res.status(400).json({ message: 'User not found' });
+			return res.status(404).json({ message: 'User not found' });
 		}
 
 		// Deny the request if an admin user asks for data of another admin or superadmin and the requester is not a superadmin
@@ -375,9 +382,10 @@ export const forgotPassword = async (
 
 		transporter.sendMail(mailOptions, function (err) {
 			if (err) {
+				console.log(err);
 				return res.status(500).json({ message: 'Error sending email' });
 			}
-			res.status(200).json({
+			return res.status(200).json({
 				message:
 					'An e-mail has been sent to ' +
 					user.email +
@@ -416,8 +424,10 @@ export const getRefreshToken = (
 				err: Error | null,
 				decoded: string | JwtPayload | Jwt | undefined
 			) => {
-				if (err) {
-					return res.sendStatus(403);
+				if (err || typeof decoded !== 'object' || decoded === null) {
+					return res
+						.status(403)
+						.json({ message: 'Invalid refresh token' });
 				}
 
 				const user = decoded as UserToken;
@@ -443,12 +453,13 @@ export const logoutUser = async (
 	res: express.Response
 ) => {
 	try {
-		res.clearCookie('refreshToken');
-
 		const { refreshToken } = req.cookies;
 
-		await refreshTokenModel.deleteOne({ token: refreshToken });
+		if (refreshToken) {
+			await refreshTokenModel.deleteOne({ token: refreshToken });
+		}
 
+		res.clearCookie('refreshToken');
 		res.status(200).json({ message: 'User logged out successfully' });
 	} catch (err) {
 		res.status(500).json({ message: 'Internal server error' });

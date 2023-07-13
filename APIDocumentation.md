@@ -1,4 +1,4 @@
-# API Documentation for My Todo List App
+# API Documentation for My Task Manager App
 
 This is the backend API for the Todo List application. This API enables users to create an account, login, and manage their todo items. Users can perform CRUD (Create, Read, Update, Delete) operations on their tasks.
 
@@ -67,9 +67,14 @@ Upon successful login, the user is provided with an authentication token. This t
 -   **Success Response**:
 
     -   **Code**: `200 OK`
-    -   **Content**: `{ "message": "Authentication successful", "token": "<User token>", "user": {"id": "<User ID>", "username": "<User username>", "email": "<User email>"} }`
+    -   **Content**: `{ "message": "Authentication successful", "token": "<User token>", "refreshToken": "<Refresh Token>", "user": {"id": "<User ID>", "username": "<User username>", "email": "<User email>"} }`
 
 -   **Error Responses**:
+
+    -   **Code**: `400 Bad Request`
+    -   **Content**: `{ "message": "Identifiants incorrects" }`
+
+    or
 
     -   **Code**: `401 Unauthorized`
     -   **Content**: `{ "message": "Invalid password" }`
@@ -78,6 +83,11 @@ Upon successful login, the user is provided with an authentication token. This t
 
     -   **Code**: `404 Not Found`
     -   **Content**: `{ "message": "User not found" }`
+
+    or
+
+    -   **Code**: `422 Unprocessable Entity`
+    -   **Content**: `{ "message": "Invalid input" }`
 
     or
 
@@ -97,7 +107,7 @@ Upon successful login, the user is provided with an authentication token. This t
     | --------- | ---------- | ------------------------ |
     | `id`      | `ObjectId` | ID of the user to update |
 
--   **Request body**:
+-   **Request body**: At least one of the following fields should be present:
 
     | Field      | Type   | Description                      |
     | ---------- | ------ | -------------------------------- |
@@ -120,6 +130,11 @@ Upon successful login, the user is provided with an authentication token. This t
 
     -   **Code**: `404 Not Found`
     -   **Content**: `{ "message": "User not found" }`
+
+    or
+
+    -   **Code**: `422 Unprocessable Entity`
+    -   **Content**: `{ "message": "No fields for update were provided" }`
 
     or
 
@@ -258,12 +273,12 @@ Upon successful login, the user is provided with an authentication token. This t
 -   **Error Responses**:
 
     -   **Code**: `401 Unauthorized`
-    -   **Content**: `Unauthorized`
+    -   **Content**: `{ "message": "Refresh token not provided" }`
 
     or
 
     -   **Code**: `403 Forbidden`
-    -   **Content**: `Forbidden`
+    -   **Content**: `{ "message": "Invalid refresh token" }`
 
     or
 
@@ -291,6 +306,11 @@ Upon successful login, the user is provided with an authentication token. This t
 
     -   **Code**: `500 Internal Server Error`
     -   **Content**: `{ "message": "Internal server error", "result": "<Error Details>" }`
+
+**Notes**:
+
+1. To logout a user, send a `POST` request to `/users/logout` with the `refreshToken` in the cookies. No request body is required.
+2. This endpoint will clear the `refreshToken` from cookies and delete the corresponding document in the database.
 
 ### Task Endpoints
 
